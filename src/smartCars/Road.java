@@ -4,6 +4,8 @@ public class Road {
 	
 	private Cost cost;
 	private int lane;
+	private AbstractIntersection origin;
+	private AbstractIntersection destination;
 	
 	public Road()
 	{
@@ -22,7 +24,6 @@ public class Road {
 		this.cost = cost;
 		this.lane = lane;
 	}
-	
 	
 	
 }

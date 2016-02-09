@@ -8,10 +8,10 @@ public class Graph {
 	 * When the intersection numbered "i" have an outgoing Road, the i case of graph contains an array in which the Road is.
 	 * The Road itself have the information of the destination
 	 */
-	private Intersection_Interface[] graph;
+	private AbstractIntersection[] intersections;
 
-	public Graph(Intersection_Interface[] graph) {
-		this.graph = graph;
+	public Graph(AbstractIntersection[] intersections) {
+		this.intersections = intersections;
 	}
 
 
