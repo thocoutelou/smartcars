@@ -1,11 +1,19 @@
 package smartCars;
 
 public class Road {
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		System.out.println("Hello World !");
-		
+	
+	private Cost cost;
+	private int lane;
+	
+	public Road()
+	{
+		lane = 1;
 	}
-
+	
+	public Road(int lane)
+	{
+		this.lane = lane;
+	}
+	
+	
 }
