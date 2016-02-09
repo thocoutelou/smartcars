@@ -3,13 +3,18 @@ package smartCars;
 public class Location {
 	
 	public boolean waitingForIntersection;
-	public Road road;
-	public float position;
+	private Road road;
+	public float positionOnTheRoad;
 	
 	//TODO
 	public static void displayLocation()
 	{
 		
+	}
+	
+	public AbstractIntersection nextIntersection()
+	{
+		return road.destination;
 	}
 
 }

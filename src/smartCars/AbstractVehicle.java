@@ -11,6 +11,11 @@ public class AbstractVehicle {
 		
 	}
 	
+	public AbstractIntersection intersectionAfterStart(float time)
+	{
+		return start.nextIntersection();
+	}
+	
 	//TODO
 	public void overtake(AbstractVehicle vehicle, Road road)
 	{

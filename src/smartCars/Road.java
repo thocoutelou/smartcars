@@ -5,7 +5,7 @@ public class Road {
 	private Cost cost;
 	private int lane;
 	private AbstractIntersection origin;
-	private AbstractIntersection destination;
+	public AbstractIntersection destination;
 	
 	public Road()
 	{
