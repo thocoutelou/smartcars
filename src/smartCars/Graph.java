@@ -2,14 +2,17 @@ package smartCars;
 
 import java.util.Stack;
 
+/**
+ * Le graphe est représenté par la liste de ses noeuds (intersections AbstractIntersection),
+ * chacune d'entre elles contenant la liste de ses arêtes (routes Road) directement connectées.
+ * L'hypothèse est faite que le graphe est FORTEMENT CONNEXE.
+ */
 public class Graph {
 	
-	
-	/* The graph is represented by an array of Intersection, and each of those contains a Road
-	 * When the intersection numbered "i" have an outgoing Road, the i case of graph contains an array in which the Road is.
-	 * The Road itself have the information of the destination
-	 */
+	// (intersections) définit le graphe même
 	private AbstractIntersection[] intersections;
+	
+	// (startDefault) définit un point de départ pour les AbstractVehicle instanciés sans précision
 	public static Location startDefault;
 	
 
@@ -26,8 +29,13 @@ public class Graph {
 	
 	public void djikstra(AbstractVehicle vehicle)
 	{
-		AbstractIntersection origin;
-		AbstractIntersection[] nextIntersections = {};
+		// 
+		AbstractIntersection origin = vehicle.intersectionAfterStart();
+		
+		// Pile des voisins aux derniers noeuds traités...
+		Stack<AbstractIntersection> nextIntersections = new Stack<AbstractIntersection>();
+		// ... initialisée avec le noeud choisi :
+		nextIntersections.add(origin);
 		
 	}
 	

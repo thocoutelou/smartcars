@@ -2,18 +2,22 @@ package smartCars;
 
 public class AbstractVehicle {
 
-	protected Location start;
-	public int size;
+	protected double startDate;
+	protected Location startLocation;
+	public Location currentLocation;
+	public double size;
 	
-	
+	//TODO mais encore beaucoup de travail avant cette méthode
 	public void calculateLocation(float time, Graph graph)
 	{
 		
 	}
 	
-	public AbstractIntersection intersectionAfterStart(float time)
+	// L'hypothèse est faite que la voiture ne peut se trouver dans une intersection à l'arrêt,
+	// et par conséquent à son départ.
+	public AbstractIntersection intersectionAfterStart()
 	{
-		return start.nextIntersection();
+		return startLocation.nextIntersection();
 	}
 	
 	//TODO

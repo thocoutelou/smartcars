@@ -2,9 +2,21 @@ package smartCars;
 
 public class Location {
 	
+	
 	public boolean waitingForIntersection;
-	private Road road;
-	public float positionOnTheRoad;
+	public Road road;
+	private double initialDate;
+	private double initialPosition;
+	public double positionOnTheRoad;
+	public double date;
+	
+	public Location()
+	{
+		initialDate = 0.;
+		initialPosition = road.length;
+		
+		
+	}
 	
 	//TODO
 	public static void displayLocation()
@@ -15,6 +27,11 @@ public class Location {
 	public AbstractIntersection nextIntersection()
 	{
 		return road.destination;
+	}
+	
+	public void crossIntersection(AbstractIntersection intersection)
+	{
+		
 	}
 
 }
