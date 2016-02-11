@@ -12,5 +12,11 @@ public class AbstractIntersection {
 	public float crossingLast;
 	
 	public boolean obstruction;
+	
+	
+	public void crossIntersection(AbstractVehicle vehicle, Road nextRoad)
+	{
+		
+	}
 
 }

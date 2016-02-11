@@ -5,8 +5,8 @@ public class Location {
 	
 	public boolean waitingForIntersection;
 	public Road road;
-	private double initialDate;
-	private double initialPosition;
+	public double initialDate;
+	public double initialPosition;
 	public double positionOnTheRoad;
 	public double date;
 	
@@ -29,9 +29,5 @@ public class Location {
 		return road.destination;
 	}
 	
-	public void crossIntersection(AbstractIntersection intersection)
-	{
-		
-	}
 
 }

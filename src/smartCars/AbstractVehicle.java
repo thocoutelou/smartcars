@@ -4,9 +4,7 @@ public class AbstractVehicle {
 
 	protected static int identificator = 0;
 	public int identifier;
-	protected double startDate;
-	protected Location startLocation;
-	public Location currentLocation;
+	public Location vehicleLocation;
 	public double size;
 	public static double minSpaceBetweenVehicles = 0.7;
 	
@@ -14,8 +12,7 @@ public class AbstractVehicle {
 	{
 		identifier = identificator;
 		identificator++;
-		startDate = 0.;
-		startLocation = Graph.startDefault;
+		vehicleLocation = Graph.startDefault;
 	}
 	
 	//TODO mais encore beaucoup de travail avant cette méthode
@@ -28,7 +25,7 @@ public class AbstractVehicle {
 	// et par conséquent à son départ.
 	public AbstractIntersection intersectionAfterStart()
 	{
-		return startLocation.nextIntersection();
+		return vehicleLocation.nextIntersection();
 	}
 	
 	//TODO

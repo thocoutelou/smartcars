@@ -11,8 +11,9 @@ package smartCars;
 
 public class Cost {
 	
+	private double absoluteCost;
 	private boolean finite;
-	private int cost = -1;
+	private double realCost = -1;
 	
 	public Cost()
 	{
@@ -21,7 +22,7 @@ public class Cost {
 	
 	public Cost(int cost)
 	{
-		this.cost = cost;
+		this.absoluteCost = cost;
 		this.finite = true;
 	}
 	
@@ -35,7 +36,7 @@ public class Cost {
 	{
 		if(!b.finite) return a;
 		else if(!a.finite) return b;
-		else if(a.cost<=b.cost) return a;
+		else if(a.realCost<=b.realCost) return a;
 		else return b;
 	}
 	

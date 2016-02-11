@@ -107,8 +107,8 @@ public class Road {
 		if(!decreaseLength(vehicle.size+AbstractVehicle.minSpaceBetweenVehicles))
 		{
 			// Vive la programmation objet pour ses tirades de logique dure
-			vehicle.currentLocation.road.destination.obstruction = true;
-			throw new IllegalStateException("La saturation de la route "+identifier+" obstrue l'intersection "+vehicle.currentLocation.road.origin);
+			vehicle.vehicleLocation.road.destination.obstruction = true;
+			throw new IllegalStateException("La saturation de la route "+identifier+" obstrue l'intersection "+vehicle.vehicleLocation.road.origin);
 		}
 		else
 		{
