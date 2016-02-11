@@ -1,5 +1,6 @@
 package smartCars;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -17,8 +18,12 @@ public class Road {
 	private AbstractIntersection origin;
 	public AbstractIntersection destination;
 	
+	// Véhicules sur la route
 	// Queue: structure FIFO (first in first out)
 	// Méthodes: isEmpty(), remove(), add()
+	public int numberOfVehicles;
+	public ArrayList<AbstractVehicle> vehiclesOnRoad = new ArrayList<AbstractVehicle>();
+	
 	public Queue<AbstractVehicle> waitingVehicles = new LinkedList<AbstractVehicle>();
 	
 	// Construit une route de coût infini
@@ -123,10 +128,16 @@ public class Road {
 	}
 	
 	//TODO Transférer le véhicule dans l'intersection (destination)
-	public AbstractVehicle formerWaitingVehicle()
+	public void formerWaitingVehicle() throws IllegalStateException
 	{
 		AbstractVehicle leavingVehicle = waitingVehicles.remove();
 		increaseLength(leavingVehicle.size);
-		return leavingVehicle;
+		if(!vehiclesOnRoad.contains(leavingVehicle))
+		{
+			throw new IllegalStateException("Les files de voitures présentes et en attente ne correspondent pas");
+		}
+		vehiclesOnRoad.remove(leavingVehicle);
+		//TODO Changer la structure de l'itinéraire d'un véhicule
+		//destination.crossIntersection(leavingVehicle, leavingVehicle.route.element());;
 	}
 }

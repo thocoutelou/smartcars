@@ -1,5 +1,6 @@
 package smartCars;
 
+
 import java.util.Stack;
 
 /**
@@ -15,11 +16,14 @@ public class Graph {
 	// (startDefault) définit un point de départ pour les AbstractVehicle instanciés sans précision
 	public static Location startDefault;
 	
+	public static AbstractVehicle[] vehiclesInGraph = {};
+	
 
-	public Graph(AbstractIntersection[] intersections, Location startDefault)
+	public Graph(AbstractIntersection[] intersections, Location startDefault, AbstractVehicle[] vehicles)
 	{
 		this.intersections = intersections;
 		this.startDefault = startDefault;
+		this.vehiclesInGraph = vehicles;
 	}
 	
 	//TODO contructeur à partir d'un image vectorielle
@@ -42,5 +46,4 @@ public class Graph {
 	}
 	
 	
-
 }

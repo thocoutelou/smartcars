@@ -1,12 +1,21 @@
 package smartCars;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class AbstractVehicle {
 
 	protected static int identificator = 0;
 	public int identifier;
+	
+	// (vehicleLocation) contient toutes les informations de temps et de position
 	public Location vehicleLocation;
 	public double size;
 	public static double minSpaceBetweenVehicles = 0.7;
+	
+	protected boolean routeExists = false;
+	protected Queue<AbstractIntersection> route;
 	
 	public AbstractVehicle()
 	{
@@ -14,6 +23,14 @@ public class AbstractVehicle {
 		identificator++;
 		vehicleLocation = Graph.startDefault;
 	}
+	
+	
+	public void saveRoute(Queue<AbstractIntersection> route)
+	{
+		this.routeExists = true;
+		this.route = route;
+	}
+	
 	
 	//TODO mais encore beaucoup de travail avant cette méthode
 	public void calculateLocation(float date, Graph graph)
@@ -28,12 +45,16 @@ public class AbstractVehicle {
 		return vehicleLocation.nextIntersection();
 	}
 	
-	//TODO
-	public void overtake(AbstractVehicle vehicle, Road road) throws IllegalArgumentException
+	
+	public void overtake(AbstractVehicle vehicleOvertaking, Road road) throws IllegalArgumentException
 	{
-		if(road.lane<=1)
+		if(road.lane==1)
 		{
-			throw new IllegalArgumentException("");
+			throw new IllegalArgumentException("Impossible de doubler, la route n'est formée que d'une seule voie");
+		}
+		//TODO
+		else
+		{
 		}
 	}
 
