@@ -2,13 +2,24 @@ package smartCars;
 
 public class AbstractVehicle {
 
+	protected static int identificator = 0;
+	public int identifier;
 	protected double startDate;
 	protected Location startLocation;
 	public Location currentLocation;
 	public double size;
+	public static double minSpaceBetweenVehicles = 0.7;
+	
+	public AbstractVehicle()
+	{
+		identifier = identificator;
+		identificator++;
+		startDate = 0.;
+		startLocation = Graph.startDefault;
+	}
 	
 	//TODO mais encore beaucoup de travail avant cette méthode
-	public void calculateLocation(float time, Graph graph)
+	public void calculateLocation(float date, Graph graph)
 	{
 		
 	}
@@ -21,9 +32,12 @@ public class AbstractVehicle {
 	}
 	
 	//TODO
-	public void overtake(AbstractVehicle vehicle, Road road)
+	public void overtake(AbstractVehicle vehicle, Road road) throws IllegalArgumentException
 	{
-		
+		if(road.lane<=1)
+		{
+			throw new IllegalArgumentException("");
+		}
 	}
 
 }

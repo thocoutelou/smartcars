@@ -4,8 +4,7 @@ public class Car extends AbstractVehicle {
 
 	public Car()
 	{
-		startDate = 0.;
-		startLocation = Graph.startDefault;
+		super();
 		size = 4.;
 	}
 	

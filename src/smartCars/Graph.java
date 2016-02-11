@@ -31,7 +31,9 @@ public class Graph {
 	{
 		// 
 		AbstractIntersection origin = vehicle.intersectionAfterStart();
-		
+
+		// Stack: structure LIFO (last in first out), pour un parcours du graphe en profondeur
+		// Méthodes: empty(), peek(), pop(), push(e), search(e)
 		// Pile des voisins aux derniers noeuds traités...
 		Stack<AbstractIntersection> nextIntersections = new Stack<AbstractIntersection>();
 		// ... initialisée avec le noeud choisi :
