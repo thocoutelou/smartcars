@@ -1,7 +1,7 @@
 package smartCars;
 
 
-import java.util.Stack;
+import java.util.ArrayList;
 
 /**
  * Le graphe est représenté par la liste de ses noeuds (intersections AbstractIntersection),
@@ -11,7 +11,7 @@ import java.util.Stack;
 public class Graph {
 	
 	// (intersections) définit le graphe même
-	private AbstractIntersection[] intersections;
+	private ArrayList<AbstractIntersection> intersections;
 	
 	// (startDefault) définit un point de départ pour les AbstractVehicle instanciés sans précision
 	public static Location startDefault;
@@ -19,7 +19,7 @@ public class Graph {
 	public static AbstractVehicle[] vehiclesInGraph = {};
 	
 
-	public Graph(AbstractIntersection[] intersections, Location startDefault, AbstractVehicle[] vehicles)
+	public Graph(ArrayList<AbstractIntersection> intersections, Location startDefault, AbstractVehicle[] vehicles)
 	{
 		this.intersections = intersections;
 		this.startDefault = startDefault;
@@ -30,19 +30,9 @@ public class Graph {
 	//TODO définir les normes de l'image (notamment les couleurs)
 	public Graph() {}
 
-	
-	public void djikstra(AbstractVehicle vehicle)
+	public ArrayList<AbstractIntersection> getIntersections()
 	{
-		// 
-		AbstractIntersection origin = vehicle.intersectionAfterStart();
-
-		// Stack: structure LIFO (last in first out), pour un parcours du graphe en profondeur
-		// Méthodes: empty(), peek(), pop(), push(e), search(e)
-		// Pile des voisins aux derniers noeuds traités...
-		Stack<AbstractIntersection> nextIntersections = new Stack<AbstractIntersection>();
-		// ... initialisée avec le noeud choisi :
-		nextIntersections.add(origin);
-		
+		return intersections;
 	}
 	
 	

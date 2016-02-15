@@ -13,7 +13,7 @@ public class Cost {
 	
 	private double absoluteCost;
 	private boolean finite;
-	private double realCost = -1;
+	private double realCost;
 	
 	public Cost()
 	{
@@ -24,6 +24,7 @@ public class Cost {
 	{
 		this.absoluteCost = cost;
 		this.finite = true;
+		this.realCost = this.absoluteCost;
 	}
 	
 	/**
