@@ -1,6 +1,7 @@
 package smartCars;
 
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class Dijkstra {
@@ -9,15 +10,13 @@ public class Dijkstra {
 	private int numberOfIntersections = graph.getIntersections().size();
 	
 	
-	public void djikstra(AbstractVehicle vehicle)
+	public Stack<Road> path(AbstractVehicle vehicle) throws IllegalStateException
 	{
 		AbstractIntersection origin = vehicle.intersectionAfterStart();
-		// Stack: structure LIFO (last in first out), pour un parcours du graphe en profondeur
-		// Méthodes: empty(), peek(), pop(), push(e), search(e)
-		// Pile des voisins aux derniers noeuds traités...
-		Stack<AbstractIntersection> nextIntersections = new Stack<AbstractIntersection>();
-		// ... initialisée avec le noeud choisi :
-		nextIntersections.add(origin);
+		ArrayList<Road> nextRoads = new ArrayList<Road>(origin.leavingRoads);
+		// route[i] contient la route qui mène à i,
+		// qui elle-même contient l'intersection d'origine
+		Road route[] = new Road[numberOfIntersections];
 		
 		boolean visited[] = new boolean[numberOfIntersections];
 		for(int i=0; i<numberOfIntersections; i++) visited[i]=false;
@@ -28,11 +27,43 @@ public class Dijkstra {
 		costs[origin.identifier] = new Cost(0);
 		
 		
-		while(!nextIntersections.isEmpty())
+		while(!visited[origin.identifier] & !nextRoads.isEmpty())
 		{
-			
+			Road currentRoad = Road.minimum(nextRoads);
+			nextRoads.remove(currentRoad);
+			visited[currentRoad.destination.identifier] = true;
+			Cost sum = Cost.sum(costs[currentRoad.origin.identifier], currentRoad.cost);
+			if(Cost.inferior(sum, costs[currentRoad.destination.identifier]))
+			{
+				costs[currentRoad.destination.identifier] = sum;
+				route[currentRoad.destination.identifier] = currentRoad;
+			}
+			for(Road r : currentRoad.destination.leavingRoads)
+			{
+				if(!visited[r.destination.identifier])
+				{
+					nextRoads.add(r);
+				}
+			}
 		}
 		
+		if(!visited[origin.identifier] & nextRoads.isEmpty())
+		{
+			throw new IllegalStateException("Le graphe n'est pas fortement connexe");
+		}
+
+		return buildPath(vehicle, route);
+	}
+	
+	public Stack<Road> buildPath(AbstractVehicle vehicle, Road[] route)
+	{
+		Stack<Road> path = new Stack<Road>();
+		path.push(vehicle.location.finalRoad);
+		while(!path.peek().equals(vehicle.location.initialRoad))
+		{
+			path.push(route[path.peek().origin.identifier]);
+		}
+		return path;
 	}
 
 }

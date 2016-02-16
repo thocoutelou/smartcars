@@ -10,7 +10,7 @@ public class AbstractVehicle {
 	public int identifier;
 	
 	// (vehicleLocation) contient toutes les informations de temps et de position
-	public Location vehicleLocation;
+	public Location location;
 	public double size;
 	public static double minSpaceBetweenVehicles = 0.7;
 	
@@ -21,7 +21,7 @@ public class AbstractVehicle {
 	{
 		identifier = identificator;
 		identificator++;
-		vehicleLocation = Graph.startDefault;
+		location = Graph.startDefault;
 	}
 	
 	
@@ -42,7 +42,7 @@ public class AbstractVehicle {
 	// et par conséquent à son départ.
 	public AbstractIntersection intersectionAfterStart()
 	{
-		return vehicleLocation.nextIntersection();
+		return location.nextIntersection();
 	}
 	
 	

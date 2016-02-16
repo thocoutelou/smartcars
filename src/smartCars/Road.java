@@ -8,14 +8,14 @@ public class Road {
 	
 	private static int identificator = 0;
 	public int identifier;
-	private Cost cost;
+	public Cost cost;
 	public int lane;
 	private double absoluteLength;
 	
 	// La longueur de la route sera variable car égale à :
 	// la longueur absolue de la route diminuée de la longueur de la file d'attente
 	public double length;
-	private AbstractIntersection origin;
+	public AbstractIntersection origin;
 	public AbstractIntersection destination;
 	
 	// Véhicules sur la route
@@ -75,6 +75,28 @@ public class Road {
 		this.absoluteLength = absoluteLength;
 	}
 	
+	
+	public static Road minimum(Road a, Road b)
+	{
+		Cost minCost = Cost.minimum(a.cost, b.cost);
+		if(minCost.equals(a.cost)) return a;
+		else return b;
+	}
+	
+	public static Road minimum(ArrayList<Road> roads)
+	{
+		if(roads.isEmpty()) throw new IllegalArgumentException("Aucune route à explorer");
+		else
+		{
+			Road min = roads.get(0);
+			for(Road r : roads)
+			{
+				min = minimum(min, r);
+			}
+			return min;
+		}
+	}
+	
 
 	private boolean decreaseLength(double distance)
 	{
@@ -112,8 +134,8 @@ public class Road {
 		if(!decreaseLength(vehicle.size+AbstractVehicle.minSpaceBetweenVehicles))
 		{
 			// Vive la programmation objet pour ses tirades de logique dure
-			vehicle.vehicleLocation.road.destination.obstruction = true;
-			throw new IllegalStateException("La saturation de la route "+identifier+" obstrue l'intersection "+vehicle.vehicleLocation.road.origin);
+			vehicle.location.currentRoad.destination.obstruction = true;
+			throw new IllegalStateException("La saturation de la route "+identifier+" obstrue l'intersection "+vehicle.location.currentRoad.origin);
 		}
 		else
 		{

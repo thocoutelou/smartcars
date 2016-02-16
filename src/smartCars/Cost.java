@@ -9,6 +9,8 @@
 
 package smartCars;
 
+import java.util.ArrayList;
+
 public class Cost {
 	
 	private double absoluteCost;
@@ -20,11 +22,19 @@ public class Cost {
 		finite = false;
 	}
 	
-	public Cost(int cost)
+	public Cost(double cost)
 	{
 		this.absoluteCost = cost;
 		this.finite = true;
 		this.realCost = this.absoluteCost;
+	}
+	
+	public static boolean inferior(Cost a, Cost b)
+	{
+		if(!b.finite) return true;
+		else if(!a.finite) return false;
+		else if(a.realCost<=b.realCost) return true;
+		else return false;
 	}
 	
 	/**
@@ -33,7 +43,7 @@ public class Cost {
 	 * @param Cost b: deuxième Cost à comparer à a
 	 * @return Cost minimal
 	 */
-	public Cost minimum(Cost a, Cost b)
+	public static Cost minimum(Cost a, Cost b)
 	{
 		if(!b.finite) return a;
 		else if(!a.finite) return b;
@@ -41,12 +51,17 @@ public class Cost {
 		else return b;
 	}
 	
-	public Cost maximum(Cost a, Cost b)
+	public static Cost maximum(Cost a, Cost b)
 	{
 		if((minimum(a, b)).equals(a)) return b;
 		else return a;
 	}
+
 	
-	
+	public static Cost sum(Cost a, Cost b)
+	{
+		if(!a.finite | !b.finite) return new Cost();
+		else return new Cost(a.realCost+b.realCost);
+	}
 	
 }
