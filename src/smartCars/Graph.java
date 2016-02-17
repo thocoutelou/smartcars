@@ -19,8 +19,8 @@ public class Graph {
 	
 	// (startDefault) définit un point de départ pour les AbstractVehicle instanciés sans précision
 	public static Location startDefault;
-	
 	public static ArrayList<AbstractVehicle> vehiclesInGraph;
+	public static ArrayList<Event> events;
 	
 
 	public Graph(ArrayList<AbstractIntersection> intersections, Location startDefault, ArrayList<AbstractVehicle> vehicles)

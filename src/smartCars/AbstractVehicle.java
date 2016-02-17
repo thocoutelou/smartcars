@@ -1,7 +1,6 @@
 package smartCars;
 
 
-import java.util.Queue;
 import java.util.Stack;
 
 public class AbstractVehicle {
@@ -14,8 +13,8 @@ public class AbstractVehicle {
 	public double size;
 	public static double minSpaceBetweenVehicles = 0.7;
 	
-	protected boolean routeExists = false;
-	protected Queue<Road> route;
+	protected boolean pathCalculated = false;
+	protected Stack<Road> path;
 	// (itinary) sauvegarde les routes déjà empruntées en vue de les revoir
 	// d'où sa structure de pile FIFO (Stack)
 	protected Stack<Road> itinary;
@@ -28,10 +27,10 @@ public class AbstractVehicle {
 	}
 	
 	
-	public void saveRoute(Queue<Road> route)
+	public void saveRoute(Stack<Road> route)
 	{
-		this.routeExists = true;
-		this.route = route;
+		this.pathCalculated = true;
+		this.path = route;
 	}
 	
 	

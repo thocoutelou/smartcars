@@ -1,6 +1,7 @@
 package smartCars;
 
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -105,7 +106,7 @@ public class Road {
 	private boolean decreaseLength(double distance)
 	{
 		// Marge d'erreur de 1 dm
-		if(0.1<distance-length)
+		if(length+0.1<distance)
 		{
 			return false;
 		}
@@ -116,11 +117,11 @@ public class Road {
 		}
 	}
 	
-	//TODO Modifier la condition logique
+
 	private boolean increaseLength(double distance)
 	{
 		// Marge d'erreur de 1 dm
-		if(0.1<absoluteLength-length-distance)
+		if(length+distance+0.1<absoluteLength)
 		{
 			return false;
 		}
@@ -164,15 +165,15 @@ public class Road {
 		}
 		vehiclesOnRoad.remove(leavingVehicle);
 		//destination.crossIntersection(leavingVehicle, leavingVehicle.route.element());
-		Road nextRoad = leavingVehicle.route.remove();
+		Road nextRoad = leavingVehicle.path.pop();
 		//TODO Modifier en détail la "location" du véhicule
 		leavingVehicle.location.currentRoad = nextRoad;
 		nextRoad.vehiclesOnRoad.add(leavingVehicle);
 		try
 		{
-			leavingVehicle.itinary.push(leavingVehicle.route.remove());
+			leavingVehicle.itinary.push(leavingVehicle.path.pop());
 		}
-		catch(Exception e)
+		catch(EmptyStackException e)
 		{
 			throw new IllegalStateException("Mauvais appel de formerWaitingVehicle : le véhicule en attente est déjà arrivé à destination");
 		}

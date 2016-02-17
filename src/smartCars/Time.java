@@ -2,6 +2,9 @@ package smartCars;
 
 public class Time {
 	
+	//TODO Penser une façon de gérer le temps
+	// - avec une classe "Events" basée sur une file chronologique ?
+	// - 'a posteriori' de Dijkstra pour chaque voiture ?
 	public static double time = 0.;
 	
 	// 0. correspond à minuit

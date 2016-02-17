@@ -10,7 +10,14 @@ public class Dijkstra {
 	private int numberOfIntersections = graph.getIntersections().size();
 	
 	
-	public Stack<Road> path(AbstractVehicle vehicle) throws IllegalStateException
+	/**
+	 * Actualise vehicle.path avec le chemin calculé dans le graphe
+	 * à l'aide de l'algorithme Dijkstra
+	 * sous la forme d'une pile (Stack) dont le sommet est l'intersection de départ.
+	 * @param vehicle
+	 * @throws IllegalStateException
+	 */
+	public void path(AbstractVehicle vehicle) throws IllegalStateException
 	{
 		AbstractIntersection origin = vehicle.intersectionAfterStart();
 		ArrayList<Road> nextRoads = new ArrayList<Road>(origin.leavingRoads);
@@ -62,11 +69,18 @@ public class Dijkstra {
 			throw new IllegalStateException("Le graphe n'est pas fortement connexe");
 		}
 
-		return buildPath(vehicle, route);
+		vehicle.path = buildPath(vehicle, route);
 	}
 
-	
-	public Stack<Road> buildPath(AbstractVehicle vehicle, Road[] route)
+	/**
+	 * Transforme le tableau 'route' contenant dans chaque case
+	 * la route précédent la route de même identifiant que l'index
+	 * de la case du tableau en une pile 'path' plus adaptée.
+	 * @param vehicle
+	 * @param route
+	 * @return Stack path (construit sur 'route')
+	 */
+	private Stack<Road> buildPath(AbstractVehicle vehicle, Road[] route)
 	{
 		Stack<Road> path = new Stack<Road>();
 		path.push(vehicle.location.finalRoad);

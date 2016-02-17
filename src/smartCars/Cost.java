@@ -41,9 +41,7 @@ public class Cost {
 	 */
 	public static Cost minimum(Cost a, Cost b)
 	{
-		if(!b.finite) return a;
-		else if(!a.finite) return b;
-		else if(a.absoluteCost<=b.absoluteCost) return a;
+		if(inferior(a, b)) return a;
 		else return b;
 	}
 	
