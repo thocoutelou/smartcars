@@ -7,11 +7,10 @@ public class AbstractIntersection {
 	
 	protected static int identificator = 0;
 	public int identifier;
-	// (type) identifie le type d'intersection instancié
-	private int type;
 	
 	// (crossingTime) durée moyenne de traversée de l'intersection
-	public double crossingDuration;
+	//TODO Intégrer dans le calcul du chemin, à travers un coût
+	public double averageTime;
 	// (obstruction) indique si l'intersection est obstruée
 	public boolean obstruction;
 	
@@ -23,8 +22,7 @@ public class AbstractIntersection {
 	{
 		identifier = identificator;
 		identificator++;
-		type = 0;
-		crossingDuration = 10.;
+		averageTime = 10.;
 		obstruction = false;
 		this.leavingRoads = leavingRoads;
 	}

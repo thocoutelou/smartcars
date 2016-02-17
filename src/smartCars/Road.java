@@ -8,6 +8,10 @@ public class Road {
 	
 	private static int identificator = 0;
 	public int identifier;
+	// (cost) ne contient pas et ne doit pas contenir
+	// le coût supplémentaire engendré par la traversée de l'intersection suivante
+	// car les première et dernière routes empruntées sont nécessaires,
+	// indépendamment de l'intersection précédente ou suivante.
 	public Cost cost;
 	public int lane;
 	private double absoluteLength;
@@ -149,7 +153,7 @@ public class Road {
 		}
 	}
 	
-	//TODO Transférer le véhicule dans l'intersection (destination)
+	
 	public void formerWaitingVehicle() throws IllegalStateException
 	{
 		AbstractVehicle leavingVehicle = waitingVehicles.remove();
@@ -159,7 +163,18 @@ public class Road {
 			throw new IllegalStateException("Les files de voitures présentes et en attente ne correspondent pas");
 		}
 		vehiclesOnRoad.remove(leavingVehicle);
-		//TODO Changer la structure de l'itinéraire d'un véhicule
-		//destination.crossIntersection(leavingVehicle, leavingVehicle.route.element());;
+		//destination.crossIntersection(leavingVehicle, leavingVehicle.route.element());
+		Road nextRoad = leavingVehicle.route.remove();
+		//TODO Modifier en détail la "location" du véhicule
+		leavingVehicle.location.currentRoad = nextRoad;
+		nextRoad.vehiclesOnRoad.add(leavingVehicle);
+		try
+		{
+			leavingVehicle.itinary.push(leavingVehicle.route.remove());
+		}
+		catch(Exception e)
+		{
+			throw new IllegalStateException("Mauvais appel de formerWaitingVehicle : le véhicule en attente est déjà arrivé à destination");
+		}
 	}
 }

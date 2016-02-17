@@ -16,15 +16,16 @@ public class Graph {
 	// (startDefault) définit un point de départ pour les AbstractVehicle instanciés sans précision
 	public static Location startDefault;
 	
-	public static AbstractVehicle[] vehiclesInGraph = {};
+	public static ArrayList<AbstractVehicle> vehiclesInGraph;
 	
 
-	public Graph(ArrayList<AbstractIntersection> intersections, Location startDefault, AbstractVehicle[] vehicles)
+	public Graph(ArrayList<AbstractIntersection> intersections, Location startDefault, ArrayList<AbstractVehicle> vehicles)
 	{
 		this.intersections = intersections;
-		this.startDefault = startDefault;
-		this.vehiclesInGraph = vehicles;
+		Graph.startDefault = startDefault;
+		Graph.vehiclesInGraph = vehicles;
 	}
+	
 	
 	//TODO contructeur à partir d'un image vectorielle
 	//TODO définir les normes de l'image (notamment les couleurs)
@@ -34,6 +35,5 @@ public class Graph {
 	{
 		return intersections;
 	}
-	
 	
 }

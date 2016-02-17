@@ -13,7 +13,7 @@ public class Car extends AbstractVehicle {
 	{
 		super();
 		size = 4.;
-		this.vehicleLocation = start;
+		this.location = start;
 	}
 	
 

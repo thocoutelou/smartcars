@@ -32,7 +32,17 @@ public class Dijkstra {
 			Road currentRoad = Road.minimum(nextRoads);
 			nextRoads.remove(currentRoad);
 			visited[currentRoad.destination.identifier] = true;
-			Cost sum = Cost.sum(costs[currentRoad.origin.identifier], currentRoad.cost);
+			
+			Cost sum;
+			if(Time.Rush())
+			{
+				sum = Cost.sum(costs[currentRoad.origin.identifier], Cost.intersection(currentRoad));
+			}
+			else
+			{
+				sum = Cost.sum(costs[currentRoad.origin.identifier], currentRoad.cost);
+			}
+			
 			if(Cost.inferior(sum, costs[currentRoad.destination.identifier]))
 			{
 				costs[currentRoad.destination.identifier] = sum;
@@ -54,6 +64,7 @@ public class Dijkstra {
 
 		return buildPath(vehicle, route);
 	}
+
 	
 	public Stack<Road> buildPath(AbstractVehicle vehicle, Road[] route)
 	{

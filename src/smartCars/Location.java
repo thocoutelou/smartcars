@@ -20,8 +20,6 @@ public class Location {
 	{
 		initialDate = 0.;
 		initialPosition = initialRoad.length;
-		
-		
 	}
 	
 	//TODO

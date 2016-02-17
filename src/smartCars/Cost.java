@@ -9,13 +9,10 @@
 
 package smartCars;
 
-import java.util.ArrayList;
-
 public class Cost {
 	
 	private double absoluteCost;
 	private boolean finite;
-	private double realCost;
 	
 	public Cost()
 	{
@@ -26,14 +23,13 @@ public class Cost {
 	{
 		this.absoluteCost = cost;
 		this.finite = true;
-		this.realCost = this.absoluteCost;
 	}
 	
 	public static boolean inferior(Cost a, Cost b)
 	{
 		if(!b.finite) return true;
 		else if(!a.finite) return false;
-		else if(a.realCost<=b.realCost) return true;
+		else if(a.absoluteCost<=b.absoluteCost) return true;
 		else return false;
 	}
 	
@@ -47,7 +43,7 @@ public class Cost {
 	{
 		if(!b.finite) return a;
 		else if(!a.finite) return b;
-		else if(a.realCost<=b.realCost) return a;
+		else if(a.absoluteCost<=b.absoluteCost) return a;
 		else return b;
 	}
 	
@@ -61,7 +57,13 @@ public class Cost {
 	public static Cost sum(Cost a, Cost b)
 	{
 		if(!a.finite | !b.finite) return new Cost();
-		else return new Cost(a.realCost+b.realCost);
+		else return new Cost(a.absoluteCost+b.absoluteCost);
+	}
+	
+
+	public static Cost intersection(Road r)
+	{
+		return sum(r.cost, new Cost(r.destination.averageTime));
 	}
 	
 }
