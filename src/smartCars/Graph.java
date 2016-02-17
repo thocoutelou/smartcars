@@ -1,6 +1,10 @@
 package smartCars;
 
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -29,7 +33,38 @@ public class Graph {
 	
 	//TODO contructeur à partir d'un image vectorielle
 	//TODO définir les normes de l'image (notamment les couleurs)
-	public Graph() {}
+	/*
+	 * Étapes du parsing de l'image:
+	 * 0 : Ouvrir le fichier .svg
+	 * 1 : sélectionner les informations dans le calque 1 (balise g)
+	 * 2 : créer toute les intersections représentées par des cercles <circle/>
+	 * 3 : créer les road dans les intersections, représentés par des <path/>
+	 * 	   un path a une intersection de départ si son premier sommet se trouve dans la zone d'un cercle (intersection)
+	 */
+	public Graph(String fileName) {
+		String line = null;
+		
+		try {
+            // FileReader reads text files in the default encoding.
+            FileReader fileReader = new FileReader(fileName);
+
+            // Always wrap FileReader in BufferedReader.
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            while((line = bufferedReader.readLine()) != null) {
+                System.out.println(line);
+            }   
+
+            // Always close files.
+            bufferedReader.close();         
+        }
+        catch(FileNotFoundException ex) {
+            System.out.println("Unable to open file '" + fileName + "'");                
+        }
+        catch(IOException ex) {
+            System.out.println("Error reading file '" + fileName + "'");
+        }
+	}
 
 	public ArrayList<AbstractIntersection> getIntersections()
 	{
