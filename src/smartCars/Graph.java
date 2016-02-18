@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * Le graphe est représenté par la liste de ses noeuds (intersections AbstractIntersection),
@@ -15,24 +16,30 @@ import java.util.ArrayList;
 public class Graph {
 	
 	// (intersections) définit le graphe même
-	private ArrayList<AbstractIntersection> intersections;
+	private static ArrayList<AbstractIntersection> intersections;
+	public static int numberOfIntersections = intersections.size();
+	public static ArrayList<Road> roads;
+	public static Cost[][] costsMatrix = Cost.floydWarshall();
 	
 	// (startDefault) définit un point de départ pour les AbstractVehicle instanciés sans précision
 	public static Location startDefault;
-	public static ArrayList<AbstractVehicle> vehiclesInGraph;
+	public static Stack<AbstractVehicle> vehicles;
 	public static ArrayList<Event> events;
 	
 
-	public Graph(ArrayList<AbstractIntersection> intersections, Location startDefault, ArrayList<AbstractVehicle> vehicles)
+	public Graph(ArrayList<AbstractIntersection> intersections, Location startDefault, ArrayList<AbstractVehicle> vehiclesInGraph)
 	{
-		this.intersections = intersections;
+		Graph.intersections = intersections;
 		Graph.startDefault = startDefault;
-		Graph.vehiclesInGraph = vehicles;
+		listRoads();
+		stackVehicles(vehiclesInGraph);
 	}
 	
 	
 	//TODO contructeur à partir d'un image vectorielle
 	//TODO définir les normes de l'image (notamment les couleurs)
+	// Ne vaudrait-il pas mieux créer une classe Svg
+	// dont les méthodes seraient appelées dans le constructeur Graph ?
 	/*
 	 * Étapes du parsing de l'image:
 	 * 0 : Ouvrir le fichier .svg
@@ -66,9 +73,30 @@ public class Graph {
         }
 	}
 
-	public ArrayList<AbstractIntersection> getIntersections()
+	/**
+	 * Forme la liste complète des routes du graphe
+	 */
+	public void listRoads()
 	{
-		return intersections;
+		for(AbstractIntersection i : intersections)
+		{
+			roads.addAll(i.leavingRoads);
+		}
+	}
+
+	/**
+	 * Forme la pile des véhicules dans leur ordre de priorité de traitement :
+	 * les véhicules d'itinéraires les plus longs sont prioritaires
+	 * @param vehiclesInGraph
+	 */
+	public void stackVehicles(ArrayList<AbstractVehicle> vehiclesInGraph)
+	{
+		Stack<AbstractVehicle> vehicles = new Stack<AbstractVehicle>();
+		while(!vehiclesInGraph.isEmpty())
+		{
+			vehicles.add(AbstractVehicle.lessPriorityVehicle(vehiclesInGraph));
+		}
+		Graph.vehicles = vehicles;
 	}
 	
 }

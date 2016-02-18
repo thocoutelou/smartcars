@@ -2,18 +2,14 @@ package smartCars;
 
 public class Event {
 	
-	private int identificator = 0;
-	private int identifier;
-
+	private int vehicleIdentifier;
 	public boolean critical;
 	public int nature;
 	public double date;
 	
-	public Event(int nature, double date)
+	public Event(AbstractVehicle vehicle, int nature, double date)
 	{
-		identifier = identificator;
-		identificator++;
-		
+		this.vehicleIdentifier = vehicle.identifier;
 		this.nature = nature;
 		this.date = date;
 		setCritical();
@@ -24,5 +20,7 @@ public class Event {
 	{
 		critical = nature==0;
 	}
+	
+	
 	
 }

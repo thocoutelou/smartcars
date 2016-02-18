@@ -1,6 +1,7 @@
 package smartCars;
 
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class AbstractVehicle {
@@ -27,10 +28,19 @@ public class AbstractVehicle {
 	}
 	
 	
-	public void saveRoute(Stack<Road> route)
+	public void savePath(Stack<Road> path)
 	{
 		this.pathCalculated = true;
-		this.path = route;
+		this.path = path;
+	}
+	
+	
+	public static boolean inferiorPath(AbstractVehicle a, AbstractVehicle b)
+	{
+		Cost aPath = Graph.costsMatrix[a.intersectionBeforeEnd().identifier][a.intersectionAfterStart().identifier];
+		Cost bPath = Graph.costsMatrix[b.intersectionBeforeEnd().identifier][b.intersectionAfterStart().identifier];
+		if(Cost.inferior(aPath, bPath)) return true;
+		else return false;
 	}
 	
 	
@@ -41,10 +51,30 @@ public class AbstractVehicle {
 	}
 	
 	// L'hypothèse est faite que la voiture ne peut se trouver dans une intersection à l'arrêt,
-	// et par conséquent à son départ.
+	// et par conséquent à son départ...
 	public AbstractIntersection intersectionAfterStart()
 	{
 		return location.nextIntersection();
+	}
+	// ... et à son arrivée.
+	public AbstractIntersection intersectionBeforeEnd()
+	{
+		return location.finalIntersection();
+	}
+	
+	
+	public static AbstractVehicle lessPriorityVehicle(ArrayList<AbstractVehicle> vehicles)
+	{
+		AbstractVehicle lessPriorityVehicle = vehicles.get(0);
+		for(AbstractVehicle v : vehicles)
+		{
+			if(inferiorPath(v, lessPriorityVehicle))
+			{
+				lessPriorityVehicle = v;
+			}
+		}
+		vehicles.remove(lessPriorityVehicle);
+		return lessPriorityVehicle;
 	}
 	
 	

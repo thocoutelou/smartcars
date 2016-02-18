@@ -6,10 +6,6 @@ import java.util.Stack;
 
 public class Dijkstra {
 	
-	private Graph graph;
-	private int numberOfIntersections = graph.getIntersections().size();
-	
-	
 	/**
 	 * Actualise vehicle.path avec le chemin calculé dans le graphe
 	 * à l'aide de l'algorithme Dijkstra
@@ -23,18 +19,18 @@ public class Dijkstra {
 		ArrayList<Road> nextRoads = new ArrayList<Road>(origin.leavingRoads);
 		// route[i] contient la route qui mène à i,
 		// qui elle-même contient l'intersection d'origine
-		Road route[] = new Road[numberOfIntersections];
+		Road route[] = new Road[Graph.numberOfIntersections];
 		
-		boolean visited[] = new boolean[numberOfIntersections];
-		for(int i=0; i<numberOfIntersections; i++) visited[i]=false;
+		boolean visited[] = new boolean[Graph.numberOfIntersections];
+		for(int i=0; i<Graph.numberOfIntersections; i++) visited[i]=false;
 		visited[origin.identifier] = true;
 		
-		Cost costs[] = new Cost[numberOfIntersections];
-		for(int i=0; i<numberOfIntersections; i++) costs[i] = new Cost();
+		Cost costs[] = new Cost[Graph.numberOfIntersections];
+		for(int i=0; i<Graph.numberOfIntersections; i++) costs[i] = new Cost();
 		costs[origin.identifier] = new Cost(0);
 		
 		
-		while(!visited[origin.identifier] & !nextRoads.isEmpty())
+		while(!nextRoads.isEmpty())
 		{
 			Road currentRoad = Road.minimum(nextRoads);
 			nextRoads.remove(currentRoad);
@@ -89,6 +85,12 @@ public class Dijkstra {
 			path.push(route[path.peek().origin.identifier]);
 		}
 		return path;
+	}
+	
+	//TODO
+	public void changePath(ArrayList<Event> events)
+	{
+		
 	}
 
 }

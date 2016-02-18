@@ -33,5 +33,9 @@ public class Location {
 		return initialRoad.destination;
 	}
 	
+	public AbstractIntersection finalIntersection()
+	{
+		return finalRoad.origin;
+	}
 
 }

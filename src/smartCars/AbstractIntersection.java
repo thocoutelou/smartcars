@@ -7,15 +7,13 @@ public class AbstractIntersection {
 	
 	protected static int identificator = 0;
 	public int identifier;
+	// (leavingRoads) routes sortantes directement connectées
+	public ArrayList<Road> leavingRoads = new ArrayList<Road>();
 	
 	// (crossingTime) durée moyenne de traversée de l'intersection
-	//TODO Intégrer dans le calcul du chemin, à travers un coût
 	public double averageTime;
 	// (obstruction) indique si l'intersection est obstruée
 	public boolean obstruction;
-	
-	// (leavingRoads) routes sortantes directement connectées
-	public ArrayList<Road> leavingRoads = new ArrayList<Road>();
 	
 	
 	public AbstractIntersection(ArrayList<Road> leavingRoads)

@@ -1,12 +1,3 @@
-/* Peut-être sera-t-il utile de créer une méthode
- * pour ranger une ArrayList<Road>
- * dans l'ordre croissant de coût de traversée.
- * Cette méthode serait soit ici présente, soit dans Road.
- * Le mieux serait que les listes de routes de chaque intersection
- * soit rangées dans l'ordre croissant de leur coût de traversée
- * dès la construction du graphe (à partir de l'image) !
- */
-
 package smartCars;
 
 public class Cost {
@@ -62,6 +53,31 @@ public class Cost {
 	public static Cost intersection(Road r)
 	{
 		return sum(r.cost, new Cost(r.destination.averageTime));
+	}
+	
+	
+	// L'idée ici est de construire la matrice de Floyd-Warshall du graphe
+	// afin de savoir quelle voiture traiter en priorité,
+	// à partir seulement de l'origine et de l'arrivée de son parcours :
+	// il est plus juste de rallonger l'itinéraire d'une voiture de plus court trajet.
+	public static Cost[][] floydWarshall()
+	{
+		Cost[][] costsMatrix = new Cost[Graph.numberOfIntersections][Graph.numberOfIntersections];
+		for(Road r : Graph.roads)
+		{
+			costsMatrix[r.destination.identifier][r.origin.identifier] = r.cost;
+		}
+		for(int k=0; k<Graph.numberOfIntersections; k++)
+		{
+			for(int i=0; i<Graph.numberOfIntersections; i++)
+			{
+				for(int j=0; j<Graph.numberOfIntersections; j++)
+				{
+					costsMatrix[j][i] = minimum(costsMatrix[j][i], sum(costsMatrix[k][i], costsMatrix[j][k]));
+				}
+			}
+		}
+		return costsMatrix;
 	}
 	
 }
