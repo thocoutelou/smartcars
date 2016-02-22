@@ -17,9 +17,9 @@ public class Graph {
 	
 	// (intersections) définit le graphe même
 	private static ArrayList<AbstractIntersection> intersections;
-	public static int numberOfIntersections = intersections.size();
+	public static int numberOfIntersections;
 	public static ArrayList<Road> roads;
-	public static Cost[][] costsMatrix = Cost.floydWarshall();
+	public static Cost[][] costsMatrix;
 	
 	// (startDefault) définit un point de départ pour les AbstractVehicle instanciés sans précision
 	public static Location startDefault;
@@ -31,6 +31,8 @@ public class Graph {
 	{
 		Graph.intersections = intersections;
 		Graph.startDefault = startDefault;
+		Graph.numberOfIntersections = intersections.size();
+		Graph.costsMatrix = Cost.floydWarshall();
 		listRoads();
 		stackVehicles(vehiclesInGraph);
 	}
