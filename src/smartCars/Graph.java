@@ -1,10 +1,21 @@
 package smartCars;
 
 
+import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -51,28 +62,50 @@ public class Graph {
 	 * 	   un path a une intersection de départ si son premier sommet se trouve dans la zone d'un cercle (intersection)
 	 */
 	public Graph(String fileName) {
-		String line = null;
+        
+		/* La documentation du parser qu'on va utiliser est en ligne:
+		 *  https://openclassrooms.com/courses/structurez-vos-donnees-avec-xml/dom-exemple-d-utilisation-en-java
+		 */
 		
+		// La classe DocumentBuilderFacorty est utilisée pour parser le xml de l'image svg.
+		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		final DocumentBuilder builder;
+		
+
 		try {
-            // FileReader reads text files in the default encoding.
-            FileReader fileReader = new FileReader(fileName);
+			// On crée le parser
+		    builder = factory.newDocumentBuilder();       
+		    final Document document= builder.parse(new File(fileName));
+		    //On sélectionne la racine
+		    final Element racine = document.getDocumentElement();
+		    final NodeList racineNoeuds = racine.getChildNodes();
+		    final int nbRacineNoeuds = racineNoeuds.getLength();
 
-            // Always wrap FileReader in BufferedReader.
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
+		    for (int i = 0; i<nbRacineNoeuds; i++) {
+		    	//On se place dans le premier calque
+		        if (racineNoeuds.item(i).getNodeName() == "g"){
+		        	final NodeList gNoeuds = racineNoeuds.item(i).getChildNodes();
+		        	final int nbgNoeuds = gNoeuds.getLength();
+		        	for(int j = 0; j<nbgNoeuds; j++ ){
+		        		//if(gNoeuds.item(j).getNodeType() == Node.ELEMENT_NODE)
+		        		System.out.println(gNoeuds.item(j).getNodeName());
+		        	}
+		        }
 
-            while((line = bufferedReader.readLine()) != null) {
-                System.out.println(line);
-            }   
+		    }
+		}
+		catch (final ParserConfigurationException e) {
+		    e.printStackTrace();
+		}
+		catch (final SAXException e) {
+		    e.printStackTrace();
+		}
+		catch (final IOException e) {
+		    e.printStackTrace();
+		}
+		
 
-            // Always close files.
-            bufferedReader.close();         
-        }
-        catch(FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + fileName + "'");                
-        }
-        catch(IOException ex) {
-            System.out.println("Error reading file '" + fileName + "'");
-        }
+
 	}
 
 	/**
