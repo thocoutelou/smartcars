@@ -23,6 +23,7 @@ public class Test_Graph {
 		//Scenario 1 : création d'un graphe simple à partir d'une image svg
 		String fileName=project_location + "/media/map/1.svg";
 		Graph graph1 = new Graph(fileName);
+		System.out.println(graph1);
 
 	}
 

@@ -55,8 +55,8 @@ public class Graph {
 	 * Étapes du parsing de l'image:
 	 * 0 : Ouvrir le fichier .svg
 	 * 1 : sélectionner les informations dans le calque 1 (balise g)
-	 * 2 : créer toute les intersections représentées par des cercles <circle/>
-	 * 3 : créer les road dans les intersections, représentés par des <path/>
+	 * 2 : créer toute les intersections représentées par des cercles <circle/> et les Road représentées par des <path/>
+	 * 3 : Créer le graphe
 	 * 	   un path a une intersection de départ si son premier sommet se trouve dans la zone d'un cercle (intersection)
 	 */
 	public Graph(String fileName) {
@@ -94,7 +94,7 @@ public class Graph {
 		        				AbstractIntersection parseIntersection = new AbstractIntersection();
 		        				parseIntersection.center = new CartesianCoordinate(Float.parseFloat(geometricFigure.getAttribute("cx")),
 		        						Float.parseFloat(geometricFigure.getAttribute("cy")));
-		        				parseIntersection.r = Float.parseFloat(geometricFigure.getAttribute("r"));
+		        				parseIntersection.radius = Float.parseFloat(geometricFigure.getAttribute("r"));
 			        			System.out.println("Intersection " + parseIntersection.identifier + " parsed: " + parseIntersection);
 		        				this.intersections.add(parseIntersection);
 		        			}
@@ -106,16 +106,54 @@ public class Graph {
 		        				// d est sous la forme d="m 395.9798,236.15895 6.06091,165.66502"
 		        				String d=geometricFigure.getAttribute("d");
 		        				String [] dParse = d.split("( |,)"); // Utilisation de regex
-		        				parseRoad.point1 = new CartesianCoordinate(Float.parseFloat(dParse[1]), Float.parseFloat(dParse[2]));
-		        				parseRoad.point2 = new CartesianCoordinate(Float.parseFloat(dParse[3]), Float.parseFloat(dParse[4]));
-			        			System.out.println("Road " + parseRoad.identifier + " parsed: " +
-			        					parseRoad.point1 + "; " + parseRoad.point2);
-		        				this.roads.add(parseRoad);
+		        				if(dParse[0].equals("M") || dParse[0].equals("m")){
+		        					if(dParse[0].equals("M")){
+		        						parseRoad.point1 = new CartesianCoordinate(Float.parseFloat(dParse[1]), Float.parseFloat(dParse[2]));
+		        						parseRoad.point2 = new CartesianCoordinate(Float.parseFloat(dParse[3]), Float.parseFloat(dParse[4]));
+		        					} else { //dParse[0].equals("m")
+		        						parseRoad.point1 = new CartesianCoordinate(Float.parseFloat(dParse[1]), Float.parseFloat(dParse[2]));
+		        						parseRoad.point2 = new CartesianCoordinate(parseRoad.point1.x + Float.parseFloat(dParse[3]), parseRoad.point1.y + Float.parseFloat(dParse[4]));
+		        					}
+				        			System.out.println("Road " + parseRoad.identifier + " parsed: " +
+				        					parseRoad.point1 + "; " + parseRoad.point2);
+			        				this.roads.add(parseRoad);
+		        				}else{
+		        					System.out.println("Cannot parse " + geometricFigure.getAttribute("id"));
+		        				}
+
 		        			}
 
 
 		        		}
 		        		
+		        	}
+		        	
+		        	/* Création du graphe
+		        	 * On parcourt les arêtes et on rajoute les arêtes dont le point1 est situé dans une intersection
+		        	 * et point2 dans une intersection (On ne considère que les arêtes arêtes significatives)
+		        	 */
+		        	for(int j = 0; j<roads.size(); j++ ){
+		        		Boolean isIntegrated = false;
+		        		// Vérification de point1
+		        		for(int k= 0; k<intersections.size(); k ++){
+		        			if(roads.get(j).point1.distanceFrom(intersections.get(k).center) <= intersections.get(k).radius){
+		        				// On cherche alors pour le point2
+		        				for(int l=0; l<intersections.size(); l++){
+		        					if(roads.get(j).point2.distanceFrom(intersections.get(l).center) <= intersections.get(l).radius){
+		        						// Le Road j a deux extrémités dans des intersections
+		        						//On renseigne les informations de l'arête
+		        						roads.get(j).origin = intersections.get(k);
+		        						roads.get(j).destination = intersections.get(l);
+		        						// On renseigne origin de l'arête sortante
+		        						intersections.get(k).leavingRoads.add(roads.get(j));
+		        						isIntegrated = true;
+		        					}
+		        				}
+		        			}
+		        		}
+	        			if(! isIntegrated){
+	        				System.out.println(roads.get(j) + " has not been integrated to the graph" );
+	        			}
 		        	}
 		        }
 
@@ -159,6 +197,15 @@ public class Graph {
 			vehicles.add(AbstractVehicle.lessPriorityVehicle(vehiclesInGraph));
 		}
 		Graph.vehicles = vehicles;
+	}
+	
+	public String toString() {
+		String newline = System.getProperty("line.separator");
+		String result = "<---   Graph print   --->" + newline;
+		for (int i=0; i<intersections.size(); i++){
+			result += intersections.get(i).toStringDetailed()+ newline;
+		}
+		return result;
 	}
 	
 }

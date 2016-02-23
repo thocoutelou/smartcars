@@ -17,7 +17,7 @@ public class AbstractIntersection {
 	
 	//Géométrie de l'intersection
 	public CartesianCoordinate center;
-	public float r;
+	public float radius;
 	
 	
 	public AbstractIntersection(ArrayList<Road> leavingRoads) {
@@ -40,8 +40,17 @@ public class AbstractIntersection {
 		
 	}
 	
+	public String toStringDetailed(){
+		String newline = System.getProperty("line.separator");
+		String result = "Intersection " + this.identifier + " Center: " + this.center.toString() + " R= " + this.radius + " leavingRoads: " + newline;
+		for(int i=0; i<leavingRoads.size(); i++){
+			result += leavingRoads.get(i).toStringDetailed() + newline;
+		}
+		return result;
+	}
+	
 	public String toString(){
-		return this.center.toString() + "R= " + this.r;
+		return "Intersection " + this.identifier;
 	}
 
 }

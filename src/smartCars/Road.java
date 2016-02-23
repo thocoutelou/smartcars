@@ -189,4 +189,13 @@ public class Road {
 			throw new IllegalStateException("Mauvais appel de formerWaitingVehicle : le véhicule en attente est déjà arrivé à destination");
 		}
 	}
+	
+	public String toString(){
+		return "Road " + this.identifier;
+	}
+	
+	public String toStringDetailed(){
+		String result =  "Road " + this.identifier + " origin=" + this.origin + " destination=" + this.destination;
+		return result;
+	}
 }
