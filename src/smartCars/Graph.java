@@ -47,7 +47,14 @@ public class Graph {
 	}
 	
 	
-	//TODO contructeur à partir d'un image vectorielle
+	// ***** Commentaires de lecture et questions *****
+	// -> pourquoi utiliser float plutôt que double ?
+	// -> ajout d'une initialisation de fortune du coût d'une route
+	// -> il faudra utiliser les constructeurs complets des objets,
+	// quitte à modifier ces constructeurs, pour faciliter la lecture et cibler le debug :
+	// commencer par définir les caractéristiques de l'objet à créer avant d'instancier la classe
+	// -> je pense que l'exception NullPointerException est due à l'initialisation des routes de ce constructeur
+	
 	//TODO définir les normes de l'image (notamment les couleurs)
 	// Ne vaudrait-il pas mieux créer une classe Svg
 	// dont les méthodes seraient appelées dans le constructeur Graph ?
@@ -114,6 +121,9 @@ public class Graph {
 		        						parseRoad.point1 = new CartesianCoordinate(Float.parseFloat(dParse[1]), Float.parseFloat(dParse[2]));
 		        						parseRoad.point2 = new CartesianCoordinate(parseRoad.point1.x + Float.parseFloat(dParse[3]), parseRoad.point1.y + Float.parseFloat(dParse[4]));
 		        					}
+		        					//TODO Initialisation temporaire de Cost pour accélérer le debug
+		        					// Le coût est pour l'instant la longueur de la route sur la vitesse urbaine standard de 50 km/h
+		        					parseRoad.cost = new Cost(CartesianCoordinate.distance(parseRoad.point1, parseRoad.point2)/50000.);
 				        			System.out.println("Road " + parseRoad.identifier + " parsed: " +
 				        					parseRoad.point1 + "; " + parseRoad.point2);
 			        				this.roads.add(parseRoad);
