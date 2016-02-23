@@ -23,6 +23,13 @@ public class Road {
 	public AbstractIntersection origin;
 	public AbstractIntersection destination;
 	
+	// Données géométriques sur l'instance
+	// Il faudrait peut-être définir une classe coordonnée si le code devient illisible
+	public float x1;
+	public float y1;
+	public float x2;
+	public float y2;
+	
 	// Véhicules sur la route
 	// Queue: structure FIFO (first in first out)
 	// Méthodes: isEmpty(), remove(), add()
@@ -78,6 +85,11 @@ public class Road {
 		this.cost = cost;
 		this.lane = lane;
 		this.absoluteLength = absoluteLength;
+	}
+	
+	public Road(){
+		identifier = identificator;
+		identificator++;
 	}
 	
 	

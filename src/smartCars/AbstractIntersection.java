@@ -15,16 +15,26 @@ public class AbstractIntersection {
 	// (obstruction) indique si l'intersection est obstruée
 	public boolean obstruction;
 	
+	//Géométrie de l'intersection
+	public float cx;
+	public float cy;
+	public float r;
 	
-	public AbstractIntersection(ArrayList<Road> leavingRoads)
-	{
+	
+	public AbstractIntersection(ArrayList<Road> leavingRoads) {
 		identifier = identificator;
 		identificator++;
 		averageTime = 10.;
 		obstruction = false;
 		this.leavingRoads = leavingRoads;
 	}
-	
+
+	public AbstractIntersection()
+	{
+		this(new ArrayList<Road>());
+	}
+
+
 	//TODO
 	public void crossIntersection(AbstractVehicle vehicle, Road nextRoad)
 	{

@@ -13,6 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -27,9 +28,9 @@ import java.util.Stack;
 public class Graph {
 	
 	// (intersections) définit le graphe même
-	private static ArrayList<AbstractIntersection> intersections;
-	public static int numberOfIntersections;
-	public static ArrayList<Road> roads;
+	private ArrayList<AbstractIntersection> intersections = new ArrayList<AbstractIntersection>();
+	public static int numberOfIntersections = 0;
+	public static ArrayList<Road> roads = new ArrayList<Road>();
 	public static Cost[][] costsMatrix;
 	
 	// (startDefault) définit un point de départ pour les AbstractVehicle instanciés sans précision
@@ -40,7 +41,7 @@ public class Graph {
 
 	public Graph(ArrayList<AbstractIntersection> intersections, Location startDefault, ArrayList<AbstractVehicle> vehiclesInGraph)
 	{
-		Graph.intersections = intersections;
+		this.intersections = intersections;
 		Graph.startDefault = startDefault;
 		Graph.numberOfIntersections = intersections.size();
 		Graph.costsMatrix = Cost.floydWarshall();
@@ -87,8 +88,43 @@ public class Graph {
 		        	final NodeList gNoeuds = racineNoeuds.item(i).getChildNodes();
 		        	final int nbgNoeuds = gNoeuds.getLength();
 		        	for(int j = 0; j<nbgNoeuds; j++ ){
-		        		//if(gNoeuds.item(j).getNodeType() == Node.ELEMENT_NODE)
-		        		System.out.println(gNoeuds.item(j).getNodeName());
+		        		// On filtre les éléments qui sont des noeuds
+		        		if(gNoeuds.item(j).getNodeType() == Node.ELEMENT_NODE){
+		        			final Element geometricFigure = (Element) gNoeuds.item(j);
+		        			
+		        			// Cas d'une intersection
+		        			if(geometricFigure.getNodeName() == "circle" ){
+		        				AbstractIntersection parseIntersection = new AbstractIntersection();
+		        				parseIntersection.cx = Float.parseFloat(geometricFigure.getAttribute("cx"));
+		        				parseIntersection.cy = Float.parseFloat(geometricFigure.getAttribute("cy"));
+		        				parseIntersection.r = Float.parseFloat(geometricFigure.getAttribute("r"));
+			        			System.out.println("Intersection " + parseIntersection.identifier + " parsed: " +
+			        					parseIntersection.cx + "; " +
+			        					parseIntersection.cy + "; " +
+			        					parseIntersection.r);
+		        				this.intersections.add(parseIntersection);
+		        			}
+
+		        			// Cas d'un Road
+		        			if(geometricFigure.getNodeName() == "path" ){
+		        				Road parseRoad = new Road();
+		        				// d contient les coordonnées du path
+		        				// d est sous la forme d="m 395.9798,236.15895 6.06091,165.66502"
+		        				String d=geometricFigure.getAttribute("d");
+		        				String [] dParse = d.split("( |,)"); // Utilisation de regex
+		        				parseRoad.x1 = Float.parseFloat(dParse[1]);
+		        				parseRoad.y1 = Float.parseFloat(dParse[2]);
+		        				parseRoad.x2 = Float.parseFloat(dParse[3]);
+		        				parseRoad.y2 = Float.parseFloat(dParse[4]);
+			        			System.out.println("Road " + parseRoad.identifier + " parsed: " +
+			        					"(" + parseRoad.x1 + ", " + parseRoad.y1 + ") " +
+			        					"(" + parseRoad.x2 + ", " + parseRoad.y2 + ")");
+		        				this.roads.add(parseRoad);
+		        			}
+
+
+		        		}
+		        		
 		        	}
 		        }
 
