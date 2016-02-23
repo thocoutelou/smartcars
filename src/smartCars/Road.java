@@ -24,11 +24,10 @@ public class Road {
 	public AbstractIntersection destination;
 	
 	// Données géométriques sur l'instance
-	// Il faudrait peut-être définir une classe coordonnée si le code devient illisible
-	public float x1;
-	public float y1;
-	public float x2;
-	public float y2;
+
+	public CartesianCoordinate point1;
+	public CartesianCoordinate point2;
+	
 	
 	// Véhicules sur la route
 	// Queue: structure FIFO (first in first out)

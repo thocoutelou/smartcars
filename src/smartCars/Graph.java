@@ -2,9 +2,6 @@ package smartCars;
 
 
 import java.io.File;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -95,13 +92,10 @@ public class Graph {
 		        			// Cas d'une intersection
 		        			if(geometricFigure.getNodeName() == "circle" ){
 		        				AbstractIntersection parseIntersection = new AbstractIntersection();
-		        				parseIntersection.cx = Float.parseFloat(geometricFigure.getAttribute("cx"));
-		        				parseIntersection.cy = Float.parseFloat(geometricFigure.getAttribute("cy"));
+		        				parseIntersection.center = new CartesianCoordinate(Float.parseFloat(geometricFigure.getAttribute("cx")),
+		        						Float.parseFloat(geometricFigure.getAttribute("cy")));
 		        				parseIntersection.r = Float.parseFloat(geometricFigure.getAttribute("r"));
-			        			System.out.println("Intersection " + parseIntersection.identifier + " parsed: " +
-			        					parseIntersection.cx + "; " +
-			        					parseIntersection.cy + "; " +
-			        					parseIntersection.r);
+			        			System.out.println("Intersection " + parseIntersection.identifier + " parsed: " + parseIntersection);
 		        				this.intersections.add(parseIntersection);
 		        			}
 
@@ -112,13 +106,10 @@ public class Graph {
 		        				// d est sous la forme d="m 395.9798,236.15895 6.06091,165.66502"
 		        				String d=geometricFigure.getAttribute("d");
 		        				String [] dParse = d.split("( |,)"); // Utilisation de regex
-		        				parseRoad.x1 = Float.parseFloat(dParse[1]);
-		        				parseRoad.y1 = Float.parseFloat(dParse[2]);
-		        				parseRoad.x2 = Float.parseFloat(dParse[3]);
-		        				parseRoad.y2 = Float.parseFloat(dParse[4]);
+		        				parseRoad.point1 = new CartesianCoordinate(Float.parseFloat(dParse[1]), Float.parseFloat(dParse[2]));
+		        				parseRoad.point2 = new CartesianCoordinate(Float.parseFloat(dParse[3]), Float.parseFloat(dParse[4]));
 			        			System.out.println("Road " + parseRoad.identifier + " parsed: " +
-			        					"(" + parseRoad.x1 + ", " + parseRoad.y1 + ") " +
-			        					"(" + parseRoad.x2 + ", " + parseRoad.y2 + ")");
+			        					parseRoad.point1 + "; " + parseRoad.point2);
 		        				this.roads.add(parseRoad);
 		        			}
 

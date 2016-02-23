@@ -16,8 +16,7 @@ public class AbstractIntersection {
 	public boolean obstruction;
 	
 	//Géométrie de l'intersection
-	public float cx;
-	public float cy;
+	public CartesianCoordinate center;
 	public float r;
 	
 	
@@ -39,6 +38,10 @@ public class AbstractIntersection {
 	public void crossIntersection(AbstractVehicle vehicle, Road nextRoad)
 	{
 		
+	}
+	
+	public String toString(){
+		return this.center.toString() + "R= " + this.r;
 	}
 
 }
