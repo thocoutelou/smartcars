@@ -24,6 +24,11 @@ public class Test_Graph {
 		String fileName=project_location + "/media/map/1.svg";
 		Graph graph1 = new Graph(fileName);
 		System.out.println(graph1);
+		
+		//Scénario 2
+		fileName=project_location + "/media/map/2.svg";
+		Graph graph2 = new Graph(fileName);
+		System.out.println(graph2);
 
 	}
 
