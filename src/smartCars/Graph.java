@@ -22,8 +22,8 @@ import java.util.Stack;
 
 /**
  * Le graphe est représenté par la liste de ses noeuds (intersections AbstractIntersection),
- * chacune d'entre elles contenant la liste de ses arêtes (routes Road) directement connectées.
- * L'hypothèse est faite que le graphe est FORTEMENT CONNEXE.
+ * chacun d'entre eux contenant la liste de ses arêtes (routes Road) directement connectées.
+ * L'hypothèse est faite que le graphe est connexe.
  */
 public class Graph {
 	
@@ -119,7 +119,7 @@ public class Graph {
 			        			System.out.println("Road " + parseRoad.identifier + " parsed: " +
 			        					"(" + parseRoad.x1 + ", " + parseRoad.y1 + ") " +
 			        					"(" + parseRoad.x2 + ", " + parseRoad.y2 + ")");
-		        				this.roads.add(parseRoad);
+		        				Graph.roads.add(parseRoad);
 		        			}
 
 
