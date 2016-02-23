@@ -49,6 +49,7 @@ public class AbstractIntersection {
 		return result;
 	}
 	
+	@Override
 	public String toString(){
 		return "Intersection " + this.identifier;
 	}

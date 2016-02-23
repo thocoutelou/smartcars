@@ -20,11 +20,11 @@ public class AbstractVehicle {
 	// d'où sa structure de pile FIFO (Stack)
 	protected Stack<Road> itinary;
 	
-	public AbstractVehicle()
+	public AbstractVehicle(Graph graph)
 	{
 		identifier = identificator;
 		identificator++;
-		location = Graph.startDefault;
+		location = graph.startDefault;
 	}
 	
 	
@@ -35,10 +35,10 @@ public class AbstractVehicle {
 	}
 	
 	
-	public static boolean inferiorPath(AbstractVehicle a, AbstractVehicle b)
+	public static boolean inferiorPath(Graph graph, AbstractVehicle a, AbstractVehicle b)
 	{
-		Cost aPath = Graph.costsMatrix[a.intersectionBeforeEnd().identifier][a.intersectionAfterStart().identifier];
-		Cost bPath = Graph.costsMatrix[b.intersectionBeforeEnd().identifier][b.intersectionAfterStart().identifier];
+		Cost aPath = graph.costsMatrix[a.intersectionBeforeEnd().identifier][a.intersectionAfterStart().identifier];
+		Cost bPath = graph.costsMatrix[b.intersectionBeforeEnd().identifier][b.intersectionAfterStart().identifier];
 		if(Cost.inferior(aPath, bPath)) return true;
 		else return false;
 	}
@@ -63,12 +63,12 @@ public class AbstractVehicle {
 	}
 	
 	
-	public static AbstractVehicle lessPriorityVehicle(ArrayList<AbstractVehicle> vehicles)
+	public static AbstractVehicle lessPriorityVehicle(Graph graph, ArrayList<AbstractVehicle> vehicles)
 	{
 		AbstractVehicle lessPriorityVehicle = vehicles.get(0);
 		for(AbstractVehicle v : vehicles)
 		{
-			if(inferiorPath(v, lessPriorityVehicle))
+			if(inferiorPath(graph, v, lessPriorityVehicle))
 			{
 				lessPriorityVehicle = v;
 			}

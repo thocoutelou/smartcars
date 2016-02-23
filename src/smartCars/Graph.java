@@ -26,22 +26,22 @@ public class Graph {
 	
 	// (intersections) définit le graphe même
 	private ArrayList<AbstractIntersection> intersections = new ArrayList<AbstractIntersection>();
-	public static int numberOfIntersections = 0;
-	public static ArrayList<Road> roads = new ArrayList<Road>();
-	public static Cost[][] costsMatrix;
+	public int numberOfIntersections = 0;
+	public ArrayList<Road> roads = new ArrayList<Road>();
+	public Cost[][] costsMatrix;
 	
 	// (startDefault) définit un point de départ pour les AbstractVehicle instanciés sans précision
-	public static Location startDefault;
-	public static Stack<AbstractVehicle> vehicles;
-	public static ArrayList<Event> events;
+	public Location startDefault;
+	public Stack<AbstractVehicle> vehicles;
+	public ArrayList<Event> events;
 	
 
 	public Graph(ArrayList<AbstractIntersection> intersections, Location startDefault, ArrayList<AbstractVehicle> vehiclesInGraph)
 	{
 		this.intersections = intersections;
-		Graph.startDefault = startDefault;
-		Graph.numberOfIntersections = intersections.size();
-		Graph.costsMatrix = Cost.floydWarshall();
+		this.startDefault = startDefault;
+		this.numberOfIntersections = intersections.size();
+		this.costsMatrix = Cost.floydWarshall(this);
 		listRoads();
 		stackVehicles(vehiclesInGraph);
 	}
@@ -168,8 +168,10 @@ public class Graph {
 		catch (final IOException e) {
 		    e.printStackTrace();
 		}
-		
 
+		this.numberOfIntersections = intersections.size();
+		this.costsMatrix = Cost.floydWarshall(this);
+		listRoads();
 
 	}
 
@@ -194,9 +196,9 @@ public class Graph {
 		Stack<AbstractVehicle> vehicles = new Stack<AbstractVehicle>();
 		while(!vehiclesInGraph.isEmpty())
 		{
-			vehicles.add(AbstractVehicle.lessPriorityVehicle(vehiclesInGraph));
+			vehicles.add(AbstractVehicle.lessPriorityVehicle(this, vehiclesInGraph));
 		}
-		Graph.vehicles = vehicles;
+		this.vehicles = vehicles;
 	}
 	
 	public String toString() {

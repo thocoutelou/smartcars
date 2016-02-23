@@ -2,7 +2,7 @@ package smartCars;
 
 public class Time {
 	
-	public static double time = setStartingTime();
+	public static double time;
 	
 	// 0. correspond à minuit
 	private final static double morningRushStart = 25200.; //7h
@@ -19,14 +19,14 @@ public class Time {
 		return morningRush|eveningRush;
 	}
 	
-	private static double setStartingTime() throws IllegalStateException
+	public static double setStartingTime(Graph graph) throws IllegalStateException
 	{
-		if(Graph.vehicles.isEmpty())
+		if(graph.vehicles.isEmpty())
 		{
 			throw new IllegalStateException("Le graphe est mal initialisé : aucun véhicule");
 		}
-		double startingTime = Graph.vehicles.get(0).location.initialDate;
-		for(AbstractVehicle v : Graph.vehicles)
+		double startingTime = graph.vehicles.get(0).location.initialDate;
+		for(AbstractVehicle v : graph.vehicles)
 		{
 			startingTime = Math.min(startingTime, v.location.initialDate);
 		}

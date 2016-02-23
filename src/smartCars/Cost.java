@@ -60,18 +60,26 @@ public class Cost {
 	// afin de savoir quelle voiture traiter en priorité,
 	// à partir seulement de l'origine et de l'arrivée de son parcours :
 	// il est plus juste de rallonger l'itinéraire d'une voiture de plus court trajet.
-	public static Cost[][] floydWarshall()
+	public static Cost[][] floydWarshall(Graph graph)
 	{
-		Cost[][] costsMatrix = new Cost[Graph.numberOfIntersections][Graph.numberOfIntersections];
-		for(Road r : Graph.roads)
+		System.out.println("Nombre d'intersections: "+graph.numberOfIntersections);
+		Cost costsMatrix[][] = new Cost[graph.numberOfIntersections][graph.numberOfIntersections];
+		for(int i=0; i<graph.numberOfIntersections; i++)
+		{
+			for(int j=0; j<graph.numberOfIntersections; j++)
+			{
+				costsMatrix[j][i] = new Cost();
+			}
+		}
+		for(Road r : graph.roads)
 		{
 			costsMatrix[r.destination.identifier][r.origin.identifier] = r.cost;
 		}
-		for(int k=0; k<Graph.numberOfIntersections; k++)
+		for(int k=0; k<graph.numberOfIntersections; k++)
 		{
-			for(int i=0; i<Graph.numberOfIntersections; i++)
+			for(int i=0; i<graph.numberOfIntersections; i++)
 			{
-				for(int j=0; j<Graph.numberOfIntersections; j++)
+				for(int j=0; j<graph.numberOfIntersections; j++)
 				{
 					costsMatrix[j][i] = minimum(costsMatrix[j][i], sum(costsMatrix[k][i], costsMatrix[j][k]));
 				}

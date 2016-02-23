@@ -3,15 +3,15 @@ package smartCars;
 
 public class Car extends AbstractVehicle {
 
-	public Car()
+	public Car(Graph graph)
 	{
-		super();
+		super(graph);
 		size = 4.;
 	}
 	
-	public Car(Location start)
+	public Car(Graph graph, Location start)
 	{
-		super();
+		super(graph);
 		size = 4.;
 		this.location = start;
 	}
