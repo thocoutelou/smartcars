@@ -19,8 +19,8 @@ import java.util.Stack;
 
 /**
  * Le graphe est représenté par la liste de ses noeuds (intersections AbstractIntersection),
- * chacune d'entre elles contenant la liste de ses arêtes (routes Road) directement connectées.
- * L'hypothèse est faite que le graphe est FORTEMENT CONNEXE.
+ * chacun d'entre eux contenant la liste de ses arêtes (routes Road) directement connectées.
+ * L'hypothèse est faite que le graphe est connexe.
  */
 public class Graph {
 	
