@@ -20,15 +20,15 @@ public class Test_Graph {
 			e.printStackTrace();
 		}
 		
-		/*
+		
 		//Scenario 1 : création d'un graphe simple à partir d'une image svg
 		String fileName=project_location + "/media/map/1.svg";
 		Graph graph1 = new Graph(fileName);
 		System.out.println(graph1);
-		*/
+		
 		
 		//Scénario 2
-		String fileName=project_location + "/media/map/2.svg";
+		fileName=project_location + "/media/map/2.svg";
 		Graph graph2 = new Graph(fileName);
 		System.out.println(graph2);
 

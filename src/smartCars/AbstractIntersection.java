@@ -8,7 +8,7 @@ public class AbstractIntersection {
 	protected static int identificator = 0;
 	public int identifier;
 	// (leavingRoads) routes sortantes directement connectées
-	public ArrayList<Road> leavingRoads = new ArrayList<Road>();
+	public ArrayList<Road> leavingRoads;
 	
 	// (crossingTime) durée moyenne de traversée de l'intersection
 	public double averageTime;
@@ -20,19 +20,16 @@ public class AbstractIntersection {
 	public float radius;
 	
 	
-	public AbstractIntersection(ArrayList<Road> leavingRoads) {
+	public AbstractIntersection(CartesianCoordinate center, float radius) {
 		identifier = identificator;
 		identificator++;
+		this.center= center;
+		this.radius = radius;
 		averageTime = 10.;
 		obstruction = false;
-		this.leavingRoads = leavingRoads;
+		// L'initialisation de leavingRoads est nécessaire, mais difficile à faire dès l'instanciation de l'intersection
+		this.leavingRoads = new ArrayList<Road>();
 	}
-
-	public AbstractIntersection()
-	{
-		this(new ArrayList<Road>());
-	}
-
 
 	//TODO
 	public void crossIntersection(AbstractVehicle vehicle, Road nextRoad)
@@ -40,6 +37,14 @@ public class AbstractIntersection {
 		
 	}
 	
+	public ArrayList<Road> getLeavingRoads() {
+		return leavingRoads;
+	}
+
+	public void setLeavingRoads(ArrayList<Road> leavingRoads) {
+		this.leavingRoads = leavingRoads;
+	}
+
 	public String toStringDetailed(){
 		String newline = System.getProperty("line.separator");
 		String result = "Intersection " + this.identifier + " Center: " + this.center.toString() + " R= " + this.radius + " leavingRoads: " + newline;

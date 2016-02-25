@@ -67,123 +67,157 @@ public class Graph {
 	 * 	   un path a une intersection de départ si son premier sommet se trouve dans la zone d'un cercle (intersection)
 	 */
 	public Graph(String fileName) {
-        
+
 		/* La documentation du parser qu'on va utiliser est en ligne:
 		 *  https://openclassrooms.com/courses/structurez-vos-donnees-avec-xml/dom-exemple-d-utilisation-en-java
 		 */
-		
+
 		// La classe DocumentBuilderFacorty est utilisée pour parser le xml de l'image svg.
 		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		final DocumentBuilder builder;
-		
+
 
 		try {
 			// On crée le parser
-		    builder = factory.newDocumentBuilder();       
-		    final Document document= builder.parse(new File(fileName));
-		    //On sélectionne la racine
-		    final Element racine = document.getDocumentElement();
-		    final NodeList racineNoeuds = racine.getChildNodes();
-		    final int nbRacineNoeuds = racineNoeuds.getLength();
-
-		    for (int i = 0; i<nbRacineNoeuds; i++) {
-		    	//On se place dans le premier calque
-		        if (racineNoeuds.item(i).getNodeName() == "g"){
-		        	final NodeList gNoeuds = racineNoeuds.item(i).getChildNodes();
-		        	final int nbgNoeuds = gNoeuds.getLength();
-		        	for(int j = 0; j<nbgNoeuds; j++ ){
-		        		// On filtre les éléments qui sont des noeuds
-		        		if(gNoeuds.item(j).getNodeType() == Node.ELEMENT_NODE){
-		        			final Element geometricFigure = (Element) gNoeuds.item(j);
-		        			
-		        			// Cas d'une intersection
-		        			if(geometricFigure.getNodeName() == "circle" ){
-		        				AbstractIntersection parseIntersection = new AbstractIntersection();
-		        				parseIntersection.center = new CartesianCoordinate(Float.parseFloat(geometricFigure.getAttribute("cx")),
-		        						Float.parseFloat(geometricFigure.getAttribute("cy")));
-		        				parseIntersection.radius = Float.parseFloat(geometricFigure.getAttribute("r"));
-			        			System.out.println("Intersection " + parseIntersection.identifier + " parsed: " + parseIntersection);
-		        				this.intersections.add(parseIntersection);
-		        			}
-
-		        			// Cas d'un Road
-		        			if(geometricFigure.getNodeName() == "path" ){
-		        				Road parseRoad = new Road();
-		        				// d contient les coordonnées du path
-		        				// d est sous la forme d="m 395.9798,236.15895 6.06091,165.66502"
-		        				String d=geometricFigure.getAttribute("d");
-		        				String [] dParse = d.split("( |,)"); // Utilisation de regex
-		        				if(dParse[0].equals("M") || dParse[0].equals("m")){
-		        					if(dParse[0].equals("M")){
-		        						parseRoad.point1 = new CartesianCoordinate(Float.parseFloat(dParse[1]), Float.parseFloat(dParse[2]));
-		        						parseRoad.point2 = new CartesianCoordinate(Float.parseFloat(dParse[3]), Float.parseFloat(dParse[4]));
-		        					} else { //dParse[0].equals("m")
-		        						parseRoad.point1 = new CartesianCoordinate(Float.parseFloat(dParse[1]), Float.parseFloat(dParse[2]));
-		        						parseRoad.point2 = new CartesianCoordinate(parseRoad.point1.x + Float.parseFloat(dParse[3]), parseRoad.point1.y + Float.parseFloat(dParse[4]));
-		        					}
-		        					//TODO Initialisation temporaire de Cost pour accélérer le debug
-		        					// Le coût est pour l'instant la longueur de la route sur la vitesse urbaine standard de 50 km/h
-		        					parseRoad.cost = new Cost(CartesianCoordinate.distance(parseRoad.point1, parseRoad.point2)/50000.);
-				        			System.out.println("Road " + parseRoad.identifier + " parsed: " +
-				        					parseRoad.point1 + "; " + parseRoad.point2);
-			        				this.roads.add(parseRoad);
-		        				}else{
-		        					System.out.println("Cannot parse " + geometricFigure.getAttribute("id"));
-		        				}
-
-		        			}
+			builder = factory.newDocumentBuilder();       
+			final Document document= builder.parse(new File(fileName));
+			//On sélectionne la racine
+			final Element racine = document.getDocumentElement();
+			final NodeList racineNoeuds = racine.getChildNodes();
+			final int nbRacineNoeuds = racineNoeuds.getLength();
 
 
-		        		}
-		        		
-		        	}
-		        	
-		        	/* Création du graphe
-		        	 * On parcourt les arêtes et on rajoute les arêtes dont le point1 est situé dans une intersection
-		        	 * et point2 dans une intersection (On ne considère que les arêtes arêtes significatives)
-		        	 */
-		        	for(int j = 0; j<roads.size(); j++ ){
-		        		Boolean isIntegrated = false;
-		        		// Vérification de point1
-		        		for(int k= 0; k<intersections.size(); k ++){
-		        			if(roads.get(j).point1.distanceFrom(intersections.get(k).center) <= intersections.get(k).radius){
-		        				// On cherche alors pour le point2
-		        				for(int l=0; l<intersections.size(); l++){
-		        					if(roads.get(j).point2.distanceFrom(intersections.get(l).center) <= intersections.get(l).radius){
-		        						// Le Road j a deux extrémités dans des intersections
-		        						//On renseigne les informations de l'arête
-		        						roads.get(j).origin = intersections.get(k);
-		        						roads.get(j).destination = intersections.get(l);
-		        						// On renseigne origin de l'arête sortante
-		        						intersections.get(k).leavingRoads.add(roads.get(j));
-		        						isIntegrated = true;
-		        					}
-		        				}
-		        			}
-		        		}
-	        			if(! isIntegrated){
-	        				System.out.println(roads.get(j) + " has not been integrated to the graph" );
-	        			}
-		        	}
-		        }
+			for (int i = 0; i<nbRacineNoeuds; i++) {
+				//On se place dans le premier calque
+				if (racineNoeuds.item(i).getNodeName() == "g"){
+					final NodeList gNoeuds = racineNoeuds.item(i).getChildNodes();
 
-		    }
+					// Parcourt et création des intersections
+					for(int j = 0; j<gNoeuds.getLength(); j++ ){
+						// On filtre les éléments qui sont des noeuds
+						if(gNoeuds.item(j).getNodeType() == Node.ELEMENT_NODE){
+							final Element geometricFigure = (Element) gNoeuds.item(j);
+							// Cas d'une intersection
+							if(geometricFigure.getNodeName() == "circle" ){
+								this.intersections.add(parseIntersection(geometricFigure));
+							}
+						}
+					}
+
+
+					// Parcourt des Road
+					// Toutes les intersections doivent être instanciées avant la création des Road
+					for(int j = 0; j<gNoeuds.getLength(); j++ ){
+						// On filtre les éléments qui sont des noeuds
+						if(gNoeuds.item(j).getNodeType() == Node.ELEMENT_NODE){
+							final Element geometricFigure = (Element) gNoeuds.item(j);
+							if(geometricFigure.getNodeName() == "path" ){
+								this.roads.add(parseRoad(geometricFigure));
+							}
+						}
+					}
+				}
+			}
 		}
 		catch (final ParserConfigurationException e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
 		catch (final SAXException e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
 		catch (final IOException e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
 
 		this.numberOfIntersections = intersections.size();
-		this.costsMatrix = Cost.floydWarshall(this);
+		//this.costsMatrix = Cost.floydWarshall(this);
 		listRoads();
 
 	}
+	
+	private AbstractIntersection parseIntersection(Element geometricFigure) throws IllegalArgumentException{
+		if(geometricFigure.getNodeName() == "circle" ){
+			CartesianCoordinate center = new CartesianCoordinate(Float.parseFloat(geometricFigure.getAttribute("cx")),
+					Float.parseFloat(geometricFigure.getAttribute("cy")));
+			Float radius = Float.parseFloat(geometricFigure.getAttribute("r"));
+			AbstractIntersection parseIntersection = new AbstractIntersection(center, radius);
+			System.out.println("Intersection " + parseIntersection.identifier + " parsed: " + parseIntersection);
+			return parseIntersection;
+		} else {
+			throw new IllegalArgumentException("Not a circle");
+		}
+
+	}
+	
+	private Road parseRoad(Element geometricFigure) throws IllegalArgumentException{
+		if(geometricFigure.getNodeName() != "path" ){
+			throw new IllegalArgumentException(geometricFigure.getAttribute("id") + " is not a path");
+		}
+		
+		CartesianCoordinate point1;
+		CartesianCoordinate point2;
+		AbstractIntersection origin = null;
+		AbstractIntersection destination = null;
+		Cost cost;
+		int lane = 1; // Attribut pas encore implémenté			
+		
+		
+		//Détermination des attributs géométriques
+		String d=geometricFigure.getAttribute("d");			// d contient les coordonnées du path
+		// d est sous la forme d="m 395.9798,236.15895 6.06091,165.66502"
+		String [] dParse = d.split("( |,)"); // Utilisation de regex
+		if(dParse[0].equals("M") || dParse[0].equals("m")){
+			if(dParse[0].equals("M")){
+				point1 = new CartesianCoordinate(Float.parseFloat(dParse[1]), Float.parseFloat(dParse[2]));
+				point2 = new CartesianCoordinate(Float.parseFloat(dParse[3]), Float.parseFloat(dParse[4]));
+			} else { //dParse[0].equals("m")
+				point1 = new CartesianCoordinate(Float.parseFloat(dParse[1]), Float.parseFloat(dParse[2]));
+				point2 = new CartesianCoordinate(point1.x + Float.parseFloat(dParse[3]), point1.y + Float.parseFloat(dParse[4]));
+			}
+		}else{
+			throw new IllegalArgumentException("Cannot parse " + geometricFigure.getAttribute("id"));
+		}
+
+
+		// Détermination de origin et destination
+		Boolean isIntegrated = false;
+		// Vérification de point1
+		for(int i= 0; i<intersections.size(); i ++){
+			if(point1.distanceFrom(intersections.get(i).center) <= intersections.get(i).radius){
+				// On cherche alors pour le point2    
+				for(int j=0; j<intersections.size(); j++){
+					if(point2.distanceFrom(intersections.get(j).center) <= intersections.get(j).radius){
+						// Le Road j a deux extrémités dans des intersections
+						//On renseigne les informations de l'arête
+						origin = intersections.get(i);
+						destination = intersections.get(j);
+						isIntegrated = true;
+					}
+				}
+			}
+
+		}
+		if(! isIntegrated){
+			throw new IllegalArgumentException(geometricFigure.getAttribute("id") + " has not been integrated to the graph");
+		}
+
+
+		// Initialisation de cost
+		// Le coût est pour l'instant la longueur de la route sur la vitesse urbaine standard de 50 km/h
+		cost = new Cost(CartesianCoordinate.distance(point1, point2)/50000.);
+
+		// Instanciation de Road
+		Road parseRoad = new Road(point1, point2, origin, destination, cost, lane);
+		
+		// Renseignement de origin d'un nouveau leavingRoad
+		origin.getLeavingRoads().add(parseRoad);
+
+		System.out.println("Road " + parseRoad.identifier + " parsed: " +
+				parseRoad.point1 + "; " + parseRoad.point2);
+		//this.roads.add(parseRoad);
+		return parseRoad;
+	}
+	
 
 	/**
 	 * Forme la liste complète des routes du graphe

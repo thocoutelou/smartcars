@@ -1,5 +1,6 @@
 package smartCars;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.LinkedList;
@@ -75,23 +76,20 @@ public class Road {
 	// Beaucoup d'arguments pour un constructeur,
 	// mais transparent pour l'utilisateur car ce constructeur
 	// sera appelé par le constructeur du graphe à partir d'une image.
-	public Road(AbstractIntersection origin, AbstractIntersection destination, Cost cost, int lane, double absoluteLength)
+	public Road(CartesianCoordinate point1, CartesianCoordinate point2, AbstractIntersection origin, AbstractIntersection destination, Cost cost, int lane)
 	{
 		identifier = identificator;
 		identificator++;
+		this.point1 = point1;
+		this.point2 = point2;
 		this.origin = origin;
 		this.destination = destination;
 		this.cost = cost;
 		this.lane = lane;
-		this.absoluteLength = absoluteLength;
+		this.absoluteLength = this.point1.distanceFrom(point2);
+		
 	}
-	
-	public Road(){
-		identifier = identificator;
-		identificator++;
-	}
-	
-	
+		
 	public static Road minimum(Road a, Road b)
 	{
 		Cost minCost = Cost.minimum(a.cost, b.cost);
