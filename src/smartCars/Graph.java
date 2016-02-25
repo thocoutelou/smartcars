@@ -62,8 +62,8 @@ public class Graph {
 	 * Étapes du parsing de l'image:
 	 * 0 : Ouvrir le fichier .svg
 	 * 1 : sélectionner les informations dans le calque 1 (balise g)
-	 * 2 : créer toute les intersections représentées par des cercles <circle/> et les Road représentées par des <path/>
-	 * 3 : Créer le graphe
+	 * 2 : créer toute les intersections représentées par des cercles <circle/> puis les Road représentées par des <path/> aves les méthodes
+	 * parseIntersection() et parseRoad()
 	 * 	   un path a une intersection de départ si son premier sommet se trouve dans la zone d'un cercle (intersection)
 	 */
 	public Graph(String fileName) {
@@ -226,7 +226,7 @@ public class Graph {
 	{
 		for(AbstractIntersection i : intersections)
 		{
-			roads.addAll(i.leavingRoads);
+			roads.addAll(i.getLeavingRoads());
 		}
 	}
 

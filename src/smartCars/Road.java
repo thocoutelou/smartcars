@@ -9,7 +9,7 @@ import java.util.Queue;
 public class Road {
 	
 	private static int identificator = 0;
-	public int identifier;
+	public final int identifier;
 	// (cost) ne contient pas et ne doit pas contenir
 	// le coût supplémentaire engendré par la traversée de l'intersection suivante
 	// car les première et dernière routes empruntées sont nécessaires,
@@ -21,13 +21,13 @@ public class Road {
 	// La longueur de la route sera variable car égale à :
 	// la longueur absolue de la route diminuée de la longueur de la file d'attente
 	public double length;
-	public AbstractIntersection origin;
-	public AbstractIntersection destination;
+	public final AbstractIntersection origin;
+	public final AbstractIntersection destination;
 	
 	// Données géométriques sur l'instance
 
-	public CartesianCoordinate point1;
-	public CartesianCoordinate point2;
+	public final CartesianCoordinate point1;
+	public final CartesianCoordinate point2;
 	
 	
 	// Véhicules sur la route
@@ -35,44 +35,8 @@ public class Road {
 	// Méthodes: isEmpty(), remove(), add()
 	public int numberOfVehicles;
 	public ArrayList<AbstractVehicle> vehiclesOnRoad = new ArrayList<AbstractVehicle>();
-	
 	public Queue<AbstractVehicle> waitingVehicles = new LinkedList<AbstractVehicle>();
-	
-	// Construit une route de coût infini
-	public Road(AbstractIntersection origin, AbstractIntersection destination)
-	{
-		identifier = identificator;
-		identificator++;
-		this.origin = origin;
-		this.destination = destination;
-		cost = new Cost();
-		lane = 1;
-		// Une route fera 1 km par défaut (moyenne urbaine)
-		absoluteLength = 1000.;
-	}
-	
-	public Road(AbstractIntersection origin, AbstractIntersection destination, Cost cost)
-	{
-		identifier = identificator;
-		identificator++;
-		this.origin = origin;
-		this.destination = destination;
-		this.cost = cost;
-		lane = 1;
-		absoluteLength = 1000.;
-	}
-	
-	public Road(AbstractIntersection origin, AbstractIntersection destination, Cost cost, int lane)
-	{
-		identifier = identificator;
-		identificator++;
-		this.origin = origin;
-		this.destination = destination;
-		this.cost = cost;
-		this.lane = lane;
-		absoluteLength = 1000.;
-	}
-	
+		
 	// Beaucoup d'arguments pour un constructeur,
 	// mais transparent pour l'utilisateur car ce constructeur
 	// sera appelé par le constructeur du graphe à partir d'une image.

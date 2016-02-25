@@ -16,7 +16,7 @@ public class Dijkstra {
 	public void path(Graph graph, AbstractVehicle vehicle) throws IllegalStateException
 	{
 		AbstractIntersection origin = vehicle.intersectionAfterStart();
-		ArrayList<Road> nextRoads = new ArrayList<Road>(origin.leavingRoads);
+		ArrayList<Road> nextRoads = new ArrayList<Road>(origin.getLeavingRoads());
 		// route[i] contient la route qui mène à i,
 		// qui elle-même contient l'intersection d'origine
 		Road route[] = new Road[graph.numberOfIntersections];
@@ -51,7 +51,7 @@ public class Dijkstra {
 				costs[currentRoad.destination.identifier] = sum;
 				route[currentRoad.destination.identifier] = currentRoad;
 			}
-			for(Road r : currentRoad.destination.leavingRoads)
+			for(Road r : currentRoad.destination.getLeavingRoads())
 			{
 				if(!visited[r.destination.identifier])
 				{

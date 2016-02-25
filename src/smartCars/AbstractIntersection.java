@@ -6,9 +6,9 @@ import java.util.ArrayList;
 public class AbstractIntersection {
 	
 	protected static int identificator = 0;
-	public int identifier;
+	public final int identifier;
 	// (leavingRoads) routes sortantes directement connectées
-	public ArrayList<Road> leavingRoads;
+	private ArrayList<Road> leavingRoads;
 	
 	// (crossingTime) durée moyenne de traversée de l'intersection
 	public double averageTime;
@@ -16,8 +16,8 @@ public class AbstractIntersection {
 	public boolean obstruction;
 	
 	//Géométrie de l'intersection
-	public CartesianCoordinate center;
-	public float radius;
+	public final CartesianCoordinate center;
+	public final float radius;
 	
 	
 	public AbstractIntersection(CartesianCoordinate center, float radius) {
