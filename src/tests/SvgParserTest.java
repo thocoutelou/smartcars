@@ -1,37 +1,40 @@
 package tests;
+
+import static org.junit.Assert.*;
+
 import java.io.File;
 import java.io.IOException;
 
-import smartCars.*;
+import org.junit.Test;
 
-public class Test_Graph {
+import smartCars.Graph;
+import smartCars.SvgParser;
 
-	static String project_location;
-	
-	int error_number = 0;
+public class SvgParserTest {
 
-	public static void main(String[] args) {
-		
-		//Temporaire
+		String project_location;
+	@Test
+	public void test() {
 		try {
-			Test_Graph.project_location = new File(".").getCanonicalPath();
+			project_location = new File(".").getCanonicalPath();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		
 		//Scenario 1 : création d'un graphe simple à partir d'une image svg
 		String fileName=project_location + "/media/map/1.svg";
 		Graph graph1 = SvgParser.parseGraph(fileName);
 		System.out.println(graph1);
+		fail("Test1");
 		
 		
 		//Scénario 2
 		fileName=project_location + "/media/map/2.svg";
 		Graph graph2 = SvgParser.parseGraph(fileName);
 		System.out.println(graph2);
-
+		
+		return;
 	}
 
 }
