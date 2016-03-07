@@ -71,9 +71,9 @@ public class Cost {
 				costsMatrix[j][i] = new Cost();
 			}
 		}
-		for(Road r : graph.roads)
+		for(int i = 0; i < graph.roads.size(); i ++)
 		{
-			costsMatrix[r.destination.identifier][r.origin.identifier] = r.cost;
+			costsMatrix[graph.roads.get(i).destination.identifier][graph.roads.get(i).origin.identifier] = graph.roads.get(i).cost;
 		}
 		for(int k=0; k<graph.numberOfIntersections; k++)
 		{
