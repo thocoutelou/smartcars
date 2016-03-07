@@ -19,14 +19,14 @@ public class Time {
 		return morningRush|eveningRush;
 	}
 	
-	public static double setStartingTime(Graph graph) throws IllegalStateException
+	public static double setStartingTime(GraphState graphState) throws IllegalStateException
 	{
-		if(graph.vehicles.isEmpty())
+		if(graphState.vehicles.isEmpty())
 		{
 			throw new IllegalStateException("Le graphe est mal initialisé : aucun véhicule");
 		}
-		double startingTime = graph.vehicles.get(0).location.initialDate;
-		for(AbstractVehicle v : graph.vehicles)
+		double startingTime = graphState.vehicles.get(0).location.initialDate;
+		for(AbstractVehicle v : graphState.vehicles)
 		{
 			startingTime = Math.min(startingTime, v.location.initialDate);
 		}

@@ -20,11 +20,11 @@ public class AbstractVehicle {
 	// d'où sa structure de pile FIFO (Stack)
 	protected Stack<Road> itinary;
 	
-	public AbstractVehicle(Graph graph)
+	public AbstractVehicle(Location location)
 	{
 		identifier = identificator;
 		identificator++;
-		location = graph.startDefault;
+		this.location = location;
 	}
 	
 	

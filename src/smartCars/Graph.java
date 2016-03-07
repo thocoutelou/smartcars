@@ -1,7 +1,6 @@
 package smartCars;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 /**
  * Le graphe est représenté par la liste de ses noeuds (intersections AbstractIntersection),
@@ -15,12 +14,6 @@ public class Graph {
 	public int numberOfIntersections = 0;
 	public ArrayList<Road> roads = new ArrayList<Road>();
 	public Cost[][] costsMatrix;
-	
-	// (startDefault) définit un point de départ pour les AbstractVehicle instanciés sans précision
-	public Location startDefault; // Pour moi cette variable est inutile, il faut être contraignant lors de la création d'un véhicule
-	public Stack<AbstractVehicle> vehicles;
-	public ArrayList<Event> events;
-	
 
 	public Graph(ArrayList<AbstractIntersection> intersections, ArrayList<Road> roads)
 	{
@@ -43,21 +36,6 @@ public class Graph {
 		{
 			roads.addAll(i.getLeavingRoads());
 		}
-	}
-
-	/**
-	 * Forme la pile des véhicules dans leur ordre de priorité de traitement :
-	 * les véhicules d'itinéraires les plus longs sont prioritaires
-	 * @param vehiclesInGraph
-	 */
-	public void stackVehicles(ArrayList<AbstractVehicle> vehiclesInGraph)
-	{
-		Stack<AbstractVehicle> vehicles = new Stack<AbstractVehicle>();
-		while(!vehiclesInGraph.isEmpty())
-		{
-			vehicles.add(AbstractVehicle.lessPriorityVehicle(this, vehiclesInGraph));
-		}
-		this.vehicles = vehicles;
 	}
 	
 	public String toString() {
