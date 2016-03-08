@@ -14,12 +14,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * Cette classe permet de créer un graphe à partir d'une image svg. 
+ * Elle en extrait également les voitures.
+ * @author thomas
+ */
 public class SvgParser {
 	
-	/**
-	 * Cette classe permet de créer un graphe à partir d'une image svg. 
-	 * Elle extrait également les voitures du svg 
-	 */
+
 	// ***** Commentaires de lecture et questions *****
 		// -> pourquoi utiliser float plutôt que double ?
 		// -> ajout d'une initialisation de fortune du coût d'une route
@@ -29,20 +31,18 @@ public class SvgParser {
 		// -> je pense que l'exception NullPointerException est due à l'initialisation des routes de ce constructeur
 		
 		//TODO définir les normes de l'image (notamment les couleurs)
-		// Ne vaudrait-il pas mieux créer une classe Svg
-		// dont les méthodes seraient appelées dans le constructeur Graph ?
-		/*
+		/**
 		 * Étapes du parsing de l'image:
 		 * 0 : Ouvrir le fichier .svg
 		 * 1 : sélectionner les informations dans le calque 1 (balise g)
-		 * 2 : créer toute les intersections représentées par des cercles <circle/> puis les Road représentées par des <path/> aves les méthodes
+		 * 2 : créer toute les intersections représentées par des cercles <circle/> puis les Road représentées par des <path/> avec les méthodes
 		 * parseIntersection() et parseRoad()
 		 * 	   un path a une intersection de départ si son premier sommet se trouve dans la zone d'un cercle (intersection)
 		 */
 		public static Graph parseGraph(String fileName) {
 
 			/* La documentation du parser qu'on va utiliser est en ligne:
-			 *  https://openclassrooms.com/courses/structurez-vos-donnees-avec-xml/dom-exemple-d-utilisation-en-java
+			 * https://openclassrooms.com/courses/structurez-vos-donnees-avec-xml/dom-exemple-d-utilisation-en-java
 			 */
 
 			// La classe DocumentBuilderFacorty est utilisée pour parser le xml de l'image svg.

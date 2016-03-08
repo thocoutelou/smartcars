@@ -4,31 +4,37 @@ import java.util.ArrayList;
 
 /**
  * Le graphe est représenté par la liste de ses noeuds (intersections AbstractIntersection),
- * chacun d'entre eux contenant la liste de ses arêtes (routes Road) directement connectées.
+ * chacun d'entre eux contenant la liste de ses arêtes (routes Road) sortantes..
  * L'hypothèse est faite que le graphe est connexe.
+ * @author cylla
  */
 public class Graph {
 	
-	// (intersections) définit le graphe même
+	// intersections du graphe (suffit à définir le graphe))
 	private ArrayList<AbstractIntersection> intersections = new ArrayList<AbstractIntersection>();
+	// nombre d'intersections
 	public int numberOfIntersections = 0;
+	// routes du graphe
 	public ArrayList<Road> roads = new ArrayList<Road>();
+	// matrice de Floyd-Warshall en devenir du graphe, initialisée dans le constructeur
 	public Cost[][] costsMatrix;
 
+	/**
+	 * constructeur temporaire, afin de visualiser les étapes de l'instanciation
+	 * @param intersections
+	 * @param roads
+	 */
 	public Graph(ArrayList<AbstractIntersection> intersections, ArrayList<Road> roads)
 	{
 		this.intersections = intersections;
 		this.roads = roads;
 		this.numberOfIntersections = intersections.size();
-		//this.costsMatrix = Cost.floydWarshall(this); // Ne marche pas encore
+		this.costsMatrix = Cost.floydWarshall(this);
 		listRoads();
 	}
-	
-	
-		
 
 	/**
-	 * Forme la liste complète des routes du graphe
+	 * Forme la liste complète des routes du graphe.
 	 */
 	public void listRoads()
 	{
@@ -38,6 +44,9 @@ public class Graph {
 		}
 	}
 	
+	/**
+	 * Identification du graphe.
+	 */
 	public String toString() {
 		String newline = System.getProperty("line.separator");
 		String result = "<---   Graph print   --->" + newline;

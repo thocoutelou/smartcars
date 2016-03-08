@@ -3,6 +3,12 @@ package smartCars;
 
 import java.util.ArrayList;
 
+/**
+ * Intersection du graphe.
+ * Contient les routes sortantes.
+ * @author cylla
+ *
+ */
 public class AbstractIntersection {
 	
 	// identificateur des instances, s'incrémente à chaque instanciation...
@@ -77,7 +83,6 @@ public class AbstractIntersection {
 
 	/**
 	 * Identification détaillée de l'intersection.
-	 * @return
 	 */
 	public String toStringDetailed(){
 		String newline = System.getProperty("line.separator");

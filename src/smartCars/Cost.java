@@ -1,5 +1,12 @@
 package smartCars;
 
+/**
+ * Représente un coût de traversée,
+ * pour une route aussi bien que pour une intersection.
+ * Permet de définir des coûts infinis.
+ * @author cylla
+ *
+ */
 public class Cost {
 	
 	// coût absolu de la route
@@ -8,13 +15,18 @@ public class Cost {
 	// Sinon, absoluteCost ne sera pas significatif.
 	private boolean finite;
 	
-	// constructeur d'un coût infini
+	/**
+	 * Constructeur d'un coût infini.
+	 */
 	public Cost()
 	{
 		finite = false;
 	}
 	
-	// constructeur de coût fini
+	/**
+	 * Constructeur d'un coût fini.
+	 * @param cost
+	 */
 	public Cost(double cost)
 	{
 		this.absoluteCost = cost;

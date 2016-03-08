@@ -6,6 +6,12 @@ import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * Route du graphe.
+ * Contient les intersections de départ et de fin.
+ * @author cylla
+ *
+ */
 public class Road {
 	
 	// identificateur des instances, s'incrémente à chaque instanciation...
@@ -203,10 +209,8 @@ public class Road {
 	
 	/**
 	 * Identification détaillée de la route.
-	 * @return
 	 */
 	public String toStringDetailed(){
-		String result =  "Road " + this.identifier + " origin=" + this.origin + " destination=" + this.destination;
-		return result;
+		return  "Road " + this.identifier + " origin=" + this.origin + " destination=" + this.destination;
 	}
 }
