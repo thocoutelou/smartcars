@@ -8,38 +8,48 @@ import java.util.Queue;
 
 public class Road {
 	
+	// identificateur des instances, s'incrémente à chaque instanciation...
 	private static int identificator = 0;
+	// ... pour définir l'identifiant de la route créée
 	public final int identifier;
-	// (cost) ne contient pas et ne doit pas contenir
-	// le coût supplémentaire engendré par la traversée de l'intersection suivante
-	// car les première et dernière routes empruntées sont nécessaires,
-	// indépendamment de l'intersection précédente ou suivante.
+	// coût de traversé de la route
+	// indépendant du coût de traversée des intersections
 	public Cost cost;
+	// nombre de voies
 	public int lane;
+	// longueur absolue de la route
 	private double absoluteLength;
 	
-	// La longueur de la route sera variable car égale à :
-	// la longueur absolue de la route diminuée de la longueur de la file d'attente
+	// la longueur disponible de la route sera variable
+	// et égale grossièrement à (absoluteLength - waitingVehicles.length())
 	public double length;
+	// intersection d'origine de la route
 	public final AbstractIntersection origin;
+	// intersection d'arrivée de la route
 	public final AbstractIntersection destination;
 	
 	// Données géométriques sur l'instance
-
+	// TODO expliciter
 	public final CartesianCoordinate point1;
 	public final CartesianCoordinate point2;
 	
 	
-	// Véhicules sur la route
-	// Queue: structure FIFO (first in first out)
-	// Méthodes: isEmpty(), remove(), add()
+	// nombre de véhicules sur la route
 	public int numberOfVehicles;
+	// véhicule sur la route
 	public ArrayList<AbstractVehicle> vehiclesOnRoad = new ArrayList<AbstractVehicle>();
+	// dont véhicule en attente de sortie de la route
 	public Queue<AbstractVehicle> waitingVehicles = new LinkedList<AbstractVehicle>();
 		
-	// Beaucoup d'arguments pour un constructeur,
-	// mais transparent pour l'utilisateur car ce constructeur
-	// sera appelé par le constructeur du graphe à partir d'une image.
+	/**
+	 *  constructeur unique, doit être utilisé seulement par le parser
+	 * @param point1
+	 * @param point2
+	 * @param origin
+	 * @param destination
+	 * @param cost
+	 * @param lane
+	 */
 	public Road(CartesianCoordinate point1, CartesianCoordinate point2, AbstractIntersection origin, AbstractIntersection destination, Cost cost, int lane)
 	{
 		identifier = identificator;
@@ -53,7 +63,14 @@ public class Road {
 		this.absoluteLength = this.point1.distanceFrom(point2);
 		
 	}
-		
+	
+	/**
+	 * Renvoie la route de coût minimal,
+	 * avec priorité pour la première route.
+	 * @param a
+	 * @param b
+	 * @return Road de coût minimal
+	 */
 	public static Road minimum(Road a, Road b)
 	{
 		Cost minCost = Cost.minimum(a.cost, b.cost);
@@ -61,6 +78,12 @@ public class Road {
 		else return b;
 	}
 	
+	/**
+	 * Renvoie la route de coût minimal,
+	 * avec priorité selon l'index de la route dans la liste.
+	 * @param roads
+	 * @return Road de coût minimal
+	 */
 	public static Road minimum(ArrayList<Road> roads)
 	{
 		if(roads.isEmpty()) throw new IllegalArgumentException("Aucune route à explorer");
@@ -76,6 +99,11 @@ public class Road {
 	}
 	
 
+	/**
+	 * Diminue la longueur disponible de la route d'une certaine distance.
+	 * @param distance
+	 * @return La longueur de la route a-t-elle pu être diminuée ?
+	 */
 	private boolean decreaseLength(double distance)
 	{
 		// Marge d'erreur de 1 dm
@@ -91,6 +119,11 @@ public class Road {
 	}
 	
 
+	/**
+	 * Augmente la longueur disponible de la route d'une certaine distance.
+	 * @param distance
+	 * @return La longueur de la route a-t-elle pu être augmentée ?
+	 */
 	private boolean increaseLength(double distance)
 	{
 		// Marge d'erreur de 1 dm
@@ -106,6 +139,11 @@ public class Road {
 	}
 	
 	
+	/**
+	 * Un nouveau véhicule attend pour traverser l'intersection suivante.
+	 * @param vehicle
+	 * @throws IllegalStateException
+	 */
 	public void newWaitingVehicle(AbstractVehicle vehicle) throws IllegalStateException
 	{
 		// Test à effets de bord
@@ -128,6 +166,11 @@ public class Road {
 	}
 	
 	
+	/**
+	 * Un véhicule précédemment en attente
+	 * peut à présent traverser l'intersection suivante.
+	 * @throws IllegalStateException
+	 */
 	public void formerWaitingVehicle() throws IllegalStateException
 	{
 		AbstractVehicle leavingVehicle = waitingVehicles.remove();
@@ -152,10 +195,17 @@ public class Road {
 		}
 	}
 	
+	/**
+	 * Identification de la route.
+	 */
 	public String toString(){
 		return "Road " + this.identifier;
 	}
 	
+	/**
+	 * Identification détaillée de la route.
+	 * @return
+	 */
 	public String toStringDetailed(){
 		String result =  "Road " + this.identifier + " origin=" + this.origin + " destination=" + this.destination;
 		return result;
