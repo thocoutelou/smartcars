@@ -28,21 +28,20 @@ public class Road {
 	// intersection d'arrivée de la route
 	public final AbstractIntersection destination;
 	
-	// Données géométriques sur l'instance
-	// TODO expliciter
+	// géométrie de la route
 	public final CartesianCoordinate point1;
 	public final CartesianCoordinate point2;
 	
 	
 	// nombre de véhicules sur la route
 	public int numberOfVehicles;
-	// véhicule sur la route
+	// véhicules sur la route
 	public ArrayList<AbstractVehicle> vehiclesOnRoad = new ArrayList<AbstractVehicle>();
-	// dont véhicule en attente de sortie de la route
+	// dont véhicules en attente de sortie de la route
 	public Queue<AbstractVehicle> waitingVehicles = new LinkedList<AbstractVehicle>();
 		
 	/**
-	 *  constructeur unique, doit être utilisé seulement par le parser
+	 * constructeur unique, doit être utilisé seulement par le parser
 	 * @param point1
 	 * @param point2
 	 * @param origin
