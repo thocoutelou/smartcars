@@ -4,6 +4,12 @@ package smartCars;
 import java.util.ArrayList;
 import java.util.Stack;
 
+/**
+ * Implémentation de l'algorithme de Dijkstra,
+ * calculant le plus court chemin d'une intersection à une autre.
+ * @author cylla
+ *
+ */
 public class Dijkstra {
 	
 	/**
@@ -69,9 +75,9 @@ public class Dijkstra {
 	}
 
 	/**
-	 * Transforme le tableau 'route' contenant dans chaque case
+	 * Transforme le tableau 'route', contenant dans chaque case
 	 * la route précédent la route de même identifiant que l'index
-	 * de la case du tableau en une pile 'path' plus adaptée.
+	 * de la case du tableau, en une pile 'path' plus adaptée.
 	 * @param vehicle
 	 * @param route
 	 * @return Stack path (construit sur 'route')
