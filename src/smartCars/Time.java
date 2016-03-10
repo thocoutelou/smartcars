@@ -1,8 +1,13 @@
 package smartCars;
 
+import java.util.Stack;
+
 public class Time {
 	
 	public static double time;
+
+	// évènements à survenir dans l'ordre chronologique, une fois calculés
+	public static Stack<AbstractEvent> events;
 	
 	// 0. correspond à minuit
 	private final static double morningRushStart = 25200.; //7h
@@ -11,7 +16,7 @@ public class Time {
 	private final static double eveningRushEnd = 68400.; //19h
 	
 	
-	public static boolean Rush()
+	public static boolean rush()
 	{
 		double dayTime = Time.time % 86400.;
 		boolean morningRush = (dayTime>morningRushStart)&(dayTime<morningRushEnd);
@@ -19,7 +24,7 @@ public class Time {
 		return morningRush|eveningRush;
 	}
 	
-	public static double setStartingTime(GraphState graphState) throws IllegalStateException
+	public static double startingTime(GraphState graphState) throws IllegalStateException
 	{
 		if(graphState.vehicles.isEmpty())
 		{

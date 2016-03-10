@@ -32,6 +32,8 @@ public class AbstractVehicle {
 	protected boolean pathCalculated = false;
 	// sauvegarde les routes déjà empruntées en vue de les revoir
 	protected Stack<Road> itinary;
+	// évènements calculés par Dijkstra
+	protected Stack<AbstractEvent> events;
 	
 	/**
 	 * Constructeur à partir des information de localisation
@@ -121,26 +123,6 @@ public class AbstractVehicle {
 		// suppression du véhicule traité des véhicules à traiter
 		vehicles.remove(lessPriorityVehicle);
 		return lessPriorityVehicle;
-	}
-	
-
-	/**
-	 * Permet à un véhicule d'en doubler un autre.
-	 * @param vehicleOvertaking
-	 * @param road
-	 * @throws IllegalArgumentException
-	 */
-	public void overtake(AbstractVehicle vehicleOvertaking, Road road) throws IllegalArgumentException
-	{
-		if(road.lane==1)
-		{
-			throw new IllegalArgumentException("Impossible de doubler, la route n'est formée que d'une seule voie");
-		}
-		//TODO
-		else
-		{
-			
-		}
 	}
 
 }

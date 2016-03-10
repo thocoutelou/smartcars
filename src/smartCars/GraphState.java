@@ -13,8 +13,6 @@ public class GraphState extends Graph {
 	
 	// véhicules présent sur la carte
 	public Stack<AbstractVehicle> vehicles;
-	// évènements à survenir dans l'ordre chronologique, une fois calculés
-	public Stack<AbstractEvent> events;
 	
 	/**
 	 * Constructeur unique, ne doit être appelé que par le parser.
@@ -26,10 +24,9 @@ public class GraphState extends Graph {
 	// this.events sera peut-être initialisé plus tard,
 	// sachant que cette pile est le résultat de tous les calculs.
 	public GraphState(ArrayList<AbstractIntersection> intersections, ArrayList<Road> roads,
-			Stack<AbstractVehicle> vehicles, Stack<AbstractEvent> events) {
+			Stack<AbstractVehicle> vehicles) {
 		super(intersections, roads);
 		this.vehicles = vehicles;
-		this.events = events;
 	}
 	
 	/**
@@ -45,5 +42,15 @@ public class GraphState extends Graph {
 			vehicles.add(AbstractVehicle.lessPriorityVehicle(this, vehiclesInGraph));
 		}
 		this.vehicles = vehicles;
+	}
+	
+	/**
+	 * Effectue tous les calculs menant à la résolution du problème,
+	 * en partant du principe que l'instance est correctement initialisée.
+	 */
+	//TODO
+	public void resolve()
+	{
+		
 	}
 }

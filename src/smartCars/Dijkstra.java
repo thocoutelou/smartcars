@@ -43,7 +43,7 @@ public class Dijkstra {
 			visited[currentRoad.destination.identifier] = true;
 			
 			Cost sum;
-			if(Time.Rush())
+			if(Time.rush())
 			{
 				sum = Cost.sum(costs[currentRoad.origin.identifier], Cost.intersection(currentRoad));
 			}
