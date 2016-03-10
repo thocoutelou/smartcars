@@ -14,9 +14,11 @@ public class AbstractIntersection {
 	// identificateur des instances, s'incrémente à chaque instanciation...
 	protected static int identificator = 0;
 	// ... pour définir l'identifiant de l'intersection créée
-	public final int identifier;
+	protected final int identifier;
 	// routes sortant de l'intersection
 	private ArrayList<Road> leavingRoads;
+	// véhicules sur l'intersection
+	public ArrayList<AbstractVehicle> vehiclesOnIntersection;
 	
 	// durée moyenne de traversée de l'intersection
 	public double averageTime;
@@ -45,17 +47,7 @@ public class AbstractIntersection {
 		this.leavingRoads = new ArrayList<Road>();
 	}
 
-	//TODO
-	/**
-	 * Un véhicule termine sa traversée de l'intersection.
-	 * @param vehicle
-	 * @param nextRoad
-	 */
-	public void crossIntersection(AbstractVehicle vehicle, Road nextRoad)
-	{
-		
-	}
-	
+
 	/**
 	 * Getter des routes sortant de l'intersection.
 	 * @return Routes sortantes

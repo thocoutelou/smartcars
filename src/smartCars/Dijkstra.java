@@ -94,7 +94,7 @@ public class Dijkstra {
 	}
 	
 	//TODO
-	public void changePath(ArrayList<Event> events)
+	public void changePath(ArrayList<AbstractEvent> events)
 	{
 		
 	}

@@ -5,21 +5,28 @@ import java.util.Stack;
 
 /**
  * Composée d'un graphe, de véhicules et des évènements en devenir,
- * constitue le problème à résoudre
+ * constitue le problème à résoudre.
  * @author thomas
  *
  */
 public class GraphState extends Graph {
 	
-	/**
-	 * Cette classe est composée d'un Graph, des véhicules et des évènements. Cela constitue
-	 * un problème mathématique à résoudre (c'est à dire déterminer les itinéraires des voitures)
-	 */
+	// véhicules présent sur la carte
 	public Stack<AbstractVehicle> vehicles;
-	public ArrayList<Event> events;
+	// évènements à survenir dans l'ordre chronologique, une fois calculés
+	public Stack<AbstractEvent> events;
 	
+	/**
+	 * Constructeur unique, ne doit être appelé que par le parser.
+	 * @param intersections
+	 * @param roads
+	 * @param vehicles
+	 * @param events
+	 */
+	// this.events sera peut-être initialisé plus tard,
+	// sachant que cette pile est le résultat de tous les calculs.
 	public GraphState(ArrayList<AbstractIntersection> intersections, ArrayList<Road> roads,
-			Stack<AbstractVehicle> vehicles, ArrayList<Event> events) {
+			Stack<AbstractVehicle> vehicles, Stack<AbstractEvent> events) {
 		super(intersections, roads);
 		this.vehicles = vehicles;
 		this.events = events;
