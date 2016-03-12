@@ -2,18 +2,15 @@ package smartCars;
 
 public class EventEnterRoad extends AbstractEvent {
 	
-	private Road roadEntered;
-	
 	public EventEnterRoad(AbstractVehicle vehicle, Road roadEntered)
 	{
-		super(vehicle);
-		this.roadEntered = roadEntered;
+		super(vehicle, roadEntered);
 	}
 	
-	public void ExecuteEvent()
+	public void executeEvent()
 	{
-		roadEntered.origin.vehiclesOnIntersection.remove(super.vehicle);
-		roadEntered.vehiclesOnRoad.add(super.vehicle);
+		road.origin.vehiclesOnIntersection.remove(super.vehicle);
+		road.vehiclesOnRoad.add(super.vehicle);
 	}
 
 }

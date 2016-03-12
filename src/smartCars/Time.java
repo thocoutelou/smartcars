@@ -1,13 +1,13 @@
 package smartCars;
 
-import java.util.Stack;
+import java.util.Queue;
 
 public class Time {
 	
 	public static double time;
 
 	// évènements à survenir dans l'ordre chronologique, une fois calculés
-	public static Stack<AbstractEvent> events;
+	public static Queue<AbstractEvent> events;
 	
 	// 0. correspond à minuit
 	private final static double morningRushStart = 25200.; //7h

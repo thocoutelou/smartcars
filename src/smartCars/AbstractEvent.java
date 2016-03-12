@@ -7,13 +7,15 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 	protected static int identificator = 0;
 	protected int identifier;
 	protected AbstractVehicle vehicle;
+	protected Road road;
 	protected double date;
 	
-	public AbstractEvent(AbstractVehicle vehicle)
+	protected AbstractEvent(AbstractVehicle vehicle, Road road)
 	{
 		this.identifier = identificator;
 		identificator++;
 		this.vehicle = vehicle;
+		this.road = road;
 	}
 	
 	public int compareTo(AbstractEvent event)

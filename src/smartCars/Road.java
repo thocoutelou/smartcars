@@ -1,6 +1,5 @@
 package smartCars;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.LinkedList;
@@ -38,13 +37,12 @@ public class Road {
 	public final CartesianCoordinate point1;
 	public final CartesianCoordinate point2;
 	
-	
-	// nombre de véhicules sur la route
-	public int numberOfVehicles;
 	// véhicules sur la route
 	public ArrayList<AbstractVehicle> vehiclesOnRoad = new ArrayList<AbstractVehicle>();
 	// dont véhicules en attente de sortie de la route
 	public Queue<AbstractVehicle> waitingVehicles = new LinkedList<AbstractVehicle>();
+	// évènements implémentant les attentes de traversée de la prochaine intersection
+	public Queue<EventWaitingOnRoad> eventsWaitingOnRoad = new LinkedList<EventWaitingOnRoad>();
 		
 	/**
 	 * constructeur unique, doit être utilisé seulement par le parser
@@ -213,4 +211,5 @@ public class Road {
 	public String toStringDetailed(){
 		return  "Road " + this.identifier + " origin=" + this.origin + " destination=" + this.destination;
 	}
+	
 }

@@ -2,18 +2,23 @@ package smartCars;
 
 public class EventLeaveRoad extends AbstractEvent {
 	
-	private Road roadLeft;
-	
-	public EventLeaveRoad(AbstractVehicle vehicle, Road roadLeft)
+	public EventLeaveRoad(AbstractVehicle vehicle, Road roadLeft, double date)
 	{
-		super(vehicle);
-		this.roadLeft = roadLeft;
+		super(vehicle, roadLeft);
+		// l'évènement sera créé par EventWaitingOnRoad
+		super.date = date;
 	}
 	
-	public void ExecuteEvent()
+	public void executeEvent()
 	{
-		roadLeft.vehiclesOnRoad.remove(super.vehicle);
-		roadLeft.destination.vehiclesOnIntersection.add(super.vehicle);
+		road.waitingVehicles.remove(super.vehicle);
+		road.vehiclesOnRoad.remove(super.vehicle);
+		road.destination.vehiclesOnIntersection.add(super.vehicle);
+	}
+	
+	public void setDate()
+	{
+		
 	}
 
 }
