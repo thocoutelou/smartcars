@@ -1,14 +1,31 @@
 package smartCars;
 
-import java.util.Queue;
+import java.util.concurrent.PriorityBlockingQueue;
 
 public class Time {
 	
 	public static double time;
 
 	// évènements à survenir dans l'ordre chronologique, une fois calculés
-	public static Queue<AbstractEvent> events;
+	public static PriorityBlockingQueue<AbstractEvent> events = new PriorityBlockingQueue<AbstractEvent>();
 	
+	
+	public static double startingTime(GraphState graphState) throws IllegalStateException
+	{
+		if(graphState.vehicles.isEmpty())
+		{
+			throw new IllegalStateException("Le graphe est mal initialisé : aucun véhicule");
+		}
+		double startingTime = graphState.vehicles.get(0).location.initialDate;
+		for(AbstractVehicle v : graphState.vehicles)
+		{
+			startingTime = Math.min(startingTime, v.location.initialDate);
+		}
+		return startingTime;
+	}
+	
+	/* Bonus : système de gestion des heures de pointe.
+
 	// 0. correspond à minuit
 	private final static double morningRushStart = 25200.; //7h
 	private final static double morningRushEnd = 32400.; //9h
@@ -24,18 +41,6 @@ public class Time {
 		return morningRush|eveningRush;
 	}
 	
-	public static double startingTime(GraphState graphState) throws IllegalStateException
-	{
-		if(graphState.vehicles.isEmpty())
-		{
-			throw new IllegalStateException("Le graphe est mal initialisé : aucun véhicule");
-		}
-		double startingTime = graphState.vehicles.get(0).location.initialDate;
-		for(AbstractVehicle v : graphState.vehicles)
-		{
-			startingTime = Math.min(startingTime, v.location.initialDate);
-		}
-		return startingTime;
-	}
+	*/
 
 }

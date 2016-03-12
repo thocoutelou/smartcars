@@ -23,11 +23,14 @@ public class Road {
 	// nombre de voies
 	public int lane;
 	// longueur absolue de la route
-	private double absoluteLength;
+	public double absoluteLength;
 	
 	// la longueur disponible de la route sera variable
 	// et égale grossièrement à (absoluteLength - waitingVehicles.length())
 	public double length;
+	// vitesse de circulation autorisée (km/h)
+	// et vitesse supposée des véhicules sur la route
+	public double speed;
 	// intersection d'origine de la route
 	public final AbstractIntersection origin;
 	// intersection d'arrivée de la route

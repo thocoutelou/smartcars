@@ -43,14 +43,7 @@ public class Dijkstra {
 			visited[currentRoad.destination.identifier] = true;
 			
 			Cost sum;
-			if(Time.rush())
-			{
-				sum = Cost.sum(costs[currentRoad.origin.identifier], Cost.intersection(currentRoad));
-			}
-			else
-			{
-				sum = Cost.sum(costs[currentRoad.origin.identifier], currentRoad.cost);
-			}
+			sum = Cost.sum(costs[currentRoad.origin.identifier], Cost.intersection(currentRoad));
 			
 			if(Cost.inferior(sum, costs[currentRoad.destination.identifier]))
 			{
@@ -68,7 +61,7 @@ public class Dijkstra {
 		
 		if(!visited[origin.identifier] & nextRoads.isEmpty())
 		{
-			throw new IllegalStateException("Le graphe n'est pas fortement connexe");
+			throw new IllegalStateException("Le graphe n'est pas connexe");
 		}
 
 		vehicle.path = buildPath(vehicle, route);

@@ -2,9 +2,9 @@ package smartCars;
 
 public class EventEnterRoad extends AbstractEvent {
 	
-	public EventEnterRoad(AbstractVehicle vehicle, Road roadEntered)
+	public EventEnterRoad(AbstractVehicle vehicle, Road roadEntered, double date)
 	{
-		super(vehicle, roadEntered);
+		super(vehicle, roadEntered, date);
 	}
 	
 	public void executeEvent()

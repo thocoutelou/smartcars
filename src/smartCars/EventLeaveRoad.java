@@ -4,9 +4,7 @@ public class EventLeaveRoad extends AbstractEvent {
 	
 	public EventLeaveRoad(AbstractVehicle vehicle, Road roadLeft, double date)
 	{
-		super(vehicle, roadLeft);
-		// l'évènement sera créé par EventWaitingOnRoad
-		super.date = date;
+		super(vehicle, roadLeft, date);
 	}
 	
 	public void executeEvent()
@@ -14,11 +12,6 @@ public class EventLeaveRoad extends AbstractEvent {
 		road.waitingVehicles.remove(super.vehicle);
 		road.vehiclesOnRoad.remove(super.vehicle);
 		road.destination.vehiclesOnIntersection.add(super.vehicle);
-	}
-	
-	public void setDate()
-	{
-		
 	}
 
 }

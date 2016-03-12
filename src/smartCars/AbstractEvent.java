@@ -1,6 +1,5 @@
 package smartCars;
 
-import java.util.Collections;
 
 public class AbstractEvent implements Comparable<AbstractEvent> {
 
@@ -10,23 +9,20 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 	protected Road road;
 	protected double date;
 	
-	protected AbstractEvent(AbstractVehicle vehicle, Road road)
+	protected AbstractEvent(AbstractVehicle vehicle, Road road, double date)
 	{
 		this.identifier = identificator;
 		identificator++;
 		this.vehicle = vehicle;
 		this.road = road;
+		this.date = date;
+		vehicle.events.add(this);
 	}
-	
+
 	public int compareTo(AbstractEvent event)
 	{
 		if(this.date>event.date) return 1;
 		else return -1;
-	}
-	
-	public static void sort(GraphState g)
-	{
-		Collections.sort(Time.events);
 	}
 	
 }
