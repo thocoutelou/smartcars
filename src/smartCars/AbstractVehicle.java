@@ -22,7 +22,7 @@ public class AbstractVehicle {
 	// et sera mis à jour si une requête de visualisation de la carte est formulée
 	public Location location;
 	// longueur de la voiture
-	public double size;
+	public double length;
 	// espace moyen entre deux véhicules à l'arrêt
 	public static double minSpaceBetweenVehicles = 0.7;
 	

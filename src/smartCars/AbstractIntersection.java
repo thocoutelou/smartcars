@@ -31,7 +31,7 @@ public class AbstractIntersection {
 	
 	
 	/**
-	 * constructeur unique, doit être utilisé seulement par le parser
+	 * Constructeur unique, doit être utilisé seulement par le parser.
 	 * @param center
 	 * @param radius
 	 */

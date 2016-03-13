@@ -35,6 +35,8 @@ public class Road {
 	public final AbstractIntersection origin;
 	// intersection d'arrivée de la route
 	public final AbstractIntersection destination;
+	// durée moyenne d'attente devant l'intersection d'arrivée
+	double averageWaitingTime;
 	
 	// géométrie de la route
 	public final CartesianCoordinate point1;
@@ -44,7 +46,8 @@ public class Road {
 	public Queue<AbstractVehicle> vehiclesOnRoad = new LinkedList<AbstractVehicle>();
 	// dont véhicules en attente de sortie de la route
 	public Queue<AbstractVehicle> waitingVehicles = new LinkedList<AbstractVehicle>();
-	// évènements implémentant les attentes de traversée de la prochaine intersection
+	// évènements implémentant les attentes de traversée de la prochaine intersection :
+	// plus la date d'un évènement est proche, plus il sera situé en fin de liste
 	public ArrayList<EventWaitingOnRoad> eventsWaitingOnRoad = new ArrayList<EventWaitingOnRoad>();
 		
 	/**
@@ -153,7 +156,7 @@ public class Road {
 	public void newWaitingVehicle(AbstractVehicle vehicle) throws IllegalStateException
 	{
 		// Test à effets de bord
-		if(!decreaseLength(vehicle.size+AbstractVehicle.minSpaceBetweenVehicles))
+		if(!decreaseLength(vehicle.length+AbstractVehicle.minSpaceBetweenVehicles))
 		{
 			// Vive la programmation objet pour ses tirades de logique dure
 			vehicle.location.currentRoad.destination.obstruction = true;
@@ -180,7 +183,7 @@ public class Road {
 	public void formerWaitingVehicle() throws IllegalStateException
 	{
 		AbstractVehicle leavingVehicle = waitingVehicles.remove();
-		increaseLength(leavingVehicle.size);
+		increaseLength(leavingVehicle.length);
 		if(!vehiclesOnRoad.contains(leavingVehicle))
 		{
 			throw new IllegalStateException("Les files de voitures présentes et en attente ne correspondent pas");
