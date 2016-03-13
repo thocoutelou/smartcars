@@ -41,11 +41,11 @@ public class Road {
 	public final CartesianCoordinate point2;
 	
 	// véhicules sur la route
-	public ArrayList<AbstractVehicle> vehiclesOnRoad = new ArrayList<AbstractVehicle>();
+	public Queue<AbstractVehicle> vehiclesOnRoad = new LinkedList<AbstractVehicle>();
 	// dont véhicules en attente de sortie de la route
 	public Queue<AbstractVehicle> waitingVehicles = new LinkedList<AbstractVehicle>();
 	// évènements implémentant les attentes de traversée de la prochaine intersection
-	public Queue<EventWaitingOnRoad> eventsWaitingOnRoad = new LinkedList<EventWaitingOnRoad>();
+	public ArrayList<EventWaitingOnRoad> eventsWaitingOnRoad = new ArrayList<EventWaitingOnRoad>();
 		
 	/**
 	 * constructeur unique, doit être utilisé seulement par le parser
