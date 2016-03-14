@@ -107,6 +107,39 @@ public class Road {
 		}
 	}
 	
+	/**
+	 * Calcule la longueur de la file des voitures
+	 * en attente de traversée de l'intersection suivante,
+	 * amputée d'un certain nombre (left) de véhicules
+	 * ayant déjà quitté la route.
+	 * A noter que la longueur retournée contient un espace supplémentaire
+	 * correspondant à la distance entre le dernier véhicule de la file
+	 * et un hypothétique nouvel arrivant.
+	 * @param left nombre de voitures ayant quitté la file d'attente
+	 * @return longueur de la file d'attente résultante
+	 */
+	public double lengthWaiting(int left)
+	{
+		double length = 0.;
+		int numberOfEvents = eventsWaitingOnRoad.size();
+		EventWaitingOnRoad event;
+		for(int i=numberOfEvents-1; i>=left; i--)
+		{
+			event = eventsWaitingOnRoad.get(i);
+			length += event.vehicle.length+AbstractVehicle.minSpaceBetweenVehicles;
+		}
+		return length;
+	}
+	
+	/**
+	 * Calcule la longueur courante de la file des voitures
+	 * en attente de traversée de l'intersection suivante.
+	 * @return longueur de la file d'attente
+	 */
+	public double lengthWaiting()
+	{
+		return lengthWaiting(0);
+	}
 
 	/**
 	 * Diminue la longueur disponible de la route d'une certaine distance.
