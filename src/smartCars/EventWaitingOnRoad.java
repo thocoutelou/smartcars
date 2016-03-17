@@ -9,8 +9,9 @@ public class EventWaitingOnRoad extends AbstractEvent{
 	public EventWaitingOnRoad(AbstractVehicle vehicle, Road road, double date)
 	{
 		super(vehicle, road, date);
-		waitingTime = road.averageWaitingTime;
-		leavingDate = date+waitingTime;
+		executeEvent();
+		vehicle.events.add(this);
+		nextEvent();
 	}
 	
 	public void executeEvent()
@@ -30,12 +31,10 @@ public class EventWaitingOnRoad extends AbstractEvent{
 			this.waitingTime = this.leavingDate-this.date;
 		}
 		road.eventsWaitingOnRoad.add(0, this);
+		//TODO
+		vehicle.location.actualizeLocation(road, road.length, date);
 	}
 	
-	public static double duration(Road road, double distance)
-	{
-		return distance/road.speed;
-	}
 	
 	public static double absoluteDate(Road road, double initialDate)
 	{
@@ -69,10 +68,10 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		}
 	}
 	
-	//TODO
+	
 	public void nextEvent()
 	{
-		
+		new EventLeaveRoad(vehicle, road ,leavingDate);
 	}
 
 }

@@ -78,5 +78,29 @@ public class Location {
 	{
 		return finalRoad.origin;
 	}
+	
+	/**
+	 * Met à jour la localisation courante du véhicule.
+	 * Cette méthode sera appelée lors de l'exécution des évènements.
+	 */
+	public void actualizeLocation(Road road, double position, double date)
+	{
+		currentRoad = road;
+		currentPosition = position;
+		currentDate = date;
+	}
+	
+	/**
+	 * Vérifie que la localisation courante supposée à jour
+	 * coïncide avec la localisation finale du véhicule.
+	 * @return Le véhicule est-il arrivé ?
+	 */
+	public boolean checkFinalLocation()
+	{
+		return  ( finalRoad.equals(currentRoad)
+				& finalPosition==currentPosition
+				& finalDate==currentDate
+				);
+	}
 
 }

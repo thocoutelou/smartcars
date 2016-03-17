@@ -6,33 +6,28 @@ public class EventVehicleStart extends AbstractEvent{
 	{
 		super(vehicle, vehicle.location.initialRoad, vehicle.location.initialDate);
 		executeEvent();
+		vehicle.events.add(this);
 		nextEvent();
 	}
 	
 	public void executeEvent()
 	{
 		road.vehiclesOnRoad.add(vehicle);
-		actualizeLocation();
+		vehicle.location.actualizeLocation(road, 0., date);
 	}
 	
 	public void nextEvent()
 	{
 		if(road.equals(vehicle.location.finalRoad) & vehicle.location.initialPosition<vehicle.location.finalPosition)
 		{
-			double nextDate = date+(vehicle.location.finalPosition-vehicle.location.initialPosition)/road.speed;
-			new EventVehicleEnd(vehicle, road, nextDate, true);
+			vehicle.location.finalDate = date+duration(road, vehicle.location.finalPosition-vehicle.location.initialPosition);
+			new EventVehicleEnd(vehicle, road, vehicle.location.finalDate);
 		}
 		else
 		{
-			double nextDate = date+(road.absoluteLength-vehicle.location.initialPosition)/road.speed;
+			double nextDate = date+duration(road, road.absoluteLength-vehicle.location.initialPosition);
 			new EventWaitingOnRoad(vehicle, road, nextDate);
 		}
 	}
 
-	public void actualizeLocation()
-	{
-		vehicle.location.currentDate = date;
-		vehicle.location.currentPosition = 0.;
-		vehicle.location.currentRoad = road;
-	}
 }
