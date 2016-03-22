@@ -237,6 +237,20 @@ public class Road {
 		}
 	}
 	
+	// Associe à un point M le point le plus proche qui appartient au segment Road
+	public CartesianCoordinate coordinateProjection(CartesianCoordinate pointM){
+		double pente = (point2.y - point1.y) / (point2.x - point1.x);
+		double k = (pente*(point1.x-pointM.x) + pointM.y - point1.y) / (1 + pente*pente);
+		CartesianCoordinate pointH = new CartesianCoordinate(pointM.x + k*pente, pointM.y-k);
+		if(pointH.x>point2.x){
+			return point2;
+		} else if (pointH.x<point1.x){
+			return point1;
+		} else {
+			return pointM;
+		}
+	}
+	
 	/**
 	 * Identification de la route.
 	 */

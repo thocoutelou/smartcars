@@ -3,6 +3,7 @@ package smartCars;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -39,7 +40,7 @@ public class SvgParser {
 		 * parseIntersection() et parseRoad()
 		 * 	   un path a une intersection de départ si son premier sommet se trouve dans la zone d'un cercle (intersection)
 		 */
-		public static Graph parseGraph(String fileName) {
+		public static GraphState parseGraphState(String fileName) {
 
 			/* La documentation du parser qu'on va utiliser est en ligne:
 			 * https://openclassrooms.com/courses/structurez-vos-donnees-avec-xml/dom-exemple-d-utilisation-en-java
@@ -49,9 +50,10 @@ public class SvgParser {
 			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			final DocumentBuilder builder;
 			
-			//Attributs du futur Graph
+			//Attributs du futur GraphState
 			ArrayList<AbstractIntersection> intersections = new ArrayList<AbstractIntersection>();
 			ArrayList<Road> roads = new ArrayList<Road>();
+			Stack<AbstractVehicle> vehicles = new Stack<AbstractVehicle>();
 
 			try {
 				// On crée le parser
@@ -92,6 +94,18 @@ public class SvgParser {
 								}
 							}
 						}
+						
+						// Parcourt des Vehicule
+						// Toutes les intersections et les Road doivent être instanciées avant la création des véhicule
+						for(int j = 0; j<gNoeuds.getLength(); j++ ){
+							// On filtre les éléments qui sont des noeuds
+							if(gNoeuds.item(j).getNodeType() == Node.ELEMENT_NODE){
+								final Element geometricFigure = (Element) gNoeuds.item(j);
+								if(geometricFigure.getNodeName() == "rect" ){
+									vehicles.add(parseVehicle(geometricFigure, intersections));
+								}
+							}
+						}
 					}
 				}
 			}
@@ -105,7 +119,7 @@ public class SvgParser {
 				e.printStackTrace();
 			}
 
-			return new Graph(intersections, roads);
+			return new GraphState(intersections, roads, vehicles);
 			//this.costsMatrix = Cost.floydWarshall(this);
 		}
 		
@@ -190,6 +204,40 @@ public class SvgParser {
 					parseRoad.point1 + "; " + parseRoad.point2);
 			//this.roads.add(parseRoad);
 			return parseRoad;
+		}
+		
+		private static AbstractVehicle parseVehicle(Element geometricFigure, ArrayList<AbstractIntersection> intersections) throws IllegalArgumentException{
+			if(geometricFigure.getNodeName() != "rect" ){
+				throw new IllegalArgumentException(geometricFigure.getAttribute("id") + " is not a Vehicule");
+			}
+			
+			// données géométriques
+			// Les véhicules sont repérés par la position de l'angle gauche à l'avant
+			CartesianCoordinate position;
+			CartesianCoordinate destination;
+			// données de position initiale
+			Road initialRoad;
+			double initialPosition;
+			double initialDate;
+			// données de position de la destination
+			Road finalRoad;
+			double finalPosition;
+			double finalDate;
+			
+			position = new CartesianCoordinate(Float.parseFloat(geometricFigure.getAttribute("x")),
+					Float.parseFloat(geometricFigure.getAttribute("y")));
+			destination = new CartesianCoordinate(Float.parseFloat(geometricFigure.getAttribute("x_destination")),
+					Float.parseFloat(geometricFigure.getAttribute("y_destination")));
+			
+			//Projection de position et de destination sur le graph: on sélectionne le Road qui est le plus proche
+			initialRoad = position.closestRoad(intersections);
+			finalRoad = destination.closestRoad(intersections);
+			
+			//Détermination des coordonnées des points projettés
+			//TODO
+			
+			Location vehiculeLocation = new Location(initialRoad,initialPosition, initialDate, finalRoad, finalPosition, finalDate);
+			return new AbstractVehicle(vehiculeLocation);
 		}
 
 }
