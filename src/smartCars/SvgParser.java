@@ -234,7 +234,12 @@ public class SvgParser {
 			finalRoad = destination.closestRoad(intersections);
 			
 			//Détermination des coordonnées des points projettés
-			//TODO
+			CartesianCoordinate positionProjection = initialRoad.coordinateProjection(position);
+			CartesianCoordinate finalProjection = initialRoad.coordinateProjection(destination);
+			
+			// Calcul de initialPosition et de finalPosition
+			initialPosition = initialRoad.point1.distanceFrom(positionProjection);
+			finalPosition = finalRoad.point1.distanceFrom(finalProjection);
 			
 			Location vehiculeLocation = new Location(initialRoad,initialPosition, initialDate, finalRoad, finalPosition, finalDate);
 			return new AbstractVehicle(vehiculeLocation);
