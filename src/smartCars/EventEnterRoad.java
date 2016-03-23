@@ -21,8 +21,8 @@ public class EventEnterRoad extends AbstractEvent {
 	{
 		if(this.road.equals(vehicle.location.finalRoad))
 		{
-			vehicle.location.finalDate = date+duration(road, vehicle.location.finalPosition);
-			new EventVehicleEnd(vehicle, road, date+duration(road, vehicle.location.finalDate));
+			vehicle.location.finalDate = date+Time.duration(road, vehicle.location.finalPosition);
+			new EventVehicleEnd(vehicle, road, date+Time.duration(road, vehicle.location.finalDate));
 		}
 	}
 

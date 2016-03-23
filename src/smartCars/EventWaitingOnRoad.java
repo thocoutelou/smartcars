@@ -38,7 +38,7 @@ public class EventWaitingOnRoad extends AbstractEvent{
 	
 	public static double absoluteDate(Road road, double initialDate)
 	{
-		return initialDate+duration(road, road.absoluteLength);
+		return initialDate+Time.duration(road, road.absoluteLength);
 	}
 	
 	// sera appelée en argument du constructeur,
@@ -59,7 +59,7 @@ public class EventWaitingOnRoad extends AbstractEvent{
 				do
 				{
 					distance = road.absoluteLength-road.lengthWaiting(left);
-					arrivingDate = initialDate+duration(road, distance);
+					arrivingDate = initialDate+Time.duration(road, distance);
 					left++;
 				}
 				while(road.eventsWaitingOnRoad.get(size-1-left).leavingDate<arrivingDate);

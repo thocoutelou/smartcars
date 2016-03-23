@@ -9,6 +9,11 @@ public class Time {
 	// évènements à survenir dans l'ordre chronologique, une fois calculés
 	public static PriorityBlockingQueue<AbstractEvent> events = new PriorityBlockingQueue<AbstractEvent>();
 	
+
+	public static double duration(Road road, double distance)
+	{
+		return distance/road.speed;
+	}
 	
 	public static double startingTime(GraphState graphState) throws IllegalStateException
 	{

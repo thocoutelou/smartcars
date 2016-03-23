@@ -229,11 +229,11 @@ public class SvgParser {
 			destination = new CartesianCoordinate(Float.parseFloat(geometricFigure.getAttribute("x_destination")),
 					Float.parseFloat(geometricFigure.getAttribute("y_destination")));
 			
-			//Projection de position et de destination sur le graph: on sélectionne le Road qui est le plus proche
+			// Projection de position et de destination sur le graph: on sélectionne le Road qui est le plus proche
 			initialRoad = position.closestRoad(intersections);
 			finalRoad = destination.closestRoad(intersections);
 			
-			//Détermination des coordonnées des points projettés
+			// Détermination des coordonnées des points projettés
 			CartesianCoordinate positionProjection = initialRoad.coordinateProjection(position);
 			CartesianCoordinate finalProjection = initialRoad.coordinateProjection(destination);
 			
@@ -241,7 +241,8 @@ public class SvgParser {
 			initialPosition = initialRoad.point1.distanceFrom(positionProjection);
 			finalPosition = finalRoad.point1.distanceFrom(finalProjection);
 			
-			Location vehiculeLocation = new Location(initialRoad,initialPosition, initialDate, finalRoad, finalPosition, finalDate);
+			// finalDate=0. n'est pas significative
+			Location vehiculeLocation = new Location(initialRoad, initialPosition, initialDate, finalRoad, finalPosition, 0.);
 			return new AbstractVehicle(vehiculeLocation);
 		}
 

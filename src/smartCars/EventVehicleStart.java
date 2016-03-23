@@ -20,12 +20,12 @@ public class EventVehicleStart extends AbstractEvent{
 	{
 		if(road.equals(vehicle.location.finalRoad) & vehicle.location.initialPosition<vehicle.location.finalPosition)
 		{
-			vehicle.location.finalDate = date+duration(road, vehicle.location.finalPosition-vehicle.location.initialPosition);
+			vehicle.location.finalDate = date+Time.duration(road, vehicle.location.finalPosition-vehicle.location.initialPosition);
 			new EventVehicleEnd(vehicle, road, vehicle.location.finalDate);
 		}
 		else
 		{
-			double nextDate = date+duration(road, road.absoluteLength-vehicle.location.initialPosition);
+			double nextDate = date+Time.duration(road, road.absoluteLength-vehicle.location.initialPosition);
 			new EventWaitingOnRoad(vehicle, road, nextDate);
 		}
 	}

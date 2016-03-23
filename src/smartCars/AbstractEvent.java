@@ -25,9 +25,4 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 		else return -1;
 	}
 	
-	public static double duration(Road road, double distance)
-	{
-		return distance/road.speed;
-	}
-	
 }
