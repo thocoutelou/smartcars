@@ -132,7 +132,12 @@ public class AbstractVehicle {
 	{
 		
 	}
-
+	
+	public String toString(){
+		String result = "AbstractVehicle " + this.identifier + " :";
+		result += this.location.toString();
+		return result;
+	}
 }
 
 

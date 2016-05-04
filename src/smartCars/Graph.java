@@ -29,7 +29,7 @@ public class Graph {
 		this.intersections = intersections;
 		this.roads = roads;
 		this.numberOfIntersections = intersections.size();
-		this.costsMatrix = Cost.floydWarshall(this);
+		//this.costsMatrix = Cost.floydWarshall(this);
 		listRoads();
 	}
 

@@ -224,10 +224,13 @@ public class SvgParser {
 			double finalPosition;
 			double finalDate;
 			
+			double initalDate;
+			
 			position = new CartesianCoordinate(Float.parseFloat(geometricFigure.getAttribute("x")),
 					Float.parseFloat(geometricFigure.getAttribute("y")));
 			destination = new CartesianCoordinate(Float.parseFloat(geometricFigure.getAttribute("x_destination")),
 					Float.parseFloat(geometricFigure.getAttribute("y_destination")));
+			initialDate = Float.parseFloat(geometricFigure.getAttribute("initialDate"));
 			
 			// Projection de position et de destination sur le graph: on sélectionne le Road qui est le plus proche
 			initialRoad = position.closestRoad(intersections);

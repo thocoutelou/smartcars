@@ -102,5 +102,12 @@ public class Location {
 				& finalDate==currentDate
 				);
 	}
+	
+	public String toString(){
+		String newline = System.getProperty("line.separator");
+		String result = "Current: " + currentRoad.toString() + currentPosition + currentDate + newline;
+		result += "Final: " +finalRoad.toString() + finalPosition + finalDate;
+		return result;
+	}
 
 }

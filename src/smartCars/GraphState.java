@@ -53,4 +53,13 @@ public class GraphState extends Graph {
 	{
 		
 	}
+	
+	public String toString(){
+		String newline = System.getProperty("line.separator");
+		String result = super.toString() + newline;
+		for(AbstractVehicle v: vehicles){
+			result += v.toString() + newline;
+		}
+		return result;
+	}
 }

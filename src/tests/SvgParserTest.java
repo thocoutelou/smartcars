@@ -37,7 +37,7 @@ public class SvgParserTest {
 		//Scénario 3 : parse d'un véhicule
 		fileName=project_location + "/media/map/3.svg";
 		Graph graph3 = SvgParser.parseGraphState(fileName);
-		System.out.println(graph2);
+		System.out.println(graph3);
 		
 		return;
 	}
