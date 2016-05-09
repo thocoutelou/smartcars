@@ -1,13 +1,12 @@
 package tests;
 
-import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.junit.Test;
 
-import smartCars.Dijkstra;
+import smartCars.AbstractVehicle;
 import smartCars.EventVehicleStart;
 import smartCars.GraphState;
 import smartCars.SvgParser;
@@ -15,6 +14,7 @@ import smartCars.SvgParser;
 public class EventVehicleStartTest {
 
 	String project_location;
+	
 	@Test
 	public void test() {
 		try {
@@ -29,8 +29,9 @@ public class EventVehicleStartTest {
 		GraphState graph3 = SvgParser.parseGraphState(fileName);
 		System.out.println(graph3);
 		
-		EventVehicleStart eventVehicleStart = new EventVehicleStart(graph3.vehicles.get(0));
-		
+		AbstractVehicle vehicleTest = graph3.vehicles.get(0);
+		new EventVehicleStart(vehicleTest);
+		System.out.println(vehicleTest.events);
 	}
 
 }

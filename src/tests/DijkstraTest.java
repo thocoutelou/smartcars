@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Stack;
 
-import org.junit.After;
 import org.junit.Test;
 
 import junit.framework.TestCase;
