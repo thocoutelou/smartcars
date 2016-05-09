@@ -19,7 +19,7 @@ public class Dijkstra {
 	 * @param vehicle
 	 * @throws IllegalStateException
 	 */
-	public void path(Graph graph, AbstractVehicle vehicle) throws IllegalStateException
+	public static void path(Graph graph, AbstractVehicle vehicle) throws IllegalStateException
 	{
 		AbstractIntersection origin = vehicle.intersectionAfterStart();
 		ArrayList<Road> nextRoads = new ArrayList<Road>(origin.getLeavingRoads());
@@ -75,13 +75,12 @@ public class Dijkstra {
 	 * @param route
 	 * @return Stack path (construit sur 'route')
 	 */
-	private Stack<Road> buildPath(AbstractVehicle vehicle, Road[] route)
+	private static Stack<Road> buildPath(AbstractVehicle vehicle, Road[] route)
 	{
 		Stack<Road> path = new Stack<Road>();
 		path.push(vehicle.location.finalRoad);
-		while(!path.peek().equals(vehicle.location.initialRoad))
-		{
-			path.push(route[path.peek().origin.identifier]);
+		for (Road r: route){
+			path.push(r);
 		}
 		return path;
 	}

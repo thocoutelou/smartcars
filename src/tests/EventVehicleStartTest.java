@@ -7,12 +7,13 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import smartCars.Dijkstra;
+import smartCars.EventVehicleStart;
 import smartCars.GraphState;
 import smartCars.SvgParser;
-import smartCars.Dijkstra;
 
-public class DijkstraTest {
-	
+public class EventVehicleStartTest {
+
 	String project_location;
 	@Test
 	public void test() {
@@ -28,9 +29,8 @@ public class DijkstraTest {
 		GraphState graph3 = SvgParser.parseGraphState(fileName);
 		System.out.println(graph3);
 		
-		Dijkstra.path(graph3, graph3.vehicles.get(0));
+		EventVehicleStart eventVehicleStart = new EventVehicleStart(graph3.vehicles.get(0));
 		
-		return;
 	}
 
 }
