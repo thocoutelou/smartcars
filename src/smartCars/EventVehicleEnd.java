@@ -5,6 +5,7 @@ public class EventVehicleEnd extends AbstractEvent{
 	public EventVehicleEnd(AbstractVehicle vehicle, Road road, double date)
 	{
 		super(vehicle, road, date);
+		nature = 4;
 		executeEvent();
 	}
 	

@@ -9,9 +9,9 @@ public class EventWaitingOnRoad extends AbstractEvent{
 	public EventWaitingOnRoad(AbstractVehicle vehicle, Road road, double date)
 	{
 		super(vehicle, road, date);
+		nature = 1;
+		leavingDate = absoluteDate(road, date);
 		executeEvent();
-		vehicle.events.add(this);
-		nextEvent();
 	}
 	
 	public void executeEvent()
@@ -68,10 +68,10 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		}
 	}
 	
-	
-	public void nextEvent()
+	// à appeler avec leavingDate
+	public static void nextEvent(Road road, AbstractVehicle vehicle, double leavingDate)
 	{
-		new EventLeaveRoad(vehicle, road ,leavingDate);
+		vehicle.events.add(new EventLeaveRoad(vehicle, road, leavingDate));
 	}
 
 }
