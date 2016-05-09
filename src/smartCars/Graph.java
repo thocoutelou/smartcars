@@ -52,7 +52,7 @@ public class Graph {
 	 */
 	public String toString() {
 		String newline = System.getProperty("line.separator");
-		String result = "<---   Graph print   --->" + newline;
+		String result = "\n\n<---   Graph print   --->" + newline;
 		for (int i=0; i<intersections.size(); i++){
 			result += intersections.get(i).toStringDetailed()+ newline;
 		}

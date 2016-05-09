@@ -14,7 +14,7 @@ public class AbstractIntersection {
 	// identificateur des instances, s'incrémente à chaque instanciation...
 	protected static int identificator = 0;
 	// ... pour définir l'identifiant de l'intersection créée
-	protected final int identifier;
+	public final int identifier;
 	// routes sortant de l'intersection
 	private ArrayList<Road> leavingRoads;
 	// véhicules sur l'intersection

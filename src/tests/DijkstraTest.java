@@ -35,16 +35,26 @@ public class DijkstraTest extends TestCase{
 		
 		AbstractVehicle vehicleTest = graph3.vehicles.get(0);
 		Dijkstra.path(graph3, vehicleTest);
-		printPath(vehicleTest.getPath());
+		printPath(vehicleTest);
 		
 	}
 
-	private void printPath(Stack<Road> path)
+	private void printPath(AbstractVehicle vehicle)
 	{
-		for(Road r : path)
+		Stack<Road> path = vehicle.getPath();
+		while(!path.isEmpty())
 		{
-			System.out.println("Road "+r.identifier);
+			Road road = path.pop();
+			if(road.equals(vehicle.location.finalRoad))
+			{
+				System.out.print("Road "+road.identifier+" -> ");
+			}
+			else
+			{
+				System.out.print("Road "+road.identifier+" -> "+"Intersection "+road.destination.identifier+"; ");
+			}
 		}
+		System.out.println("end");
 	}
 
 }

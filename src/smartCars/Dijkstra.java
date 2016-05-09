@@ -21,6 +21,8 @@ public class Dijkstra {
 	 */
 	public static void path(Graph graph, AbstractVehicle vehicle) throws IllegalStateException
 	{
+		System.out.println("<---   Dijkstra on vehicle "+vehicle.identifier+"   --->");
+		
 		AbstractIntersection origin = vehicle.intersectionAfterStart();
 		ArrayList<Road> nextRoads = new ArrayList<Road>(origin.getLeavingRoads());
 		// route[i] contient la route qui mène à i,
@@ -66,6 +68,7 @@ public class Dijkstra {
 		}
 
 		vehicle.path = buildPath(vehicle, route);
+		System.out.println(vehicle.path);
 	}
 
 	/**
