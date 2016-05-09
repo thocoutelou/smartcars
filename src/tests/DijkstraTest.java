@@ -1,19 +1,24 @@
 package tests;
 
-import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Stack;
 
+import org.junit.After;
 import org.junit.Test;
 
+import junit.framework.TestCase;
+import smartCars.AbstractVehicle;
 import smartCars.GraphState;
+import smartCars.Road;
 import smartCars.SvgParser;
 import smartCars.Dijkstra;
 
-public class DijkstraTest {
+public class DijkstraTest extends TestCase{
 	
 	String project_location;
+	
 	@Test
 	public void test() {
 		try {
@@ -28,9 +33,18 @@ public class DijkstraTest {
 		GraphState graph3 = SvgParser.parseGraphState(fileName);
 		System.out.println(graph3);
 		
-		Dijkstra.path(graph3, graph3.vehicles.get(0));
+		AbstractVehicle vehicleTest = graph3.vehicles.get(0);
+		Dijkstra.path(graph3, vehicleTest);
+		printPath(vehicleTest.getPath());
 		
-		return;
+	}
+
+	private void printPath(Stack<Road> path)
+	{
+		for(Road r : path)
+		{
+			System.out.println("Road "+r.identifier);
+		}
 	}
 
 }

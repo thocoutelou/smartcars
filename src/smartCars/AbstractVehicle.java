@@ -57,6 +57,11 @@ public class AbstractVehicle {
 		this.path = path;
 	}
 	
+	public Stack<Road> getPath()
+	{
+		return path;
+	}
+	
 	/**
 	 * Compare les coûts des plus courts chemins de deux véhicules
 	 * s'ils étaient calculés indépendamment,

@@ -87,6 +87,7 @@ public class Dijkstra {
 		return path;
 	}
 	
+	
 	//TODO
 	public void changePath(ArrayList<AbstractEvent> events)
 	{
