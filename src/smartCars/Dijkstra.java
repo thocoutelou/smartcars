@@ -26,6 +26,7 @@ public class Dijkstra {
 		// route[i] contient la route qui mène à i,
 		// qui elle-même contient l'intersection d'origine
 		Road route[] = new Road[graph.numberOfIntersections];
+		route[origin.identifier] = vehicle.location.initialRoad;
 		
 		boolean visited[] = new boolean[graph.numberOfIntersections];
 		for(int i=0; i<graph.numberOfIntersections; i++) visited[i]=false;
@@ -59,7 +60,7 @@ public class Dijkstra {
 			}
 		}
 		
-		if(!visited[origin.identifier] & nextRoads.isEmpty())
+		if(!visited[vehicle.location.finalRoad.destination.identifier] & nextRoads.isEmpty())
 		{
 			throw new IllegalStateException("Le graphe n'est pas connexe");
 		}
