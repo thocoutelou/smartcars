@@ -79,9 +79,11 @@ public class Dijkstra {
 	{
 		Stack<Road> path = new Stack<Road>();
 		path.push(vehicle.location.finalRoad);
-		for (Road r: route){
-			path.push(r);
-		}
+		while(!path.peek().equals(vehicle.location.initialRoad))
+			{
+				path.push(route[path.peek().origin.identifier]);
+			}
+
 		return path;
 	}
 	

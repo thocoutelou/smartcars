@@ -25,8 +25,9 @@ public class Road {
 	// longueur absolue de la route
 	public double absoluteLength;
 	
-	// la longueur disponible de la route sera variable
-	// et égale grossièrement à (absoluteLength - waitingVehicles.length())
+	// la longueur disponible de la route sera variable,
+	// car doit prendre en compte les véhicules en attente
+	// de traversée de la prochaine intersection
 	public double length;
 	// vitesse de circulation autorisée (km/h)
 	// et vitesse supposée des véhicules sur la route
@@ -38,8 +39,10 @@ public class Road {
 	// durée moyenne d'attente devant l'intersection d'arrivée
 	double averageWaitingTime;
 	
-	// géométrie de la route
+	// géométrie de la route:
+	// point de départ
 	public final CartesianCoordinate point1;
+	// point d'arrivée
 	public final CartesianCoordinate point2;
 	
 	// véhicules sur la route
