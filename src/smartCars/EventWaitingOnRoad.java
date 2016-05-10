@@ -68,9 +68,14 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		}
 	}
 	
-	public void nextEvent()
+	public static void nextEvent(AbstractEvent event)
 	{
-		vehicle.events.add(new EventLeaveRoad(vehicle, road, leavingDate));
+
+		Road road = event.road;
+		AbstractVehicle vehicle = event.vehicle;
+		double date = event.date;
+		
+		vehicle.events.add(new EventLeaveRoad(vehicle, road, absoluteDate(road, date)));
 	}
 
 }

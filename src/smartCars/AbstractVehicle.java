@@ -33,7 +33,7 @@ public class AbstractVehicle {
 	// sauvegarde les routes déjà empruntées en vue de les revoir
 	protected Stack<Road> itinary;
 	// évènements calculés par Dijkstra
-	public PriorityBlockingQueue<AbstractEvent> events;
+	public PriorityBlockingQueue<AbstractEvent> events = new PriorityBlockingQueue<AbstractEvent>();
 	
 	/**
 	 * Constructeur à partir des information de localisation

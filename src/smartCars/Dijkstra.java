@@ -67,7 +67,7 @@ public class Dijkstra {
 			throw new IllegalStateException("Le graphe n'est pas connexe");
 		}
 
-		vehicle.path = buildPath(vehicle, route);
+		vehicle.savePath(buildPath(vehicle, route));
 		System.out.println(vehicle.path);
 	}
 

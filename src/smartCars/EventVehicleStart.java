@@ -15,9 +15,14 @@ public class EventVehicleStart extends AbstractEvent{
 		vehicle.location.actualizeLocation(road, 0., date);
 	}
 	
-	// date de l'objet
-	public void nextEvent()
+	// passage en statique à cause de l'impossibilité de cast
+	// un AbstractEvent en l'un de ses héritiers
+	public static void nextEvent(AbstractEvent event)
 	{
+		Road road = event.road;
+		AbstractVehicle vehicle = event.vehicle;
+		double date = event.date;
+		
 		if(road.equals(vehicle.location.finalRoad) & vehicle.location.initialPosition<vehicle.location.finalPosition)
 		{
 			vehicle.location.finalDate = date+Time.duration(road, vehicle.location.finalPosition-vehicle.location.initialPosition);

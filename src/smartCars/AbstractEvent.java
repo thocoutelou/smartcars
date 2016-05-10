@@ -26,7 +26,7 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 	}
 	
 	// ne doit être appelée qu'après le calcul de Dijkstra sur le véhicule
-	public static void vehiclesEvents(AbstractVehicle vehicle) throws IllegalStateException
+	public static void vehicleEvents(AbstractVehicle vehicle) throws IllegalStateException
 	{
 		if(!vehicle.pathCalculated)
 		{
@@ -50,7 +50,7 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 				int lastEventNature = vehicle.events.peek().nature;
 				
 				// *** EventWaitingOnRoad ***
-				if(lastEventNature==0) start.nextEvent();
+				if(lastEventNature==0) EventVehicleStart.nextEvent(start);
 				else
 				{
 					if(lastEventNature!=3)
@@ -59,8 +59,8 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 					}
 					else
 					{
-						EventEnterRoad lastEventEnterRoad = (EventEnterRoad) vehicle.events.peek();
-						lastEventEnterRoad.nextEvent();
+						AbstractEvent lastEventEnterRoad = vehicle.events.peek();
+						EventEnterRoad.nextEvent(lastEventEnterRoad);
 					}
 				}
 				
@@ -72,12 +72,12 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 				else
 				{
 					// *** EventLeavingRoad ***
-					EventWaitingOnRoad lastEventWaitingOnRoad = (EventWaitingOnRoad) vehicle.events.peek();
-					lastEventWaitingOnRoad.nextEvent();
+					AbstractEvent lastEventWaitingOnRoad = vehicle.events.peek();
+					EventWaitingOnRoad.nextEvent(lastEventWaitingOnRoad);
 					
 					// *** EventEnterRoad ***
-					EventLeaveRoad lastEventLeaveRoad = (EventLeaveRoad) vehicle.events.peek();
-					lastEventLeaveRoad.nextEvent();
+					AbstractEvent lastEventLeaveRoad = vehicle.events.peek();
+					EventLeaveRoad.nextEvent(lastEventLeaveRoad);
 				}
 			}
 		}

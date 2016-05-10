@@ -19,8 +19,13 @@ public class EventLeaveRoad extends AbstractEvent {
 	}
 	
 	// date de l'objet
-	public void nextEvent()
+	public static void nextEvent(AbstractEvent event)
 	{
+
+		Road road = event.road;
+		AbstractVehicle vehicle = event.vehicle;
+		double date = event.date;
+		
 		vehicle.events.add(new EventEnterRoad(vehicle, vehicle.path.pop(), date+road.destination.averageTime));
 	}
 	

@@ -18,7 +18,7 @@ public class AbstractIntersection {
 	// routes sortant de l'intersection
 	private ArrayList<Road> leavingRoads;
 	// véhicules sur l'intersection
-	public ArrayList<AbstractVehicle> vehiclesOnIntersection;
+	public ArrayList<AbstractVehicle> vehiclesOnIntersection = new ArrayList<AbstractVehicle>();
 	
 	// durée moyenne de traversée de l'intersection
 	public double averageTime;
