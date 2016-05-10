@@ -25,30 +25,61 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 		else return -1;
 	}
 	
-	public boolean nextEvent(AbstractVehicle vehicle)
+	// ne doit être appelée qu'après le calcul de Dijkstra sur le véhicule
+	public static void vehiclesEvents(AbstractVehicle vehicle) throws IllegalStateException
 	{
-		AbstractEvent lastEvent = vehicle.events.peek();
-		int nature = lastEvent.nature;
-		if(nature==4) return true;
-		else if(nature==0)
+		if(!vehicle.pathCalculated)
 		{
-			EventVehicleStart.nextEvent(road, vehicle, date);
-			return false;
+			throw new IllegalStateException("Dijkstra n'a pas été appliqué à ce véhicule");
 		}
-		else if(nature==1)
+		else
 		{
+			// *** EventVehicleStart ***
+			Road road = vehicle.path.pop();
+			if(!road.equals(vehicle.location.initialRoad))
+			{
+				throw new IllegalStateException("Itinéraire Dijkstra faux");
+			}
+			EventVehicleStart start = new EventVehicleStart(vehicle);
+			// seul évènement à ajouter manuellement au véhicule
+			// puisqu'il n'est pas construit par une méthode nextEvent
+			vehicle.events.add(start);
 			
-			return false;
-		}
-		else if(nature==2)
-		{
-
-			return false;
-		}
-		else if(nature==3)
-		{
-
-			return false;
+			while(!road.equals(vehicle.location.finalRoad))
+			{
+				int lastEventNature = vehicle.events.peek().nature;
+				
+				// *** EventWaitingOnRoad ***
+				if(lastEventNature==0) start.nextEvent();
+				else
+				{
+					if(lastEventNature!=3)
+					{
+						throw new IllegalStateException("La boucle de calcul des évènements n'est pas cyclique.");
+					}
+					else
+					{
+						EventEnterRoad lastEventEnterRoad = (EventEnterRoad) vehicle.events.peek();
+						lastEventEnterRoad.nextEvent();
+					}
+				}
+				
+				lastEventNature = vehicle.events.peek().nature;
+				// l'évènement EventVehicleEnd survient ;
+				// comprend le cas où la destination est plus loin
+				// et sur la même route que le point de départ
+				if(lastEventNature==4) return;
+				else
+				{
+					// *** EventLeavingRoad ***
+					EventWaitingOnRoad lastEventWaitingOnRoad = (EventWaitingOnRoad) vehicle.events.peek();
+					lastEventWaitingOnRoad.nextEvent();
+					
+					// *** EventEnterRoad ***
+					EventLeaveRoad lastEventLeaveRoad = (EventLeaveRoad) vehicle.events.peek();
+					lastEventLeaveRoad.nextEvent();
+				}
+			}
 		}
 	}
 	

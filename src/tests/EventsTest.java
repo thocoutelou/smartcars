@@ -1,20 +1,18 @@
 package tests;
 
-
+import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Test;
-
+import smartCars.AbstractEvent;
 import smartCars.AbstractVehicle;
-import smartCars.EventVehicleStart;
 import smartCars.GraphState;
 import smartCars.SvgParser;
 
-public class EventVehicleStartTest {
-
-	String project_location;
+public class EventsTest {
 	
+	String project_location;
+
 	@Test
 	public void test() {
 		try {
@@ -30,7 +28,7 @@ public class EventVehicleStartTest {
 		System.out.println(graph3);
 		
 		AbstractVehicle vehicleTest = graph3.vehicles.get(0);
-		new EventVehicleStart(vehicleTest);
+		AbstractEvent.vehiclesEvents(vehicleTest);
 		System.out.println(vehicleTest.events);
 	}
 

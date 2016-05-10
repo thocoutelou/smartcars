@@ -17,7 +17,7 @@ public class EventEnterRoad extends AbstractEvent {
 	}
 	
 	// date de l'objet
-	public static void nextEvent(Road road, AbstractVehicle vehicle, double date)
+	public void nextEvent()
 	{
 		if(road.equals(vehicle.location.finalRoad))
 		{

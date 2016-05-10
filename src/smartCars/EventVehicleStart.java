@@ -16,7 +16,7 @@ public class EventVehicleStart extends AbstractEvent{
 	}
 	
 	// date de l'objet
-	public static void nextEvent(Road road, AbstractVehicle vehicle, double date)
+	public void nextEvent()
 	{
 		if(road.equals(vehicle.location.finalRoad) & vehicle.location.initialPosition<vehicle.location.finalPosition)
 		{
@@ -28,30 +28,6 @@ public class EventVehicleStart extends AbstractEvent{
 			double nextDate = date+Time.duration(road, road.absoluteLength-vehicle.location.initialPosition);
 			vehicle.events.add(new EventWaitingOnRoad(vehicle, road, nextDate));
 		}
-	}
-	
-	// ne doit être appelée qu'après le calcul de Dijkstra sur le véhicule
-	public static void vehiclesEvents(AbstractVehicle vehicle) throws IllegalStateException
-	{
-		if(!vehicle.pathCalculated)
-		{
-			throw new IllegalStateException("Dijkstra n'a pas été appliqué à ce véhicule");
-		}
-		else
-		{
-			// *** EventVehicleStart ***
-			Road road = vehicle.path.pop();
-			if(!road.equals(vehicle.location.initialRoad))
-			{
-				throw new IllegalStateException("Itinéraire Dijkstra faux");
-			}
-			EventVehicleStart start = new EventVehicleStart(vehicle);
-			vehicle.events.add(start);
-			
-			// *** EventWaitingOnRoad ***
-			// TODO
-		}
-		
 	}
 
 }
