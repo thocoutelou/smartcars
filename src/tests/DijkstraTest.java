@@ -27,7 +27,7 @@ public class DijkstraTest extends TestCase{
 		e.printStackTrace();
 		}
 		
-		//Parse d'un GraphState
+		//Parse du graph3
 		String fileName=project_location + "/media/map/3.svg";
 		GraphState graph3 = SvgParser.parseGraphState(fileName);
 		System.out.println(graph3);
@@ -36,6 +36,15 @@ public class DijkstraTest extends TestCase{
 		Dijkstra.path(graph3, vehicleTest);
 		printPath(vehicleTest);
 		
+		//Parse du graph4
+		fileName=project_location + "/media/map/4.svg";
+		GraphState graph4 = SvgParser.parseGraphState(fileName);
+		System.out.println(graph3);
+		for (int i=0; i<2; i++){
+			vehicleTest = graph4.vehicles.get(i);
+			Dijkstra.path(graph4, vehicleTest);
+			printPath(vehicleTest);
+		}
 	}
 
 	private void printPath(AbstractVehicle vehicle)
