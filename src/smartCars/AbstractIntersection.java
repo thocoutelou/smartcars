@@ -21,7 +21,7 @@ public class AbstractIntersection {
 	public ArrayList<AbstractVehicle> vehiclesOnIntersection = new ArrayList<AbstractVehicle>();
 	
 	// durée moyenne de traversée de l'intersection
-	public double averageTime;
+	public double averageTime = 10.;
 	// L'intersection est-elle encombrée ?
 	public boolean obstruction;
 	

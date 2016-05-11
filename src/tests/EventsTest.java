@@ -31,7 +31,6 @@ public class EventsTest {
 		AbstractVehicle vehicleTest = graph3.vehicles.get(0);
 		Dijkstra.path(graph3, vehicleTest);
 		AbstractEvent.vehicleEvents(vehicleTest);
-		System.out.println(vehicleTest.events);
 	}
 
 }

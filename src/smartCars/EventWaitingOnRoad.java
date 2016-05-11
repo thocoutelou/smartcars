@@ -10,7 +10,7 @@ public class EventWaitingOnRoad extends AbstractEvent{
 	{
 		super(vehicle, road, date);
 		nature = 1;
-		leavingDate = absoluteDate(road, date);
+		leavingDate = date+1.;
 		executeEvent();
 	}
 	
@@ -73,9 +73,9 @@ public class EventWaitingOnRoad extends AbstractEvent{
 
 		Road road = event.road;
 		AbstractVehicle vehicle = event.vehicle;
-		double date = event.date;
+		double leavingDate = event.date+1.;
 		
-		vehicle.events.add(new EventLeaveRoad(vehicle, road, absoluteDate(road, date)));
+		vehicle.tempEvents.add(new EventLeaveRoad(vehicle, road, leavingDate));
 	}
 
 }

@@ -6,6 +6,7 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 	protected static int identificator = 0;
 	protected int identifier;
 	protected int nature;
+	
 	protected AbstractVehicle vehicle;
 	protected Road road;
 	protected double date;
@@ -21,8 +22,8 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 
 	public int compareTo(AbstractEvent event)
 	{
-		if(this.date>event.date) return 1;
-		else return -1;
+		if(this.date>event.date) return -1;
+		else return 1;
 	}
 	
 	// ne doit être appelée qu'après le calcul de Dijkstra sur le véhicule
@@ -35,22 +36,20 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 		else
 		{
 			// *** EventVehicleStart ***
-			Road road = vehicle.path.pop();
-			if(!road.equals(vehicle.location.initialRoad))
-			{
-				throw new IllegalStateException("Itinéraire Dijkstra faux");
-			}
-			EventVehicleStart start = new EventVehicleStart(vehicle);
-			// seul évènement à ajouter manuellement au véhicule
-			// puisqu'il n'est pas construit par une méthode nextEvent
-			vehicle.events.add(start);
+			AbstractEvent start = new EventVehicleStart(vehicle);
+			vehicle.tempEvents.add(start);
 			
-			while(!road.equals(vehicle.location.finalRoad))
+			AbstractEvent lastEventEnterRoad;
+			
+			while(true)
 			{
-				int lastEventNature = vehicle.events.peek().nature;
+				int lastEventNature = vehicle.tempEvents.peek().nature;
 				
 				// *** EventWaitingOnRoad ***
-				if(lastEventNature==0) EventVehicleStart.nextEvent(start);
+				if(lastEventNature==0)
+				{
+					EventVehicleStart.nextEvent(vehicle.tempEvents.peek());
+				}
 				else
 				{
 					if(lastEventNature!=3)
@@ -59,27 +58,52 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 					}
 					else
 					{
-						AbstractEvent lastEventEnterRoad = vehicle.events.peek();
+						lastEventEnterRoad = vehicle.tempEvents.peek();
 						EventEnterRoad.nextEvent(lastEventEnterRoad);
 					}
 				}
 				
-				lastEventNature = vehicle.events.peek().nature;
+				lastEventNature = vehicle.tempEvents.peek().nature;
 				// l'évènement EventVehicleEnd survient ;
 				// comprend le cas où la destination est plus loin
 				// et sur la même route que le point de départ
-				if(lastEventNature==4) return;
+				if(lastEventNature==4)
+				{
+					System.out.println("\nLe véhicule a été acheminé avec succès à destination.");
+					
+					System.out.println("Pile LIFO des évènements :");
+					System.out.println(vehicle.tempEvents);
+					System.out.println("\nPath désormais vide du véhicule :");
+					System.out.println(vehicle.path);
+					
+					fifoToLifo(vehicle);
+					
+					System.out.println("\nPile FIFO des évènements :");
+					System.out.println(vehicle.events);
+					
+					break;
+				}
 				else
 				{
 					// *** EventLeavingRoad ***
-					AbstractEvent lastEventWaitingOnRoad = vehicle.events.peek();
+					AbstractEvent lastEventWaitingOnRoad = vehicle.tempEvents.peek();
 					EventWaitingOnRoad.nextEvent(lastEventWaitingOnRoad);
 					
 					// *** EventEnterRoad ***
-					AbstractEvent lastEventLeaveRoad = vehicle.events.peek();
+					AbstractEvent lastEventLeaveRoad = vehicle.tempEvents.peek();
 					EventLeaveRoad.nextEvent(lastEventLeaveRoad);
+					
+					lastEventEnterRoad = vehicle.tempEvents.peek();
 				}
 			}
+		}
+	}
+	
+	public static void fifoToLifo(AbstractVehicle vehicle)
+	{
+		while(!vehicle.tempEvents.isEmpty())
+		{
+			vehicle.events.add(vehicle.tempEvents.pop());
 		}
 	}
 	
