@@ -1,5 +1,6 @@
 package smartCars;
 
+import java.util.Stack;
 
 public class AbstractEvent implements Comparable<AbstractEvent> {
 
@@ -29,26 +30,33 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 	// ne doit être appelée qu'après le calcul de Dijkstra sur le véhicule
 	public static void vehicleEvents(AbstractVehicle vehicle) throws IllegalStateException
 	{
+		Stack<AbstractEvent> tempEvents = new Stack<AbstractEvent>();
+		Stack<Road> path = new Stack<Road>();
+		for(Road r : vehicle.path)
+		{
+			path.add(r);
+		}
+		
 		if(!vehicle.pathCalculated)
 		{
-			throw new IllegalStateException("Dijkstra n'a pas été appliqué à ce véhicule");
+			throw new IllegalStateException("Dijkstra n'a pas été appliqué à ce véhicule.");
 		}
 		else
 		{
 			// *** EventVehicleStart ***
-			AbstractEvent start = new EventVehicleStart(vehicle);
-			vehicle.tempEvents.add(start);
+			AbstractEvent start = new EventVehicleStart(vehicle, path);
+			tempEvents.add(start);
 			
 			AbstractEvent lastEventEnterRoad;
 			
 			while(true)
 			{
-				int lastEventNature = vehicle.tempEvents.peek().nature;
+				int lastEventNature = tempEvents.peek().nature;
 				
 				// *** EventWaitingOnRoad ***
 				if(lastEventNature==0)
 				{
-					EventVehicleStart.nextEvent(vehicle.tempEvents.peek());
+					EventVehicleStart.nextEvent(tempEvents.peek(), tempEvents, path);
 				}
 				else
 				{
@@ -58,25 +66,23 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 					}
 					else
 					{
-						lastEventEnterRoad = vehicle.tempEvents.peek();
-						EventEnterRoad.nextEvent(lastEventEnterRoad);
+						lastEventEnterRoad = tempEvents.peek();
+						EventEnterRoad.nextEvent(lastEventEnterRoad, tempEvents, path);
 					}
 				}
 				
-				lastEventNature = vehicle.tempEvents.peek().nature;
+				lastEventNature = tempEvents.peek().nature;
 				// l'évènement EventVehicleEnd survient ;
 				// comprend le cas où la destination est plus loin
 				// et sur la même route que le point de départ
 				if(lastEventNature==4)
 				{
-					System.out.println("\nLe véhicule a été acheminé avec succès à destination.");
+					System.out.println("\nLe véhicule a été acheminé avec succès à destination.\n");
 					
 					System.out.println("Pile LIFO des évènements :");
-					System.out.println(vehicle.tempEvents);
-					System.out.println("\nPath désormais vide du véhicule :");
-					System.out.println(vehicle.path);
+					System.out.println(tempEvents);
 					
-					fifoToLifo(vehicle);
+					AbstractVehicle.lifoToFifo(vehicle, tempEvents);
 					
 					System.out.println("\nPile FIFO des évènements :");
 					System.out.println(vehicle.events);
@@ -86,24 +92,16 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 				else
 				{
 					// *** EventLeavingRoad ***
-					AbstractEvent lastEventWaitingOnRoad = vehicle.tempEvents.peek();
-					EventWaitingOnRoad.nextEvent(lastEventWaitingOnRoad);
+					AbstractEvent lastEventWaitingOnRoad = tempEvents.peek();
+					EventWaitingOnRoad.nextEvent(lastEventWaitingOnRoad, tempEvents);
 					
 					// *** EventEnterRoad ***
-					AbstractEvent lastEventLeaveRoad = vehicle.tempEvents.peek();
-					EventLeaveRoad.nextEvent(lastEventLeaveRoad);
+					AbstractEvent lastEventLeaveRoad = tempEvents.peek();
+					EventLeaveRoad.nextEvent(lastEventLeaveRoad, tempEvents, path);
 					
-					lastEventEnterRoad = vehicle.tempEvents.peek();
+					lastEventEnterRoad = tempEvents.peek();
 				}
 			}
-		}
-	}
-	
-	public static void fifoToLifo(AbstractVehicle vehicle)
-	{
-		while(!vehicle.tempEvents.isEmpty())
-		{
-			vehicle.events.add(vehicle.tempEvents.pop());
 		}
 	}
 	

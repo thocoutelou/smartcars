@@ -224,8 +224,6 @@ public class SvgParser {
 			double finalPosition;
 			double finalDate;
 			
-			double initalDate;
-			
 			position = new CartesianCoordinate(Float.parseFloat(geometricFigure.getAttribute("x")),
 					Float.parseFloat(geometricFigure.getAttribute("y")));
 			destination = new CartesianCoordinate(Float.parseFloat(geometricFigure.getAttribute("x_destination")),

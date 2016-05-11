@@ -1,5 +1,7 @@
 package smartCars;
 
+import java.util.Stack;
+
 public class EventEnterRoad extends AbstractEvent {
 	
 	public EventEnterRoad(AbstractVehicle vehicle, Road roadEntered, double date)
@@ -17,7 +19,7 @@ public class EventEnterRoad extends AbstractEvent {
 	}
 	
 	// date de l'objet
-	public static void nextEvent(AbstractEvent event)
+	public static void nextEvent(AbstractEvent event, Stack<AbstractEvent> tempEvents, Stack<Road> path)
 	{
 		Road road = event.road;
 		AbstractVehicle vehicle = event.vehicle;
@@ -26,11 +28,11 @@ public class EventEnterRoad extends AbstractEvent {
 		if(road.equals(vehicle.location.finalRoad))
 		{
 			vehicle.location.finalDate = date+Time.duration(road, vehicle.location.finalPosition);
-			vehicle.tempEvents.add(new EventVehicleEnd(vehicle, road, vehicle.location.finalDate));
+			tempEvents.add(new EventVehicleEnd(vehicle, road, vehicle.location.finalDate, path));
 		}
 		else
 		{
-			vehicle.tempEvents.add(new EventWaitingOnRoad(vehicle, road, date+1.));
+			tempEvents.add(new EventWaitingOnRoad(vehicle, road, date+1.));
 		}
 	}
 

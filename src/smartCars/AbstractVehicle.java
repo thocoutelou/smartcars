@@ -34,8 +34,6 @@ public class AbstractVehicle {
 	// sauvegarde les routes déjà empruntées en vue de les revoir
 	protected Stack<Road> itinary;
 	// évènements calculés à partir de Dijkstra
-	public Stack<AbstractEvent> tempEvents = new Stack<AbstractEvent>();
-	// évènements organisés en pile FIFO pour la suite des opérations
 	public Queue<AbstractEvent> events = new LinkedList<AbstractEvent>();
 	
 	/**
@@ -63,6 +61,33 @@ public class AbstractVehicle {
 	public Stack<Road> getPath()
 	{
 		return path;
+	}
+	
+	public void printPath()
+	{
+		Stack<Road> path = getPath();
+		while(!path.isEmpty())
+		{
+			Road road = path.pop();
+			if(road.equals(location.finalRoad))
+			{
+				System.out.print("Road "+road.identifier+" -> ");
+			}
+			else
+			{
+				System.out.print("Road "+road.identifier+" -> "+"Intersection "+road.destination.identifier+"; ");
+			}
+		}
+		System.out.println("end\n");
+	}
+	
+	
+	public static void lifoToFifo(AbstractVehicle vehicle, Stack<AbstractEvent> tempEvents)
+	{
+		while(!tempEvents.isEmpty())
+		{
+			vehicle.events.add(tempEvents.pop());
+		}
 	}
 	
 	/**

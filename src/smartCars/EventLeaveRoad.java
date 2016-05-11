@@ -1,5 +1,7 @@
 package smartCars;
 
+import java.util.Stack;
+
 public class EventLeaveRoad extends AbstractEvent {
 	
 	public EventLeaveRoad(AbstractVehicle vehicle, Road roadLeft, double date)
@@ -19,14 +21,14 @@ public class EventLeaveRoad extends AbstractEvent {
 	}
 	
 	// date de l'objet
-	public static void nextEvent(AbstractEvent event)
+	public static void nextEvent(AbstractEvent event, Stack<AbstractEvent> tempEvents, Stack<Road> path)
 	{
 
 		Road road = event.road;
 		AbstractVehicle vehicle = event.vehicle;
 		double date = event.date;
 		
-		vehicle.tempEvents.add(new EventEnterRoad(vehicle, vehicle.path.pop(), date+road.destination.averageTime));
+		tempEvents.add(new EventEnterRoad(vehicle, path.pop(), date+road.destination.averageTime));
 	}
 	
 }

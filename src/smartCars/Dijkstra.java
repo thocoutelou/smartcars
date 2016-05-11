@@ -27,15 +27,15 @@ public class Dijkstra {
 		ArrayList<Road> nextRoads = new ArrayList<Road>(origin.getLeavingRoads());
 		// route[i] contient la route qui mène à i,
 		// qui elle-même contient l'intersection d'origine
-		Road route[] = new Road[graph.numberOfIntersections];
+		Road route[] = new Road[AbstractIntersection.identificator];
 		route[origin.identifier] = vehicle.location.initialRoad;
 		
-		boolean visited[] = new boolean[graph.numberOfIntersections];
-		for(int i=0; i<graph.numberOfIntersections; i++) visited[i]=false;
+		boolean visited[] = new boolean[AbstractIntersection.identificator];
+		for(int i=0; i<AbstractIntersection.identificator; i++) visited[i]=false;
 		visited[origin.identifier] = true;
 		
-		Cost costs[] = new Cost[graph.numberOfIntersections];
-		for(int i=0; i<graph.numberOfIntersections; i++) costs[i] = new Cost();
+		Cost costs[] = new Cost[AbstractIntersection.identificator];
+		for(int i=0; i<AbstractIntersection.identificator; i++) costs[i] = new Cost();
 		costs[origin.identifier] = new Cost(0);
 		
 		
