@@ -13,6 +13,8 @@ public class AbstractEvent {
 	protected Road road;
 	public double date;
 	
+	public double leavingDate;
+	
 	protected AbstractEvent(AbstractVehicle vehicle, Road road, double date)
 	{
 		this.identifier = identificator;

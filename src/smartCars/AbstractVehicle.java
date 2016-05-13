@@ -2,6 +2,7 @@ package smartCars;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -34,7 +35,7 @@ public class AbstractVehicle {
 	// sauvegarde les routes déjà empruntées en vue de les revoir
 	protected Stack<Road> itinary;
 	// évènements calculés à partir de Dijkstra
-	public Queue<AbstractEvent> events = new LinkedList<AbstractEvent>();
+	public PriorityQueue<AbstractEvent> events = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
 	
 	/**
 	 * Constructeur à partir des information de localisation

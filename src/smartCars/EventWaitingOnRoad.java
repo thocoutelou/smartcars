@@ -5,7 +5,6 @@ import java.util.Stack;
 public class EventWaitingOnRoad extends AbstractEvent{
 	
 	public double waitingTime;
-	public double leavingDate;
 	
 	public EventWaitingOnRoad(AbstractVehicle vehicle, Road road, double date)
 	{
@@ -44,8 +43,10 @@ public class EventWaitingOnRoad extends AbstractEvent{
 	
 	// sera appelée en argument du constructeur,
 	// donc l'évènement ne sera pas encore dans road.eventsWaitingOnRoad
-	public static double relativeDate(Road road, double initialDate)
+	public static double relativeDate(AbstractEvent event)
 	{
+		Road road = event.road;
+		double initialDate = event.date;
 		double absoluteDate = absoluteDate(road, initialDate);
 		if(road.eventsWaitingOnRoad.isEmpty()) return absoluteDate;
 		else
@@ -74,9 +75,8 @@ public class EventWaitingOnRoad extends AbstractEvent{
 
 		Road road = event.road;
 		AbstractVehicle vehicle = event.vehicle;
-		double leavingDate = event.date+1.;
 		
-		tempEvents.add(new EventLeaveRoad(vehicle, road, leavingDate));
+		tempEvents.add(new EventLeaveRoad(vehicle, road, event.leavingDate));
 	}
 
 }

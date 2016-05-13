@@ -42,7 +42,7 @@ public class ResolutionTest {
 		AbstractEvent event;
 		while(!events.isEmpty())
 		{
-			event = events.poll();
+			event = events.remove();
 			System.out.println(event+" se réaliserait à t="+event.date);
 		}
 	}

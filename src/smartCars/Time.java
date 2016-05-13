@@ -30,9 +30,46 @@ public class Time {
 		return startingTime;
 	}
 	
-	public static void realDates(PriorityQueue<AbstractEvent> events)
+	public static void realDates(GraphState graph, PriorityQueue<AbstractEvent> events)
 	{
-		
+		PriorityQueue<AbstractEvent> eventsCopy = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
+		for(AbstractEvent event : graph.events)
+		{
+			eventsCopy.add(event);
+		}
+		AbstractEvent event;
+		double realDate;
+		while(!eventsCopy.isEmpty())
+		{
+			event = eventsCopy.remove();
+			if(event.nature==1)
+			{
+				realDate = EventWaitingOnRoad.relativeDate(event);
+				increaseFollowingDates(event.vehicle, event.date, realDate);
+				event.date = realDate;
+				eventsCopy.add(event);
+			}
+		}
+	}
+	
+	public static void increaseFollowingDates(AbstractVehicle vehicle, double date, double realDate)
+	{
+		//TODO : déplacer les exécutions des évènements (les retirer des constructeurs)
+		PriorityQueue<AbstractEvent> eventsCopy = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
+		for(AbstractEvent event : vehicle.events)
+		{
+			eventsCopy.add(event);
+		}
+		AbstractEvent event = eventsCopy.peek();
+		while(event.date<=date & eventsCopy.size()>1)
+		{
+			eventsCopy.remove();
+			event = eventsCopy.peek();
+		}
+		for(AbstractEvent e : eventsCopy)
+		{
+			e.date+=realDate-date;
+		}
 	}
 	
 	/* Bonus : système de gestion des heures de pointe.
