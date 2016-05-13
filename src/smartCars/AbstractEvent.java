@@ -26,8 +26,8 @@ public class AbstractEvent {
 	{
 		public int compare(AbstractEvent eventA, AbstractEvent eventB)
 		{
-			if(eventA.date<=eventB.date) return 1;
-			else return -1;
+			if(eventA.date<eventB.date) return -1;
+			else return 1;
 		}
 	}
 	
