@@ -1,6 +1,7 @@
 package smartCars;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Stack;
 
 /**
@@ -13,6 +14,9 @@ public class GraphState extends Graph {
 	
 	// véhicules présent sur la carte
 	public Stack<AbstractVehicle> vehicles;
+	
+	// file (FIFO en fonction des dates) des évènements à survenir dans le graphe
+	public PriorityQueue<AbstractEvent> events = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
 	
 	/**
 	 * Constructeur unique, ne doit être appelé que par le parser.
@@ -44,14 +48,22 @@ public class GraphState extends Graph {
 		this.vehicles = vehicles;
 	}
 	
-	/**
-	 * Effectue tous les calculs menant à la résolution du problème,
-	 * en partant du principe que l'instance est correctement initialisée.
-	 */
-	//TODO
-	public void resolve()
+	public void calculatePaths()
 	{
-		
+		for(AbstractVehicle vehicle : vehicles)
+		{
+			Dijkstra.calculatePath(this, vehicle);
+			vehicle.printPath();
+		}
+	}
+	
+	public void gatherEvents()
+	{
+		for(AbstractVehicle vehicle : vehicles)
+		{
+			AbstractEvent.vehicleEvents(vehicle);
+			this.events.addAll(vehicle.events);
+		}
 	}
 	
 	public String toString(){

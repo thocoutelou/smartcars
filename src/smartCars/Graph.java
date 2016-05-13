@@ -48,6 +48,21 @@ public class Graph {
 	}
 	
 	/**
+	 * Effectue tous les calculs menant à la résolution du problème,
+	 * en partant du principe que l'instance est correctement initialisée.
+	 */
+	// TODO Actualiser au fur et à mesure des tests.
+	public final void resolve(int map)
+	{
+		String projectLocation = SvgParser.getProjectLocation();
+		String mapLocation = new String(projectLocation+"/media/map/"+map+".svg");
+		GraphState graph = SvgParser.parseGraphState(mapLocation);
+		graph.calculatePaths();
+		graph.gatherEvents();
+		
+	}
+	
+	/**
 	 * Identification du graphe.
 	 */
 	public String toString() {

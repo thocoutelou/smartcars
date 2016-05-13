@@ -58,17 +58,28 @@ public class AbstractVehicle {
 		this.path = path;
 	}
 	
-	public Stack<Road> getPath()
+	public Stack<Road> getPathCopy()
 	{
+		Stack<Road> path = new Stack<Road>();
+		for(Road r : this.path)
+		{
+			path.add(r);
+		}
 		return path;
 	}
 	
 	public void printPath()
 	{
-		Stack<Road> path = getPath();
+		Stack<Road> path = getPathCopy();
 		while(!path.isEmpty())
 		{
 			Road road = path.pop();
+			
+			if(location.initialRoad.identifier==location.finalRoad.identifier
+					& location.initialPosition>location.finalPosition)
+			{
+				System.out.print("Road "+road.identifier+" -> "+"Intersection "+road.destination.identifier+"; ");
+			}
 			if(road.equals(location.finalRoad))
 			{
 				System.out.print("Road "+road.identifier+" -> ");

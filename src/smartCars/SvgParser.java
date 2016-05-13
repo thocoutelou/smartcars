@@ -54,6 +54,8 @@ public class SvgParser {
 			ArrayList<AbstractIntersection> intersections = new ArrayList<AbstractIntersection>();
 			ArrayList<Road> roads = new ArrayList<Road>();
 			Stack<AbstractVehicle> vehicles = new Stack<AbstractVehicle>();
+			
+			System.out.println("<---   Graph parse   --->");
 
 			try {
 				// On crée le parser
@@ -118,8 +120,10 @@ public class SvgParser {
 			catch (final IOException e) {
 				e.printStackTrace();
 			}
-
-			return new GraphState(intersections, roads, vehicles);
+			
+			GraphState graphState = new GraphState(intersections, roads, vehicles);
+			System.out.println(graphState);
+			return graphState;
 			//this.costsMatrix = Cost.floydWarshall(this);
 		}
 		
@@ -222,7 +226,6 @@ public class SvgParser {
 			// données de position de la destination
 			Road finalRoad;
 			double finalPosition;
-			double finalDate;
 			
 			position = new CartesianCoordinate(Float.parseFloat(geometricFigure.getAttribute("x")),
 					Float.parseFloat(geometricFigure.getAttribute("y")));
@@ -245,6 +248,16 @@ public class SvgParser {
 			// finalDate=0. n'est pas significative
 			Location vehiculeLocation = new Location(initialRoad, initialPosition, initialDate, finalRoad, finalPosition, 0.);
 			return new AbstractVehicle(vehiculeLocation);
+		}
+		
+		public static String getProjectLocation(){
+			String projectLocation = new String();
+			try
+			{
+				projectLocation = new File(".").getCanonicalPath();
+			}
+			catch (IOException e) {e.printStackTrace();};
+			return projectLocation;
 		}
 
 }

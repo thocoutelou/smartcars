@@ -19,9 +19,9 @@ public class Dijkstra {
 	 * @param vehicle
 	 * @throws IllegalStateException
 	 */
-	public static void path(Graph graph, AbstractVehicle vehicle) throws IllegalStateException
+	public static void calculatePath(Graph graph, AbstractVehicle vehicle) throws IllegalStateException
 	{
-		System.out.println("<---   Dijkstra on vehicle "+vehicle.identifier+"   --->");
+		System.out.println("<---   Dijkstra pour le véhicule "+vehicle.identifier+"   --->");
 		
 		AbstractIntersection origin = vehicle.intersectionAfterStart();
 		ArrayList<Road> nextRoads = new ArrayList<Road>(origin.getLeavingRoads());
@@ -64,7 +64,7 @@ public class Dijkstra {
 		
 		if(!visited[vehicle.location.finalRoad.destination.identifier] & nextRoads.isEmpty())
 		{
-			throw new IllegalStateException("Le graphe n'est pas connexe");
+			throw new IllegalStateException("Le graphe n'est pas connexe.");
 		}
 
 		vehicle.savePath(buildPath(vehicle, route));
@@ -83,6 +83,13 @@ public class Dijkstra {
 	{
 		Stack<Road> path = new Stack<Road>();
 		path.push(vehicle.location.finalRoad);
+		
+		if(vehicle.location.initialRoad.identifier==vehicle.location.finalRoad.identifier
+				& vehicle.location.initialPosition>vehicle.location.finalPosition)
+		{
+			path.push(route[path.peek().origin.identifier]);
+		}
+		
 		while(!path.peek().equals(vehicle.location.initialRoad))
 			{
 				path.push(route[path.peek().origin.identifier]);
@@ -92,7 +99,7 @@ public class Dijkstra {
 	}
 	
 	
-	//TODO
+	//TODO (ou pas)
 	public void changePath(ArrayList<AbstractEvent> events)
 	{
 		

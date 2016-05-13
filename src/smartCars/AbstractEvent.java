@@ -1,8 +1,9 @@
 package smartCars;
 
+import java.util.Comparator;
 import java.util.Stack;
 
-public class AbstractEvent implements Comparable<AbstractEvent> {
+public class AbstractEvent {
 
 	protected static int identificator = 0;
 	protected int identifier;
@@ -10,7 +11,7 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 	
 	protected AbstractVehicle vehicle;
 	protected Road road;
-	protected double date;
+	public double date;
 	
 	protected AbstractEvent(AbstractVehicle vehicle, Road road, double date)
 	{
@@ -21,21 +22,20 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 		this.date = date;
 	}
 
-	public int compareTo(AbstractEvent event)
+	public static class EventComparator implements Comparator<AbstractEvent>
 	{
-		if(this.date>event.date) return -1;
-		else return 1;
+		public int compare(AbstractEvent eventA, AbstractEvent eventB)
+		{
+			if(eventA.date<=eventB.date) return 1;
+			else return -1;
+		}
 	}
 	
 	// ne doit être appelée qu'après le calcul de Dijkstra sur le véhicule
 	public static void vehicleEvents(AbstractVehicle vehicle) throws IllegalStateException
 	{
 		Stack<AbstractEvent> tempEvents = new Stack<AbstractEvent>();
-		Stack<Road> path = new Stack<Road>();
-		for(Road r : vehicle.path)
-		{
-			path.add(r);
-		}
+		Stack<Road> path = vehicle.getPathCopy();
 		
 		if(!vehicle.pathCalculated)
 		{
@@ -77,7 +77,7 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 				// et sur la même route que le point de départ
 				if(lastEventNature==4)
 				{
-					System.out.println("\nLe véhicule a été acheminé avec succès à destination.\n");
+					System.out.println("\nLe véhicule "+vehicle.identifier+" a été acheminé avec succès à destination.\n");
 					
 					System.out.println("Pile LIFO des évènements :");
 					System.out.println(tempEvents);
@@ -98,8 +98,6 @@ public class AbstractEvent implements Comparable<AbstractEvent> {
 					// *** EventEnterRoad ***
 					AbstractEvent lastEventLeaveRoad = tempEvents.peek();
 					EventLeaveRoad.nextEvent(lastEventLeaveRoad, tempEvents, path);
-					
-					lastEventEnterRoad = tempEvents.peek();
 				}
 			}
 		}

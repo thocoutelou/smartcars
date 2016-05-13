@@ -1,9 +1,5 @@
 package tests;
 
-
-import java.io.File;
-import java.io.IOException;
-
 import org.junit.Test;
 
 import junit.framework.TestCase;
@@ -14,16 +10,10 @@ import smartCars.Dijkstra;
 
 public class DijkstraTest extends TestCase{
 	
-	String project_location;
+	String project_location = SvgParser.getProjectLocation();
 	
 	@Test
 	public void test() {
-		try {
-			project_location = new File(".").getCanonicalPath();
-		} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-		}
 		
 		//Parse du graph3
 		String fileName=project_location + "/media/map/3.svg";
@@ -31,16 +21,16 @@ public class DijkstraTest extends TestCase{
 		System.out.println(graph3);
 		
 		AbstractVehicle vehicleTest = graph3.vehicles.get(0);
-		Dijkstra.path(graph3, vehicleTest);
+		Dijkstra.calculatePath(graph3, vehicleTest);
 		vehicleTest.printPath();
 		
 		//Parse du graph4
 		fileName=project_location + "/media/map/4.svg";
 		GraphState graph4 = SvgParser.parseGraphState(fileName);
-		System.out.println(graph3);
+		System.out.println(graph4);
 		for (int i=0; i<2; i++){
 			vehicleTest = graph4.vehicles.get(i);
-			Dijkstra.path(graph4, vehicleTest);
+			Dijkstra.calculatePath(graph4, vehicleTest);
 			vehicleTest.printPath();
 		}
 	}
