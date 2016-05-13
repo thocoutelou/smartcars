@@ -22,6 +22,11 @@ import org.xml.sax.SAXException;
  */
 public class SvgParser {
 	
+	// TODO URGENT
+	// Parser les vitesses autorisées sur les routes (Road.speed) ; peut être le résultat d'une classification par palliers des routes en fonction de leur longueur.
+	// Parser le temps moyen de traversée d'une intersection (AbstractIntersection.averageTime) ; peut être la conséquence du diamètre ou de la circonférence du cercle qui la représente dans l'image.
+	// Parser une date de départ aléatoire aux véhicules (AbstractVehicle.location.initialDate).
+	// Puis supprimer les valeurs par défaut que j'ai forcées au niveau des attributs des classes pour les tests.
 
 	// ***** Commentaires de lecture et questions *****
 		// -> pourquoi utiliser float plutôt que double ?

@@ -33,15 +33,17 @@ public class ResolutionTest {
 		
 		System.out.println("\nActualisation de l'état du graphe :\n"+graph4.events+"\n\n");
 		
-		System.out.println("Vérification de la chronologie de ces évènements :");
+		System.out.println("Vérification de la chronologie de ces évènements (dates factices) :");
 		PriorityQueue<AbstractEvent> events = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
 		for(AbstractEvent event : graph4.events)
 		{
 			events.add(event);
 		}
+		AbstractEvent event;
 		while(!events.isEmpty())
 		{
-			System.out.println(events.poll().date);
+			event = events.poll();
+			System.out.println(event+" se réaliserait à t="+event.date);
 		}
 	}
 

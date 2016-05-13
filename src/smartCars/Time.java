@@ -1,5 +1,6 @@
 package smartCars;
 
+import java.util.PriorityQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
 public class Time {
@@ -12,7 +13,7 @@ public class Time {
 
 	public static double duration(Road road, double distance)
 	{
-		return distance/road.speed;
+		return 3.6*distance/road.speed;
 	}
 	
 	public static double startingTime(GraphState graphState) throws IllegalStateException
@@ -27,6 +28,11 @@ public class Time {
 			startingTime = Math.min(startingTime, v.location.initialDate);
 		}
 		return startingTime;
+	}
+	
+	public static void realDates(PriorityQueue<AbstractEvent> events)
+	{
+		
 	}
 	
 	/* Bonus : système de gestion des heures de pointe.

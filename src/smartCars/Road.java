@@ -22,7 +22,7 @@ public class Road {
 	public Cost cost;
 	// nombre de voies
 	public int lane;
-	// longueur absolue de la route
+	// longueur absolue de la route en mètres
 	public double absoluteLength;
 	
 	// la longueur disponible de la route sera variable,
@@ -31,7 +31,7 @@ public class Road {
 	public double length;
 	// vitesse de circulation autorisée (km/h)
 	// et vitesse supposée des véhicules sur la route
-	public double speed;
+	public double speed = 50.;
 	// intersection d'origine de la route
 	public final AbstractIntersection origin;
 	// intersection d'arrivée de la route

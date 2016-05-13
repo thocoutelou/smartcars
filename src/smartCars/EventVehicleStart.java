@@ -30,7 +30,7 @@ public class EventVehicleStart extends AbstractEvent{
 		AbstractVehicle vehicle = event.vehicle;
 		double date = event.date;
 		
-		if(road.equals(vehicle.location.finalRoad) & vehicle.location.initialPosition<vehicle.location.finalPosition)
+		if(road.equals(vehicle.location.finalRoad) & vehicle.location.initialPosition<=vehicle.location.finalPosition)
 		{
 			vehicle.location.finalDate = date+Time.duration(road, vehicle.location.finalPosition-vehicle.location.initialPosition);
 			tempEvents.add(new EventVehicleEnd(vehicle, road, vehicle.location.finalDate, path));
