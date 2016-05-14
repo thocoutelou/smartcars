@@ -74,7 +74,7 @@ public class AbstractVehicle {
 		this.tempPath = getPathCopy();
 	}
 	
-	private PriorityQueue<AbstractEvent> getEventsCopy()
+	public PriorityQueue<AbstractEvent> getEventsCopy()
 	{
 		PriorityQueue<AbstractEvent> tempEvents = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
 		for(AbstractEvent e : this.events)

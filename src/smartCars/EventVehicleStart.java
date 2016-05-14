@@ -10,14 +10,8 @@ public class EventVehicleStart extends AbstractEvent{
 		nature = 0;
 	}
 	
-	public static void executeEvent(AbstractEvent event)
+	public static synchronized void executeEvent(AbstractEvent event)
 	{
-		event.vehicle.setTempPath();
-		// test à effet de bord
-		if(!event.vehicle.tempPath.pop().equals(event.vehicle.location.initialRoad))
-		{
-			throw new IllegalStateException("Itinéraire Dijkstra faux.");
-		}
 		event.road.vehiclesOnRoad.add(event.vehicle);
 		event.vehicle.location.actualizeLocation(event.road, 0., event.date);
 	}
@@ -37,7 +31,6 @@ public class EventVehicleStart extends AbstractEvent{
 		}
 		else
 		{
-			// double nextDate = date+Time.duration(road, road.absoluteLength-vehicle.location.initialPosition);
 			tempEvents.add(new EventWaitingOnRoad(vehicle, road, date+1.));
 		}
 	}

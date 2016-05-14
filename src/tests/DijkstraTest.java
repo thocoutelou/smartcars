@@ -28,7 +28,7 @@ public class DijkstraTest extends TestCase{
 		fileName=project_location + "/media/map/4.svg";
 		GraphState graph4 = SvgParser.parseGraphState(fileName);
 		System.out.println(graph4);
-		for (int i=0; i<2; i++){
+		for (int i=0; i<graph4.vehicles.size(); i++){
 			vehicleTest = graph4.vehicles.get(i);
 			Dijkstra.calculatePath(graph4, vehicleTest);
 			vehicleTest.printPath();

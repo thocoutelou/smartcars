@@ -10,7 +10,7 @@ public class EventEnterRoad extends AbstractEvent {
 		nature = 3;
 	}
 	
-	public static void executeEvent(AbstractEvent event)
+	public static synchronized void executeEvent(AbstractEvent event)
 	{
 		event.road.origin.vehiclesOnIntersection.remove(event.vehicle);
 		event.road.vehiclesOnRoad.add(event.vehicle);

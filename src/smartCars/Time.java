@@ -43,11 +43,16 @@ public class Time {
 		}
 		AbstractEvent event;
 		AbstractEvent vehicleEvent;
+		AbstractEvent eventLeaveRoad;
 		double realDate;
 		while(!eventsCopy.isEmpty())
 		{
 			event = eventsCopy.remove();
 			vehicleEvent = event.vehicle.tempEvents.remove();
+			System.out.print(event+"   ");
+			System.out.println(event.date);
+			System.out.print(vehicleEvent+"   ");
+			System.out.println(vehicleEvent.date);
 			System.out.println("Prout");
 			if(!event.equals(vehicleEvent))
 			{
@@ -55,19 +60,23 @@ public class Time {
 			}
 			if(event.nature==1 & !event.trueDate)
 			{
+				eventLeaveRoad = event.vehicle.tempEvents.remove();
 				realDate = EventWaitingOnRoad.relativeDate(event);
-				increaseFollowingDates(event.vehicle, event.date, realDate);
 				event.date = realDate;
 				event.trueDate = true;
-				if(event.vehicle.tempEvents.peek().nature!=2)
+				System.out.print("\nChangement de date : "+event+"   ");
+				System.out.println(event.date+"\n");
+				if(eventLeaveRoad.nature!=2)
 				{
 					throw new IllegalStateException("Un EventWaitingOnRoad doit être suivi par un EventLeaveRoad.");
 				}
 				else
 				{
 					EventWaitingOnRoad.setLeavingDate(event);
-					event.vehicle.tempEvents.peek().date=event.leavingDate;
+					increaseFollowingDates(event, event.leavingDate-eventLeaveRoad.date);
+					eventLeaveRoad.date=event.leavingDate;
 				}
+				event.vehicle.tempEvents.add(eventLeaveRoad);
 				eventsCopy.add(event);
 				event.vehicle.tempEvents.add(event);
 			}
@@ -97,23 +106,11 @@ public class Time {
 		}
 	}
 	
-	public static void increaseFollowingDates(AbstractVehicle vehicle, double date, double realDate)
+	public static void increaseFollowingDates(AbstractEvent event, double difference)
 	{
-		//TODO : déplacer les exécutions des évènements (les retirer des constructeurs)
-		PriorityQueue<AbstractEvent> eventsCopy = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
-		for(AbstractEvent event : vehicle.events)
+		for(AbstractEvent e : event.vehicle.tempEvents)
 		{
-			eventsCopy.add(event);
-		}
-		AbstractEvent event = eventsCopy.peek();
-		while(event.date<=date & eventsCopy.size()>1)
-		{
-			eventsCopy.remove();
-			event = eventsCopy.peek();
-		}
-		for(AbstractEvent e : eventsCopy)
-		{
-			e.date+=realDate-date;
+			e.date+=difference;
 		}
 	}
 	

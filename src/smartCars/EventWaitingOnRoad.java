@@ -11,7 +11,7 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		leavingDate = date+1.;
 	}
 	
-	public static void executeEvent(AbstractEvent event)
+	public static synchronized void executeEvent(AbstractEvent event)
 	{
 		event.road.waitingVehicles.add(event.vehicle);
 		event.vehicle.location.waitingForIntersection = true;
@@ -21,7 +21,7 @@ public class EventWaitingOnRoad extends AbstractEvent{
 	}
 	
 	// doit absolument être appelée avant l'exécution de l'évènement (event.road.eventsWaitingOnRoad.get(0))
-	public static void setLeavingDate(AbstractEvent event)
+	public static synchronized void setLeavingDate(AbstractEvent event)
 	{
 		if(event.road.eventsWaitingOnRoad.isEmpty())
 		{

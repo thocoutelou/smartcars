@@ -10,7 +10,7 @@ public class EventLeaveRoad extends AbstractEvent {
 		nature = 2;
 	}
 	
-	public static void executeEvent(AbstractEvent event)
+	public static synchronized void executeEvent(AbstractEvent event)
 	{
 		event.road.waitingVehicles.remove(event.vehicle);
 		event.vehicle.location.waitingForIntersection = false;

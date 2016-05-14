@@ -23,6 +23,15 @@ public class EventsTest {
 		AbstractVehicle vehicleTest = graph3.vehicles.get(0);
 		Dijkstra.calculatePath(graph3, vehicleTest);
 		AbstractEvent.vehicleEvents(vehicleTest);
+		
+		AbstractEvent event;
+		System.out.println();
+		while(!vehicleTest.events.isEmpty())
+		{
+			event = vehicleTest.events.remove();
+			System.out.print(event+"   ");
+			System.out.println(event.date);
+		}
 	}
 
 }

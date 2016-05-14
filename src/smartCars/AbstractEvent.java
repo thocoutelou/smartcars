@@ -22,7 +22,7 @@ public class AbstractEvent {
 		identificator++;
 		this.vehicle = vehicle;
 		this.road = road;
-		this.date = date;
+		this.date = date+Math.random();
 	}
 
 	public static class EventComparator implements Comparator<AbstractEvent>
@@ -30,15 +30,6 @@ public class AbstractEvent {
 		public int compare(AbstractEvent eventA, AbstractEvent eventB)
 		{
 			if(eventA.date<eventB.date) return -1;
-			else return 1;
-		}
-	}
-	
-	public static class EventComparatorBis implements Comparator<AbstractEvent>
-	{
-		public int compare(AbstractEvent eventA, AbstractEvent eventB)
-		{
-			if(eventA.date>=eventB.date) return -1;
 			else return 1;
 		}
 	}
@@ -90,9 +81,6 @@ public class AbstractEvent {
 				if(lastEventNature==4)
 				{
 					System.out.println("\nLe véhicule "+vehicle.identifier+" a été acheminé avec succès à destination.\n");
-					
-					System.out.println("Pile LIFO des évènements :");
-					System.out.println(tempEvents);
 					
 					vehicle.setEvents(tempEvents);
 					

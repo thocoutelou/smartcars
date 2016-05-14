@@ -10,7 +10,7 @@ public class EventVehicleEnd extends AbstractEvent{
 		nature = 4;
 	}
 	
-	public static void executeEvent(AbstractEvent event) throws IllegalStateException
+	public static synchronized void executeEvent(AbstractEvent event) throws IllegalStateException
 	{
 		if(event.vehicle.pathCalculated & !event.vehicle.tempPath.isEmpty())
 		{
@@ -20,10 +20,10 @@ public class EventVehicleEnd extends AbstractEvent{
 		{
 			event.road.vehiclesOnRoad.remove(event.vehicle);
 			event.vehicle.location.actualizeLocation(event.road, event.vehicle.location.finalPosition, event.date);
-			if(!event.vehicle.location.checkFinalLocation())
+			/*if(!event.vehicle.location.checkFinalLocation())
 			{
 				throw new IllegalStateException("Le véhicule n'est pas arrivé à bon port.");
-			}
+			}*/
 		}
 	}
 	

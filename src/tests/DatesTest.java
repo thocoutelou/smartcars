@@ -17,21 +17,28 @@ public class DatesTest {
 	public void test() {
 		
 		//Parse du graph4
-		String fileName=project_location + "/media/map/4.svg";
-		GraphState graph4 = SvgParser.parseGraphState(fileName);
+		String fileName=project_location + "/media/map/3.svg";
+		GraphState graph3 = SvgParser.parseGraphState(fileName);
 		
-		graph4.calculatePaths();
-		graph4.gatherEvents();
-		
-		Time.realDates(graph4);
-		
-		System.out.println("Vérification de la chronologie de ces évènements (dates réelles) :");
-		PriorityQueue<AbstractEvent> events = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
-		for(AbstractEvent event : graph4.events)
-		{
-			events.add(event);
-		}
+		graph3.calculatePaths();
+		graph3.gatherEvents();
+
 		AbstractEvent event;
+		System.out.println("Vérification de la chronologie de ces évènements (dates factices) :");
+		PriorityQueue<AbstractEvent> events = graph3.vehicles.get(0).getEventsCopy();
+		while(!events.isEmpty())
+		{
+			event = events.remove();
+			System.out.println(event+" se réaliserait à t="+event.date);
+		}
+		
+		Time.realDates(graph3);
+		
+		System.out.println("\nVérification de la chronologie de ces évènements (dates réelles) :");
+		for(AbstractEvent e : graph3.events)
+		{
+			events.add(e);
+		}
 		while(!events.isEmpty())
 		{
 			event = events.remove();
