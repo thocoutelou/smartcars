@@ -51,7 +51,7 @@ public class Road {
 	public Queue<AbstractVehicle> waitingVehicles = new LinkedList<AbstractVehicle>();
 	// évènements implémentant les attentes de traversée de la prochaine intersection :
 	// plus la date d'un évènement est proche, plus il sera situé en fin de liste
-	public ArrayList<EventWaitingOnRoad> eventsWaitingOnRoad = new ArrayList<EventWaitingOnRoad>();
+	public ArrayList<AbstractEvent> eventsWaitingOnRoad = new ArrayList<AbstractEvent>();
 		
 	/**
 	 * constructeur unique, doit être utilisé seulement par le parser
@@ -125,11 +125,11 @@ public class Road {
 	{
 		double length = 0.;
 		int numberOfEvents = eventsWaitingOnRoad.size();
-		EventWaitingOnRoad event;
+		AbstractEvent eventWaitingOnRoad;
 		for(int i=numberOfEvents-1; i>=left; i--)
 		{
-			event = eventsWaitingOnRoad.get(i);
-			length += event.vehicle.length+AbstractVehicle.minSpaceBetweenVehicles;
+			eventWaitingOnRoad = eventsWaitingOnRoad.get(i);
+			length += eventWaitingOnRoad.vehicle.length+AbstractVehicle.minSpaceBetweenVehicles;
 		}
 		return length;
 	}

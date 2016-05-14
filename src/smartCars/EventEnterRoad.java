@@ -8,18 +8,17 @@ public class EventEnterRoad extends AbstractEvent {
 	{
 		super(vehicle, roadEntered, date);
 		nature = 3;
-		executeEvent();
 	}
 	
-	public void executeEvent()
+	public static void executeEvent(AbstractEvent event)
 	{
-		road.origin.vehiclesOnIntersection.remove(super.vehicle);
-		road.vehiclesOnRoad.add(super.vehicle);
-		vehicle.location.actualizeLocation(road, 0., date);
+		event.road.origin.vehiclesOnIntersection.remove(event.vehicle);
+		event.road.vehiclesOnRoad.add(event.vehicle);
+		event.vehicle.location.actualizeLocation(event.road, 0., event.date);
 	}
 	
 	// date de l'objet
-	public static void nextEvent(AbstractEvent event, Stack<AbstractEvent> tempEvents, Stack<Road> path)
+	public static void nextEvent(AbstractEvent event, Stack<AbstractEvent> tempEvents)
 	{
 		Road road = event.road;
 		AbstractVehicle vehicle = event.vehicle;
@@ -28,7 +27,7 @@ public class EventEnterRoad extends AbstractEvent {
 		if(road.equals(vehicle.location.finalRoad))
 		{
 			vehicle.location.finalDate = date+Time.duration(road, vehicle.location.finalPosition);
-			tempEvents.add(new EventVehicleEnd(vehicle, road, vehicle.location.finalDate, path));
+			tempEvents.add(new EventVehicleEnd(vehicle, road, vehicle.location.finalDate, event.vehicle.tempPath));
 		}
 		else
 		{

@@ -12,6 +12,7 @@ public class AbstractEvent {
 	protected AbstractVehicle vehicle;
 	protected Road road;
 	public double date;
+	public boolean trueDate = false;
 	
 	public double leavingDate;
 	
@@ -33,11 +34,20 @@ public class AbstractEvent {
 		}
 	}
 	
+	public static class EventComparatorBis implements Comparator<AbstractEvent>
+	{
+		public int compare(AbstractEvent eventA, AbstractEvent eventB)
+		{
+			if(eventA.date>=eventB.date) return -1;
+			else return 1;
+		}
+	}
+	
 	// ne doit être appelée qu'après le calcul de Dijkstra sur le véhicule
 	public static void vehicleEvents(AbstractVehicle vehicle) throws IllegalStateException
 	{
 		Stack<AbstractEvent> tempEvents = new Stack<AbstractEvent>();
-		Stack<Road> path = vehicle.getPathCopy();
+		vehicle.setTempPath();
 		
 		if(!vehicle.pathCalculated)
 		{
@@ -46,7 +56,7 @@ public class AbstractEvent {
 		else
 		{
 			// *** EventVehicleStart ***
-			AbstractEvent start = new EventVehicleStart(vehicle, path);
+			AbstractEvent start = new EventVehicleStart(vehicle);
 			tempEvents.add(start);
 			
 			AbstractEvent lastEventEnterRoad;
@@ -58,7 +68,7 @@ public class AbstractEvent {
 				// *** EventWaitingOnRoad ***
 				if(lastEventNature==0)
 				{
-					EventVehicleStart.nextEvent(tempEvents.peek(), tempEvents, path);
+					EventVehicleStart.nextEvent(tempEvents.peek(), tempEvents);
 				}
 				else
 				{
@@ -69,7 +79,7 @@ public class AbstractEvent {
 					else
 					{
 						lastEventEnterRoad = tempEvents.peek();
-						EventEnterRoad.nextEvent(lastEventEnterRoad, tempEvents, path);
+						EventEnterRoad.nextEvent(lastEventEnterRoad, tempEvents);
 					}
 				}
 				
@@ -84,7 +94,7 @@ public class AbstractEvent {
 					System.out.println("Pile LIFO des évènements :");
 					System.out.println(tempEvents);
 					
-					AbstractVehicle.lifoToFifo(vehicle, tempEvents);
+					vehicle.setEvents(tempEvents);
 					
 					System.out.println("\nPile FIFO des évènements :");
 					System.out.println(vehicle.events);
@@ -99,7 +109,7 @@ public class AbstractEvent {
 					
 					// *** EventEnterRoad ***
 					AbstractEvent lastEventLeaveRoad = tempEvents.peek();
-					EventLeaveRoad.nextEvent(lastEventLeaveRoad, tempEvents, path);
+					EventLeaveRoad.nextEvent(lastEventLeaveRoad, tempEvents);
 				}
 			}
 		}

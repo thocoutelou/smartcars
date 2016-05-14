@@ -8,20 +8,19 @@ public class EventVehicleEnd extends AbstractEvent{
 	{
 		super(vehicle, road, date);
 		nature = 4;
-		executeEvent(path);
 	}
 	
-	public void executeEvent(Stack<Road> path) throws IllegalStateException
+	public static void executeEvent(AbstractEvent event) throws IllegalStateException
 	{
-		if(vehicle.pathCalculated & !path.isEmpty())
+		if(event.vehicle.pathCalculated & !event.vehicle.tempPath.isEmpty())
 		{
 			throw new IllegalStateException("L'itinéraire est faux ou n'a pas été mis à jour.");
 		}
 		else
 		{
-			road.vehiclesOnRoad.remove(vehicle);
-			vehicle.location.actualizeLocation(road, vehicle.location.finalPosition, date);
-			if(!vehicle.location.checkFinalLocation())
+			event.road.vehiclesOnRoad.remove(event.vehicle);
+			event.vehicle.location.actualizeLocation(event.road, event.vehicle.location.finalPosition, event.date);
+			if(!event.vehicle.location.checkFinalLocation())
 			{
 				throw new IllegalStateException("Le véhicule n'est pas arrivé à bon port.");
 			}

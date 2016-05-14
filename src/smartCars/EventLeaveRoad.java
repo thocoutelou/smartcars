@@ -8,27 +8,26 @@ public class EventLeaveRoad extends AbstractEvent {
 	{
 		super(vehicle, roadLeft, date);
 		nature = 2;
-		executeEvent();
 	}
 	
-	public void executeEvent()
+	public static void executeEvent(AbstractEvent event)
 	{
-		road.waitingVehicles.remove(super.vehicle);
-		vehicle.location.waitingForIntersection = false;
-		road.vehiclesOnRoad.remove(super.vehicle);
-		road.destination.vehiclesOnIntersection.add(super.vehicle);
-		vehicle.location.actualizeLocation(road, road.length, date);
+		event.road.waitingVehicles.remove(event.vehicle);
+		event.vehicle.location.waitingForIntersection = false;
+		event.road.vehiclesOnRoad.remove(event.vehicle);
+		event.road.destination.vehiclesOnIntersection.add(event.vehicle);
+		event.vehicle.location.actualizeLocation(event.road, event.road.length, event.date);
 	}
 	
 	// date de l'objet
-	public static void nextEvent(AbstractEvent event, Stack<AbstractEvent> tempEvents, Stack<Road> path)
+	public static void nextEvent(AbstractEvent event, Stack<AbstractEvent> tempEvents)
 	{
 
 		Road road = event.road;
 		AbstractVehicle vehicle = event.vehicle;
 		double date = event.date;
 		
-		tempEvents.add(new EventEnterRoad(vehicle, path.pop(), date+road.destination.averageTime));
+		tempEvents.add(new EventEnterRoad(vehicle, event.vehicle.tempPath.pop(), date+road.destination.averageTime));
 	}
 	
 }

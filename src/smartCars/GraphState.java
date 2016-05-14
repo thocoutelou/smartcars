@@ -64,6 +64,8 @@ public class GraphState extends Graph {
 			AbstractEvent.vehicleEvents(vehicle);
 			this.events.addAll(vehicle.events);
 		}
+		System.out.println("\nActualisation de l'état du graphe :\n"+this.events+"\n\n");
+		
 	}
 	
 	public String toString(){

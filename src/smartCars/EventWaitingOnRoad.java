@@ -4,37 +4,35 @@ import java.util.Stack;
 
 public class EventWaitingOnRoad extends AbstractEvent{
 	
-	public double waitingTime;
-	
 	public EventWaitingOnRoad(AbstractVehicle vehicle, Road road, double date)
 	{
 		super(vehicle, road, date);
 		nature = 1;
 		leavingDate = date+1.;
-		executeEvent();
 	}
 	
-	public void executeEvent()
+	public static void executeEvent(AbstractEvent event)
 	{
-		road.waitingVehicles.add(vehicle);
-		vehicle.location.waitingForIntersection = true;
-		road.length-=vehicle.length+AbstractVehicle.minSpaceBetweenVehicles;
-		if(road.eventsWaitingOnRoad.isEmpty())
+		event.road.waitingVehicles.add(event.vehicle);
+		event.vehicle.location.waitingForIntersection = true;
+		event.road.length-=event.vehicle.length+AbstractVehicle.minSpaceBetweenVehicles;
+		event.road.eventsWaitingOnRoad.add(0, event);
+		event.vehicle.location.actualizeLocation(event.road, event.road.length, event.date);
+	}
+	
+	// doit absolument être appelée avant l'exécution de l'évènement (event.road.eventsWaitingOnRoad.get(0))
+	public static void setLeavingDate(AbstractEvent event)
+	{
+		if(event.road.eventsWaitingOnRoad.isEmpty())
 		{
-			waitingTime = road.averageWaitingTime;
-			leavingDate = date+waitingTime;
+			event.leavingDate = event.date+event.road.averageWaitingTime;
 		}
 		else
 		{
-			EventWaitingOnRoad event = road.eventsWaitingOnRoad.get(0);
-			this.leavingDate = event.leavingDate+road.averageWaitingTime;
-			this.waitingTime = this.leavingDate-this.date;
+			AbstractEvent lastEventWaitingOnRoad = event.road.eventsWaitingOnRoad.get(0);
+			event.leavingDate = lastEventWaitingOnRoad.leavingDate+event.road.averageWaitingTime;
 		}
-		road.eventsWaitingOnRoad.add(0, this);
-		//TODO
-		vehicle.location.actualizeLocation(road, road.length, date);
 	}
-	
 	
 	public static double absoluteDate(Road road, double initialDate)
 	{

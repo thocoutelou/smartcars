@@ -1,9 +1,7 @@
 package smartCars;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -30,12 +28,14 @@ public class AbstractVehicle {
 	
 	// trajectoire du véhicule une fois calculée
 	protected Stack<Road> path;
+	public Stack<Road> tempPath;
 	// La trajectoire du véhicule est-elle calculée ?
 	protected boolean pathCalculated = false;
 	// sauvegarde les routes déjà empruntées en vue de les revoir
 	protected Stack<Road> itinary;
 	// évènements calculés à partir de Dijkstra
 	public PriorityQueue<AbstractEvent> events = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
+	public PriorityQueue<AbstractEvent> tempEvents = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
 	
 	/**
 	 * Constructeur à partir des information de localisation
@@ -59,7 +59,7 @@ public class AbstractVehicle {
 		this.path = path;
 	}
 	
-	public Stack<Road> getPathCopy()
+	private Stack<Road> getPathCopy()
 	{
 		Stack<Road> path = new Stack<Road>();
 		for(Road r : this.path)
@@ -67,6 +67,26 @@ public class AbstractVehicle {
 			path.add(r);
 		}
 		return path;
+	}
+	
+	public void setTempPath()
+	{
+		this.tempPath = getPathCopy();
+	}
+	
+	private PriorityQueue<AbstractEvent> getEventsCopy()
+	{
+		PriorityQueue<AbstractEvent> tempEvents = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
+		for(AbstractEvent e : this.events)
+		{
+			tempEvents.add(e);
+		}
+		return tempEvents;
+	}
+	
+	public void setTempEvents()
+	{
+		tempEvents = getEventsCopy();
 	}
 	
 	public void printPath()
@@ -94,11 +114,11 @@ public class AbstractVehicle {
 	}
 	
 	
-	public static void lifoToFifo(AbstractVehicle vehicle, Stack<AbstractEvent> tempEvents)
+	public void setEvents(Stack<AbstractEvent> tempEvents)
 	{
 		while(!tempEvents.isEmpty())
 		{
-			vehicle.events.add(tempEvents.pop());
+			events.add(tempEvents.pop());
 		}
 	}
 	
@@ -120,7 +140,7 @@ public class AbstractVehicle {
 	
 	
 	//TODO mais encore beaucoup de travail avant cette méthode
-	public void calculateLocation(float date, Graph graph)
+	public void calculateLocation(GraphState graph, double date)
 	{
 		
 	}
@@ -179,7 +199,7 @@ public class AbstractVehicle {
 	}
 	
 	public String toString(){
-		String result = "AbstractVehicle " + this.identifier + " :";
+		String result = "Véhicule " + this.identifier + " : ";
 		result += this.location.toString();
 		return result;
 	}

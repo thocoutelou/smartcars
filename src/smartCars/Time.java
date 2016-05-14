@@ -30,24 +30,69 @@ public class Time {
 		return startingTime;
 	}
 	
-	public static void realDates(GraphState graph, PriorityQueue<AbstractEvent> events)
+	public static void realDates(GraphState graph)
 	{
 		PriorityQueue<AbstractEvent> eventsCopy = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
 		for(AbstractEvent event : graph.events)
 		{
 			eventsCopy.add(event);
 		}
+		for(AbstractVehicle vehicle : graph.vehicles)
+		{
+			vehicle.setTempEvents();
+		}
 		AbstractEvent event;
+		AbstractEvent vehicleEvent;
 		double realDate;
 		while(!eventsCopy.isEmpty())
 		{
 			event = eventsCopy.remove();
-			if(event.nature==1)
+			vehicleEvent = event.vehicle.tempEvents.remove();
+			System.out.println("Prout");
+			if(!event.equals(vehicleEvent))
+			{
+				throw new IllegalStateException("Les évènements ne sont pas retournés dans l'ordre.");
+			}
+			if(event.nature==1 & !event.trueDate)
 			{
 				realDate = EventWaitingOnRoad.relativeDate(event);
 				increaseFollowingDates(event.vehicle, event.date, realDate);
 				event.date = realDate;
+				event.trueDate = true;
+				if(event.vehicle.tempEvents.peek().nature!=2)
+				{
+					throw new IllegalStateException("Un EventWaitingOnRoad doit être suivi par un EventLeaveRoad.");
+				}
+				else
+				{
+					EventWaitingOnRoad.setLeavingDate(event);
+					event.vehicle.tempEvents.peek().date=event.leavingDate;
+				}
 				eventsCopy.add(event);
+				event.vehicle.tempEvents.add(event);
+			}
+			else
+			{
+				if(event.nature==0)
+				{
+					EventVehicleStart.executeEvent(event);
+				}
+				else if(event.nature==1 & event.trueDate)
+				{
+					EventWaitingOnRoad.executeEvent(event);
+				}
+				else if(event.nature==2)
+				{
+					EventLeaveRoad.executeEvent(event);
+				}
+				else if(event.nature==3)
+				{
+					EventEnterRoad.executeEvent(event);
+				}
+				else if(event.nature==4)
+				{
+					EventVehicleEnd.executeEvent(event);
+				}
 			}
 		}
 	}

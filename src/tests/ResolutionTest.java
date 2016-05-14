@@ -22,16 +22,12 @@ public class ResolutionTest {
 		graph3.calculatePaths();
 		graph3.gatherEvents();
 		
-		System.out.println("\nActualisation de l'état du graphe :\n"+graph3.events+"\n\n");
-		
 		//Parse du graph4
 		fileName=project_location + "/media/map/4.svg";
 		GraphState graph4 = SvgParser.parseGraphState(fileName);
 		
 		graph4.calculatePaths();
 		graph4.gatherEvents();
-		
-		System.out.println("\nActualisation de l'état du graphe :\n"+graph4.events+"\n\n");
 		
 		System.out.println("Vérification de la chronologie de ces évènements (dates factices) :");
 		PriorityQueue<AbstractEvent> events = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());

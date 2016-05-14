@@ -105,8 +105,8 @@ public class Location {
 	
 	public String toString(){
 		String newline = System.getProperty("line.separator");
-		String result = "Current: " + currentRoad.toString() + currentPosition + currentDate + newline;
-		result += "Final: " +finalRoad.toString() + finalPosition + finalDate;
+		String result = "Position initiale : "+initialRoad.toString()+" / "+initialPosition+"m / "+initialDate+"s"+newline;
+		result += "Position finale : "+finalRoad.toString()+" / "+finalPosition+"m / date finale à calculer\n";
 		return result;
 	}
 
