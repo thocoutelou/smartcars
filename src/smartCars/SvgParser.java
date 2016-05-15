@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.concurrent.ExecutionException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,12 +22,6 @@ import org.xml.sax.SAXException;
  * @author thomas
  */
 public class SvgParser {
-	
-	// TODO URGENT
-	// Parser les vitesses autorisées sur les routes (Road.speed) ; peut être le résultat d'une classification par palliers des routes en fonction de leur longueur.
-	// Parser le temps moyen de traversée d'une intersection (AbstractIntersection.averageTime) ; peut être la conséquence du diamètre ou de la circonférence du cercle qui la représente dans l'image.
-	// Parser une date de départ aléatoire aux véhicules (AbstractVehicle.location.initialDate).
-	// Puis supprimer les valeurs par défaut que j'ai forcées au niveau des attributs des classes pour les tests.
 
 	// ***** Commentaires de lecture et questions *****
 		// -> pourquoi utiliser float plutôt que double ?
@@ -250,8 +245,13 @@ public class SvgParser {
 					Float.parseFloat(geometricFigure.getAttribute("y")));
 			destination = new CartesianCoordinate(Float.parseFloat(geometricFigure.getAttribute("x_destination")),
 					Float.parseFloat(geometricFigure.getAttribute("y_destination")));
-			initialDate = Float.parseFloat(geometricFigure.getAttribute("initialDate"));
-			
+			if(geometricFigure.getAttribute("initialDate").isEmpty()){
+				//Utilisation d'une date de départ aléatoire
+				initialDate = Math.random()*100;
+			} else {
+				initialDate = Float.parseFloat(geometricFigure.getAttribute("initialDate"));
+			}
+
 			// Projection de position et de destination sur le graph: on sélectionne le Road qui est le plus proche
 			initialRoad = position.closestRoad(intersections);
 			finalRoad = destination.closestRoad(intersections);
