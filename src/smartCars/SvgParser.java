@@ -155,6 +155,7 @@ public class SvgParser {
 			CartesianCoordinate point2;
 			AbstractIntersection origin = null;
 			AbstractIntersection destination = null;
+			double speed = 50;
 			Cost cost;
 			int lane = 1; // Attribut pas encore implémenté			
 			
@@ -197,11 +198,17 @@ public class SvgParser {
 			if(! isIntegrated){
 				throw new IllegalArgumentException(geometricFigure.getAttribute("id") + " has not been integrated to the graph");
 			}
-
+			
+			// Détermination de speed
+			if (geometricFigure.getAttribute("speed").isEmpty()) { // On utilise la valeur par défaut
+				speed = 50000;
+			} else {
+				speed = Float.parseFloat(geometricFigure.getAttribute("speed"));
+			}
 
 			// Initialisation de cost
-			// Le coût est pour l'instant la longueur de la route sur la vitesse urbaine standard de 50 km/h
-			cost = new Cost(CartesianCoordinate.distance(point1, point2)/50000.);
+			// Le coût est pour l'instant la longueur de la route sur la vitesse urbaine
+			cost = new Cost(CartesianCoordinate.distance(point1, point2)/speed);
 
 			// Instanciation de Road
 			Road parseRoad = new Road(point1, point2, origin, destination, cost, lane);
