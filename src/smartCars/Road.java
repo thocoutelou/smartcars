@@ -31,7 +31,7 @@ public class Road {
 	public double length;
 	// vitesse de circulation autorisée (km/h)
 	// et vitesse supposée des véhicules sur la route
-	public double speed = 50.;
+	public double speed;
 	// intersection d'origine de la route
 	public final AbstractIntersection origin;
 	// intersection d'arrivée de la route
@@ -62,7 +62,7 @@ public class Road {
 	 * @param cost
 	 * @param lane
 	 */
-	public Road(CartesianCoordinate point1, CartesianCoordinate point2, AbstractIntersection origin, AbstractIntersection destination, Cost cost, int lane)
+	public Road(CartesianCoordinate point1, CartesianCoordinate point2, AbstractIntersection origin, AbstractIntersection destination, double speed, Cost cost, int lane)
 	{
 		identifier = identificator;
 		identificator++;
@@ -70,6 +70,7 @@ public class Road {
 		this.point2 = point2;
 		this.origin = origin;
 		this.destination = destination;
+		this.speed = speed;
 		this.cost = cost;
 		this.lane = lane;
 		this.absoluteLength = this.point1.distanceFrom(point2);

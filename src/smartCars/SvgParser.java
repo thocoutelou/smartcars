@@ -211,7 +211,7 @@ public class SvgParser {
 			cost = new Cost(CartesianCoordinate.distance(point1, point2)/speed);
 
 			// Instanciation de Road
-			Road parseRoad = new Road(point1, point2, origin, destination, cost, lane);
+			Road parseRoad = new Road(point1, point2, origin, destination, speed, cost, lane);
 			
 			// Renseignement de origin d'un nouveau leavingRoad
 			origin.getLeavingRoads().add(parseRoad);
