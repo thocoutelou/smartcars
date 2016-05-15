@@ -137,7 +137,14 @@ public class SvgParser {
 				CartesianCoordinate center = new CartesianCoordinate(Float.parseFloat(geometricFigure.getAttribute("cx")),
 						Float.parseFloat(geometricFigure.getAttribute("cy")));
 				Float radius = Float.parseFloat(geometricFigure.getAttribute("r"));
-				AbstractIntersection parseIntersection = new AbstractIntersection(center, radius);
+				// Parse de averageTime
+				double averageTime;
+				if (geometricFigure.getAttribute("averageTime").isEmpty()){
+					averageTime = 10.;
+				} else {
+					averageTime = Float.parseFloat(geometricFigure.getAttribute("averageTime"));
+				}
+				AbstractIntersection parseIntersection = new AbstractIntersection(center, radius, averageTime);
 				System.out.println("Intersection " + parseIntersection.identifier + " parsed: " + parseIntersection);
 				return parseIntersection;
 			} else {

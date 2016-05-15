@@ -21,7 +21,7 @@ public class AbstractIntersection {
 	public ArrayList<AbstractVehicle> vehiclesOnIntersection = new ArrayList<AbstractVehicle>();
 	
 	// durée moyenne de traversée de l'intersection
-	public double averageTime = 10.;
+	public double averageTime;
 	// L'intersection est-elle encombrée ?
 	public boolean obstruction;
 	
@@ -35,13 +35,12 @@ public class AbstractIntersection {
 	 * @param center
 	 * @param radius
 	 */
-	public AbstractIntersection(CartesianCoordinate center, float radius) {
+	public AbstractIntersection(CartesianCoordinate center, float radius, double averageTime) {
 		identifier = identificator;
 		identificator++;
 		this.center= center;
 		this.radius = radius;
-		// TODO (averageTime) à calculer à partir de la géométrie de l'intersection
-		averageTime = 10.;
+		this.averageTime = averageTime;
 		obstruction = false;
 		// l'initialisation de leavingRoads est nécessaire, mais difficile à faire dès l'instanciation de l'intersection
 		this.leavingRoads = new ArrayList<Road>();
