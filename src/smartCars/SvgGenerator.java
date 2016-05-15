@@ -3,6 +3,7 @@ package smartCars;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -11,6 +12,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.IOException;
 
 /* Ce fichier permet de générer une image svg qui représente l'état d'un GraphState à l'instant t
     Il est inspiré de http://research.jacquet.xyz/teaching/java/xml-dom/ dont l'auteur est Christophe Jacquet
@@ -18,27 +20,42 @@ import java.io.File;
 
 public class SvgGenerator {
 
-    private static Document creerDocumentExemple(DocumentBuilder docBuilder) {
-        Document doc = docBuilder.newDocument();
+    static Document doc = null;
 
-        Element racine = doc.createElement("root");
-        racine.setAttribute("lang", "fr");
-        doc.appendChild(racine);
 
-        Element sujet = doc.createElement("node");
-        sujet.setAttribute("role", "sujet");
-        sujet.setTextContent("Supélec");
-        racine.appendChild(sujet);
+    public SvgGenerator(Graph graph){
 
-        Element verbe = doc.createElement("node");
-        verbe.setAttribute("role", "verbe");
-        verbe.setTextContent("est");
-        racine.appendChild(verbe);
+        doc = createSvgStructure();
+        Element element = doc.getDocumentElement();
+        addRoadToElement(element);
+        // l'écrire sur le disque dans un fichier
+        ecrireDocument(doc, "media/output.svg");
+    }
 
-        Element complement = doc.createElement("node");
-        complement.setAttribute("role", "complément de lieu");
-        complement.setTextContent("en France");
-        racine.appendChild(complement);
+    private static Element addRoadToElement(Element element){
+        Element path = doc.createElement("path");
+        path.setAttribute("d", "M 0,0 100,100");
+        path.setAttribute("style", "fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1");
+        element.appendChild(path);
+        return element;
+    }
+
+    private static Document createSvgStructure(){
+
+        String template_location = "media/svg_template.svg";
+
+        try {
+            final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            final DocumentBuilder builder = factory.newDocumentBuilder();
+            doc= builder.parse(new File(template_location));
+
+        } catch (final ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (final SAXException e) {
+            e.printStackTrace();
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
 
         return doc;
     }
@@ -82,24 +99,4 @@ public class SvgGenerator {
             System.exit(1);
         }
     }
-
-    public static void main(String[] args) {
-        // obtention d'un Document Builder qui permet de créer de nouveaux
-        // documents ou de parser des documents à partir de fichiers
-        DocumentBuilder docBuilder = null;
-
-        try {
-            docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        } catch(ParserConfigurationException e) {
-            System.err.println("Impossible de créer un DocumentBuilder.");
-            System.exit(1);
-        }
-
-        // crée un petit document d'exemple
-        Document doc = creerDocumentExemple(docBuilder);
-
-        // l'écrire sur le disque dans un fichier
-        ecrireDocument(doc, "test.xml");
-    }
-
 }
