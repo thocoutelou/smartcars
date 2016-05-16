@@ -16,14 +16,14 @@ public class ResolutionTest {
 	public void test() {
 		
 		//Parse du graph3
-		String fileName=project_location + "/media/map/3.svg";
+		String fileName=project_location + "/media/exemple/3.svg";
 		GraphState graph3 = SvgParser.parseGraphState(fileName);
 		
 		graph3.calculatePaths();
 		graph3.gatherEvents();
 		
 		//Parse du graph4
-		fileName=project_location + "/media/map/4.svg";
+		fileName=project_location + "/media/exemple/4.svg";
 		GraphState graph4 = SvgParser.parseGraphState(fileName);
 		
 		graph4.calculatePaths();
