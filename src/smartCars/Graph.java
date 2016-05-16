@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Graph {
 	
 	// intersections du graphe (suffit à définir le graphe))
-	private ArrayList<AbstractIntersection> intersections = new ArrayList<AbstractIntersection>();
+	public ArrayList<AbstractIntersection> intersections = new ArrayList<AbstractIntersection>();
 	// nombre d'intersections
 	public int numberOfIntersections;
 	// routes du graphe

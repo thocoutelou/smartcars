@@ -23,18 +23,39 @@ public class SvgGenerator {
     static Document doc = null;
 
 
-    public SvgGenerator(Graph graph){
+    public SvgGenerator(Graph graph, String output){
 
         doc = createSvgStructure();
         Element element = doc.getDocumentElement();
-        addRoadToElement(element);
-        // l'écrire sur le disque dans un fichier
-        ecrireDocument(doc, "media/output.svg");
+
+        //Ajout des Intersections
+        for (AbstractIntersection intersection: graph.intersections){
+            addIntersectionToElement(element, intersection);
+        }
+
+        // Ajout des Road au document
+        for (Road road : graph.roads){
+            addRoadToElement(element,road);
+        }
+
+        // Ecriture du document sur le disque dans un fichier
+        ecrireDocument(doc, output);
     }
 
-    private static Element addRoadToElement(Element element){
+    private static Element addIntersectionToElement(Element element, AbstractIntersection intersection){
+        Element circle = doc.createElement("circle");
+        circle.setAttribute("cx", String.valueOf(intersection.center.x));
+        circle.setAttribute("cy", String.valueOf(intersection.center.y));
+        circle.setAttribute("r", String.valueOf(intersection.radius));
+        circle.setAttribute("style", "fill:#ff0000;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1");
+        element.appendChild(circle);
+        return element;
+    }
+
+    private static Element addRoadToElement(Element element, Road road){
         Element path = doc.createElement("path");
-        path.setAttribute("d", "M 0,0 100,100");
+        String d = "M " + road.point1.x + "," + road.point1.y + " " + road.point2.x + "," + road.point2.y;
+        path.setAttribute("d", d);
         path.setAttribute("style", "fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1");
         element.appendChild(path);
         return element;
