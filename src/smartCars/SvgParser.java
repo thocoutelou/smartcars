@@ -8,6 +8,11 @@ import java.util.Stack;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -57,66 +62,41 @@ public class SvgParser {
 			System.out.println("<---   Graph parse   --->");
 
 			try {
-				// On crée le parser
-				builder = factory.newDocumentBuilder();       
+				// On crée le parser et xPath pour utiliser les expressins régulières
+				builder = factory.newDocumentBuilder();
 				final Document document= builder.parse(new File(fileName));
-				//On sélectionne la racine
-				final Element racine = document.getDocumentElement();
-				final NodeList racineNoeuds = racine.getChildNodes();
-				final int nbRacineNoeuds = racineNoeuds.getLength();
+				XPath xPath = XPathFactory.newInstance().newXPath();
+				XPathExpression exp;
+				NodeList nl;
 
+				//Regex pour récupérer la liste de tout les noeuds cirlce
+				exp = xPath.compile("//circle");
+				nl = (NodeList)exp.evaluate(document, XPathConstants.NODESET);
+				//Parse de toutes les intersections
+				for (int i=0; i<nl.getLength(); i++){
+					final Element circle = (Element) nl.item(i);
+					intersections.add(parseIntersection(circle));
+				}
 
-				for (int i = 0; i<nbRacineNoeuds; i++) {
-					//On se place dans le premier calque
-					if (racineNoeuds.item(i).getNodeName() == "g"){
-						final NodeList gNoeuds = racineNoeuds.item(i).getChildNodes();
+				//Regex pour récupérer la liste de tout les noeuds path
+				exp = xPath.compile("//path");
+				nl = (NodeList)exp.evaluate(document, XPathConstants.NODESET);
+				//Parse de toutes les Road
+				for (int i=0; i<nl.getLength(); i++){
+					final Element path = (Element) nl.item(i);
+					roads.add(parseRoad(path,intersections));
+				}
 
-						// Parcourt et création des intersections
-						for(int j = 0; j<gNoeuds.getLength(); j++ ){
-							// On filtre les éléments qui sont des noeuds
-							if(gNoeuds.item(j).getNodeType() == Node.ELEMENT_NODE){
-								final Element geometricFigure = (Element) gNoeuds.item(j);
-								// Cas d'une intersection
-								if(geometricFigure.getNodeName() == "circle" ){
-									intersections.add(parseIntersection(geometricFigure));
-								}
-							}
-						}
-
-
-						// Parcourt des Road
-						// Toutes les intersections doivent être instanciées avant la création des Road
-						for(int j = 0; j<gNoeuds.getLength(); j++ ){
-							// On filtre les éléments qui sont des noeuds
-							if(gNoeuds.item(j).getNodeType() == Node.ELEMENT_NODE){
-								final Element geometricFigure = (Element) gNoeuds.item(j);
-								if(geometricFigure.getNodeName() == "path" ){
-									roads.add(parseRoad(geometricFigure, intersections));
-								}
-							}
-						}
-						
-						// Parcourt des Vehicule
-						// Toutes les intersections et les Road doivent être instanciées avant la création des véhicule
-						for(int j = 0; j<gNoeuds.getLength(); j++ ){
-							// On filtre les éléments qui sont des noeuds
-							if(gNoeuds.item(j).getNodeType() == Node.ELEMENT_NODE){
-								final Element geometricFigure = (Element) gNoeuds.item(j);
-								if(geometricFigure.getNodeName() == "rect" ){
-									vehicles.add(parseVehicle(geometricFigure, intersections));
-								}
-							}
-						}
-					}
+				//Regex pour récupérer la liste de tout les noeuds rect
+				exp = xPath.compile("//rect");
+				nl = (NodeList)exp.evaluate(document, XPathConstants.NODESET);
+				//Parse de tous les vhéhicules
+				for (int i=0; i<nl.getLength(); i++){
+					final Element rect = (Element) nl.item(i);
+					vehicles.add(parseVehicle(rect,intersections));
 				}
 			}
-			catch (final ParserConfigurationException e) {
-				e.printStackTrace();
-			}
-			catch (final SAXException e) {
-				e.printStackTrace();
-			}
-			catch (final IOException e) {
+			catch (ParserConfigurationException|SAXException|IOException|XPathExpressionException e) {
 				e.printStackTrace();
 			}
 			
@@ -167,6 +147,7 @@ public class SvgParser {
 			// d est sous la forme d="m 395.9798,236.15895 6.06091,165.66502"
 			String [] dParse = d.split("( |,)"); // Utilisation de regex
 			if(dParse[0].equals("M") || dParse[0].equals("m")){
+				//System.out.println(dParse[0]+" "+dParse[1]+" "+dParse[2]+" "+dParse[3]+" "+dParse[4]);
 				if(dParse[0].equals("M")){
 					point1 = new CartesianCoordinate(Float.parseFloat(dParse[1]), Float.parseFloat(dParse[2]));
 					point2 = new CartesianCoordinate(Float.parseFloat(dParse[3]), Float.parseFloat(dParse[4]));
@@ -215,7 +196,6 @@ public class SvgParser {
 			//détermination de averageWaitingTime
 			if (geometricFigure.getAttribute("averageWaitingTime").isEmpty()) { // On utilise la valeur par défaut
 				averageWaitingTime = 10;
-				System.out.println("default averageWaitingTime");
 			} else {
 				averageWaitingTime = Double.parseDouble(geometricFigure.getAttribute("averageWaitingTime"));
 			}
