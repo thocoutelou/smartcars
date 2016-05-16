@@ -38,7 +38,7 @@ public class Road {
 	// intersection d'arrivée de la route
 	public final AbstractIntersection destination;
 	// durée moyenne d'attente devant l'intersection d'arrivée
-	public double averageWaitingTime=10.;
+	public double averageWaitingTime;
 	
 	// géométrie de la route:
 	// point de départ
@@ -63,7 +63,7 @@ public class Road {
 	 * @param cost
 	 * @param lane
 	 */
-	public Road(CartesianCoordinate point1, CartesianCoordinate point2, AbstractIntersection origin, AbstractIntersection destination, double speed, Cost cost, int lane)
+	public Road(CartesianCoordinate point1, CartesianCoordinate point2, AbstractIntersection origin, AbstractIntersection destination, double speed, Cost cost, int lane, double averageWaitingTime)
 	{
 		identifier = identificator;
 		identificator++;
@@ -74,6 +74,7 @@ public class Road {
 		this.speed = speed;
 		this.cost = cost;
 		this.lane = lane;
+		this.averageWaitingTime = averageWaitingTime;
 		this.absoluteLength = this.point1.distanceFrom(point2);
 		this.length = this.absoluteLength;
 	}

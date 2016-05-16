@@ -158,7 +158,8 @@ public class SvgParser {
 			AbstractIntersection destination = null;
 			double speed = 50;
 			Cost cost;
-			int lane = 1; // Attribut pas encore implémenté			
+			int lane = 1; // Attribut pas encore implémenté
+			double averageWaitingTime;
 			
 			
 			//Détermination des attributs géométriques
@@ -211,8 +212,16 @@ public class SvgParser {
 			// Le coût est pour l'instant la longueur de la route sur la vitesse urbaine
 			cost = new Cost(CartesianCoordinate.distance(point1, point2)/speed);
 
+			//détermination de averageWaitingTime
+			if (geometricFigure.getAttribute("averageWaitingTime").isEmpty()) { // On utilise la valeur par défaut
+				averageWaitingTime = 10;
+				System.out.println("default averageWaitingTime");
+			} else {
+				averageWaitingTime = Double.parseDouble(geometricFigure.getAttribute("averageWaitingTime"));
+			}
+
 			// Instanciation de Road
-			Road parseRoad = new Road(point1, point2, origin, destination, speed, cost, lane);
+			Road parseRoad = new Road(point1, point2, origin, destination, speed, cost, lane, averageWaitingTime);
 			
 			// Renseignement de origin d'un nouveau leavingRoad
 			origin.getLeavingRoads().add(parseRoad);
