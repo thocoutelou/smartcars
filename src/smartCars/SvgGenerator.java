@@ -23,7 +23,7 @@ public class SvgGenerator {
     static Document doc = null;
 
 
-    public SvgGenerator(Graph graph, String output){
+    public SvgGenerator(Graph graph, File outputFile){
 
         doc = createSvgStructure();
         Element element = doc.getDocumentElement();
@@ -39,16 +39,30 @@ public class SvgGenerator {
         }
 
         // Ecriture du document sur le disque dans un fichier
-        ecrireDocument(doc, output);
+        ecrireDocument(doc, outputFile);
     }
 
     private static Element addIntersectionToElement(Element element, AbstractIntersection intersection){
+        // Ajout du cercle
         Element circle = doc.createElement("circle");
         circle.setAttribute("cx", String.valueOf(intersection.center.x));
         circle.setAttribute("cy", String.valueOf(intersection.center.y));
         circle.setAttribute("r", String.valueOf(intersection.radius));
         circle.setAttribute("style", "fill:#ff0000;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1");
         element.appendChild(circle);
+
+        //Ajout d'un légende (texte)
+        Element text = doc.createElement("text");
+        text.setAttribute("x", String.valueOf(intersection.center.x));
+        text.setAttribute("y", String.valueOf(intersection.center.y));
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("fill", "black");
+        String style = "font-size:" + String.valueOf(intersection.radius);
+        text.setAttribute("style", style);
+        text.setTextContent(String.valueOf(intersection.identifier));
+        element.appendChild(text);
+        //<text x="541.8071899414062" y="552.707275390625" text-anchor="middle" fill="black" stroke-width="2px" dy=".3em">Look, I’m centered!Look, I’m centered!</text>
+
         return element;
     }
 
@@ -81,14 +95,14 @@ public class SvgGenerator {
         return doc;
     }
 
-    private static void ecrireDocument(Document doc, String nomFichier) {
+    private static void ecrireDocument(Document doc, File outputFile) {
         // on considère le document "doc" comme étant la source d'une
         // transformation XML
         Source source = new DOMSource(doc);
 
         // le résultat de cette transformation sera un flux d'écriture dans
         // un fichier
-        Result resultat = new StreamResult(new File(nomFichier));
+        Result resultat = new StreamResult(outputFile);
 
         // création du transformateur XML
         Transformer transfo = null;

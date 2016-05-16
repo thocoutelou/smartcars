@@ -44,7 +44,7 @@ public class SvgParser {
 		 * parseIntersection() et parseRoad()
 		 * 	   un path a une intersection de départ si son premier sommet se trouve dans la zone d'un cercle (intersection)
 		 */
-		public static GraphState parseGraphState(String fileName) {
+		public static GraphState parseGraphState(File file) {
 
 			/* La documentation du parser qu'on va utiliser est en ligne:
 			 * https://openclassrooms.com/courses/structurez-vos-donnees-avec-xml/dom-exemple-d-utilisation-en-java
@@ -64,7 +64,7 @@ public class SvgParser {
 			try {
 				// On crée le parser et xPath pour utiliser les expressins régulières
 				builder = factory.newDocumentBuilder();
-				final Document document= builder.parse(new File(fileName));
+				final Document document= builder.parse(file);
 				XPath xPath = XPathFactory.newInstance().newXPath();
 				XPathExpression exp;
 				NodeList nl;
@@ -104,6 +104,11 @@ public class SvgParser {
 			System.out.println(graphState);
 			return graphState;
 			//this.costsMatrix = Cost.floydWarshall(this);
+		}
+
+		public static GraphState parseGraphState(String filename){
+			File file = new File(filename);
+			return parseGraphState(file);
 		}
 		
 		private static AbstractIntersection parseIntersection(Element geometricFigure) throws IllegalArgumentException{
