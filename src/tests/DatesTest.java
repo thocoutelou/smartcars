@@ -17,7 +17,7 @@ public class DatesTest {
 	public void test() {
 		
 		//Parse du graph4
-		String fileName=project_location + "/media/map/3.svg";
+		String fileName=project_location + "/media/exemple/3.svg";
 		GraphState graph3 = SvgParser.parseGraphState(fileName);
 		
 		graph3.calculatePaths();

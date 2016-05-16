@@ -16,7 +16,7 @@ public class EventsTest {
 	public void test() {
 		
 		//Parse d'un GraphState
-		String fileName=project_location + "/media/map/3.svg";
+		String fileName=project_location + "/media/exemple/3.svg";
 		GraphState graph3 = SvgParser.parseGraphState(fileName);
 		System.out.println(graph3);
 		
