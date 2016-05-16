@@ -16,7 +16,7 @@ public class GraphState extends Graph {
 	public Stack<AbstractVehicle> vehicles;
 	
 	// file (FIFO en fonction des dates) des évènements à survenir dans le graphe
-	public PriorityQueue<AbstractEvent> events = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
+	public PriorityQueue<AbstractEvent> events = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
 	
 	/**
 	 * Constructeur unique, ne doit être appelé que par le parser.

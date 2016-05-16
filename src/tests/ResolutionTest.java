@@ -30,7 +30,7 @@ public class ResolutionTest {
 		graph4.gatherEvents();
 		
 		System.out.println("Vérification de la chronologie de ces évènements (dates factices) :");
-		PriorityQueue<AbstractEvent> events = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
+		PriorityQueue<AbstractEvent> events = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
 		for(AbstractEvent event : graph4.events)
 		{
 			events.add(event);

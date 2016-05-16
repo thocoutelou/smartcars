@@ -3,6 +3,7 @@ package smartCars;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 /**
@@ -37,7 +38,7 @@ public class Road {
 	// intersection d'arrivée de la route
 	public final AbstractIntersection destination;
 	// durée moyenne d'attente devant l'intersection d'arrivée
-	double averageWaitingTime;
+	public double averageWaitingTime=10.;
 	
 	// géométrie de la route:
 	// point de départ
@@ -51,8 +52,8 @@ public class Road {
 	public Queue<AbstractVehicle> waitingVehicles = new LinkedList<AbstractVehicle>();
 	// évènements implémentant les attentes de traversée de la prochaine intersection :
 	// plus la date d'un évènement est proche, plus il sera situé en fin de liste
-	public ArrayList<AbstractEvent> eventsWaitingOnRoad = new ArrayList<AbstractEvent>();
-		
+	public PriorityQueue<AbstractEvent> eventsWaitingOnRoad = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventAntiChronos());
+	
 	/**
 	 * constructeur unique, doit être utilisé seulement par le parser
 	 * @param point1
@@ -74,7 +75,7 @@ public class Road {
 		this.cost = cost;
 		this.lane = lane;
 		this.absoluteLength = this.point1.distanceFrom(point2);
-		
+		this.length = this.absoluteLength;
 	}
 	
 	/**
@@ -124,15 +125,61 @@ public class Road {
 	 */
 	public double lengthWaiting(int left)
 	{
+		AbstractEvent[] eWORArray = eventsWaitingOnRoadToArray();
 		double length = 0.;
-		int numberOfEvents = eventsWaitingOnRoad.size();
 		AbstractEvent eventWaitingOnRoad;
-		for(int i=numberOfEvents-1; i>=left; i--)
+		for(int i=left; i<eWORArray.length; i++)
 		{
-			eventWaitingOnRoad = eventsWaitingOnRoad.get(i);
+			eventWaitingOnRoad = eWORArray[i];
 			length += eventWaitingOnRoad.vehicle.length+AbstractVehicle.minSpaceBetweenVehicles;
 		}
 		return length;
+	}
+	
+	public PriorityQueue<AbstractEvent> eventsWaitingOnRoadCopy()
+	{
+		PriorityQueue<AbstractEvent> eWORCopy = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventAntiChronos());
+		for(AbstractEvent e : eventsWaitingOnRoad)
+		{
+			eWORCopy.add(e);
+		}
+		return eWORCopy;
+	}
+	
+	public PriorityQueue<AbstractEvent> reverseEventsWaitingOnRoadCopy()
+	{
+		PriorityQueue<AbstractEvent> eWORCopy = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
+		for(AbstractEvent e : eventsWaitingOnRoad)
+		{
+			eWORCopy.add(e);
+		}
+		return eWORCopy;
+	}
+	
+	public AbstractEvent[] eventsWaitingOnRoadToArray()
+	{
+		PriorityQueue<AbstractEvent> eWORCopy = eventsWaitingOnRoadCopy();
+		AbstractEvent[] eWORArray = new AbstractEvent[eWORCopy.size()];
+		int c = 0;
+		while(!eWORCopy.isEmpty())
+		{
+			eWORArray[c]=eWORCopy.remove();
+			c++;
+		}
+		return eWORArray;
+	}
+	
+	public AbstractEvent[] reverseEventsWaitingOnRoadToArray()
+	{
+		PriorityQueue<AbstractEvent> eWORCopy = reverseEventsWaitingOnRoadCopy();
+		AbstractEvent[] eWORArray = new AbstractEvent[eWORCopy.size()];
+		int c = 0;
+		while(!eWORCopy.isEmpty())
+		{
+			eWORArray[c]=eWORCopy.remove();
+			c++;
+		}
+		return eWORArray;
 	}
 	
 	/**

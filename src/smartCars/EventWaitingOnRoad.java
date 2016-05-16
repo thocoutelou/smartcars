@@ -16,7 +16,7 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		event.road.waitingVehicles.add(event.vehicle);
 		event.vehicle.location.waitingForIntersection = true;
 		event.road.length-=event.vehicle.length+AbstractVehicle.minSpaceBetweenVehicles;
-		event.road.eventsWaitingOnRoad.add(0, event);
+		event.road.eventsWaitingOnRoad.add(event);
 		event.vehicle.location.actualizeLocation(event.road, event.road.length, event.date);
 	}
 	
@@ -29,7 +29,8 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		}
 		else
 		{
-			AbstractEvent lastEventWaitingOnRoad = event.road.eventsWaitingOnRoad.get(0);
+			AbstractEvent lastEventWaitingOnRoad = event.road.eventsWaitingOnRoad.peek();
+			System.out.println("OMG It was you !   "+lastEventWaitingOnRoad);
 			event.leavingDate = lastEventWaitingOnRoad.leavingDate+event.road.averageWaitingTime;
 		}
 	}
@@ -41,7 +42,7 @@ public class EventWaitingOnRoad extends AbstractEvent{
 	
 	// sera appelée en argument du constructeur,
 	// donc l'évènement ne sera pas encore dans road.eventsWaitingOnRoad
-	public static double relativeDate(AbstractEvent event)
+	public static synchronized double relativeDate(AbstractEvent event)
 	{
 		Road road = event.road;
 		double initialDate = event.date;
@@ -49,10 +50,10 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		if(road.eventsWaitingOnRoad.isEmpty()) return absoluteDate;
 		else
 		{
-			int size = road.eventsWaitingOnRoad.size();
+			AbstractEvent[] eWORArray = road.eventsWaitingOnRoadToArray();
 			int left = 0;
 			double arrivingDate, distance;
-			if(road.eventsWaitingOnRoad.get(0).leavingDate<absoluteDate)
+			if(road.eventsWaitingOnRoad.peek().leavingDate<absoluteDate)
 				return absoluteDate;
 			else
 			{
@@ -62,7 +63,7 @@ public class EventWaitingOnRoad extends AbstractEvent{
 					arrivingDate = initialDate+Time.duration(road, distance);
 					left++;
 				}
-				while(road.eventsWaitingOnRoad.get(size-1-left).leavingDate<arrivingDate);
+				while(eWORArray[left].leavingDate<arrivingDate);
 				return arrivingDate;
 			}
 		}
@@ -74,7 +75,7 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		Road road = event.road;
 		AbstractVehicle vehicle = event.vehicle;
 		
-		tempEvents.add(new EventLeaveRoad(vehicle, road, event.leavingDate));
+		tempEvents.add(new EventLeaveRoad(vehicle, road, event.leavingDate, event));
 	}
 
 }

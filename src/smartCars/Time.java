@@ -13,7 +13,7 @@ public class Time {
 
 	public static double duration(Road road, double distance)
 	{
-		return 3.6*distance/road.speed;
+		return 3600.*distance/road.speed;
 	}
 	
 	public static double startingTime(GraphState graphState) throws IllegalStateException
@@ -32,7 +32,7 @@ public class Time {
 	
 	public static void realDates(GraphState graph)
 	{
-		PriorityQueue<AbstractEvent> eventsCopy = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
+		PriorityQueue<AbstractEvent> eventsCopy = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
 		for(AbstractEvent event : graph.events)
 		{
 			eventsCopy.add(event);
@@ -44,7 +44,7 @@ public class Time {
 		AbstractEvent event;
 		AbstractEvent vehicleEvent;
 		AbstractEvent eventLeaveRoad;
-		double realDate;
+		double difference;
 		while(!eventsCopy.isEmpty())
 		{
 			event = eventsCopy.remove();
@@ -60,23 +60,13 @@ public class Time {
 			}
 			if(event.nature==1 & !event.trueDate)
 			{
-				eventLeaveRoad = event.vehicle.tempEvents.remove();
-				realDate = EventWaitingOnRoad.relativeDate(event);
-				event.date = realDate;
+				difference = event.date;
+				event.date = EventWaitingOnRoad.relativeDate(event);
 				event.trueDate = true;
 				System.out.print("\nChangement de date : "+event+"   ");
 				System.out.println(event.date+"\n");
-				if(eventLeaveRoad.nature!=2)
-				{
-					throw new IllegalStateException("Un EventWaitingOnRoad doit être suivi par un EventLeaveRoad.");
-				}
-				else
-				{
-					EventWaitingOnRoad.setLeavingDate(event);
-					increaseFollowingDates(event, event.leavingDate-eventLeaveRoad.date);
-					eventLeaveRoad.date=event.leavingDate;
-				}
-				event.vehicle.tempEvents.add(eventLeaveRoad);
+				difference = event.date-difference;
+				increaseFollowingDates(event, difference);
 				eventsCopy.add(event);
 				event.vehicle.tempEvents.add(event);
 			}
@@ -88,11 +78,27 @@ public class Time {
 				}
 				else if(event.nature==1 & event.trueDate)
 				{
+					eventLeaveRoad = event.vehicle.tempEvents.remove();
+					if(eventLeaveRoad.nature!=2)
+					{
+						throw new IllegalStateException("Un EventWaitingOnRoad doit être suivi par un EventLeaveRoad.");
+					}
+					else
+					{
+						EventWaitingOnRoad.setLeavingDate(event);
+						difference = event.leavingDate-eventLeaveRoad.date;
+						System.out.println(event.date);
+						System.out.println(eventLeaveRoad.date);
+						System.out.println(event.leavingDate);
+						increaseFollowingDates(event, difference);
+						eventLeaveRoad.date=event.leavingDate;
+					}
+					event.vehicle.tempEvents.add(eventLeaveRoad);
 					EventWaitingOnRoad.executeEvent(event);
 				}
 				else if(event.nature==2)
 				{
-					EventLeaveRoad.executeEvent(event);
+					EventLeaveRoad.executeEvent(event, event.eventWaitingOnRoad);
 				}
 				else if(event.nature==3)
 				{
@@ -108,6 +114,11 @@ public class Time {
 	
 	public static void increaseFollowingDates(AbstractEvent event, double difference)
 	{
+		if(difference<0)
+		{
+			System.out.println("\n*** Be aware *** Debug time has come!  "+difference);
+			throw new IllegalArgumentException("L'incrément de temps doit être positif.");
+		}
 		for(AbstractEvent e : event.vehicle.tempEvents)
 		{
 			e.date+=difference;

@@ -4,14 +4,16 @@ import java.util.Stack;
 
 public class EventLeaveRoad extends AbstractEvent {
 	
-	public EventLeaveRoad(AbstractVehicle vehicle, Road roadLeft, double date)
+	public EventLeaveRoad(AbstractVehicle vehicle, Road roadLeft, double date, AbstractEvent eventWOR)
 	{
 		super(vehicle, roadLeft, date);
+		eventWaitingOnRoad = eventWOR;
 		nature = 2;
 	}
 	
-	public static synchronized void executeEvent(AbstractEvent event)
+	public static synchronized void executeEvent(AbstractEvent event, AbstractEvent eventWOR)
 	{
+		event.road.eventsWaitingOnRoad.remove(eventWOR);
 		event.road.waitingVehicles.remove(event.vehicle);
 		event.vehicle.location.waitingForIntersection = false;
 		event.road.vehiclesOnRoad.remove(event.vehicle);

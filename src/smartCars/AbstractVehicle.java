@@ -34,8 +34,8 @@ public class AbstractVehicle {
 	// sauvegarde les routes déjà empruntées en vue de les revoir
 	protected Stack<Road> itinary;
 	// évènements calculés à partir de Dijkstra
-	public PriorityQueue<AbstractEvent> events = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
-	public PriorityQueue<AbstractEvent> tempEvents = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
+	public PriorityQueue<AbstractEvent> events = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
+	public PriorityQueue<AbstractEvent> tempEvents = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
 	
 	/**
 	 * Constructeur à partir des information de localisation
@@ -76,7 +76,7 @@ public class AbstractVehicle {
 	
 	public PriorityQueue<AbstractEvent> getEventsCopy()
 	{
-		PriorityQueue<AbstractEvent> tempEvents = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventComparator());
+		PriorityQueue<AbstractEvent> tempEvents = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
 		for(AbstractEvent e : this.events)
 		{
 			tempEvents.add(e);
