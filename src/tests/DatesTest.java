@@ -16,8 +16,8 @@ public class DatesTest {
 	@Test
 	public void test() {
 		
-		//Parse du graph4
-		String fileName=project_location + "/media/map/3.svg";
+		//Parse du graph3
+		String fileName=project_location + "/media/exemple/4.svg";
 		GraphState graph3 = SvgParser.parseGraphState(fileName);
 		
 		graph3.calculatePaths();
@@ -45,5 +45,5 @@ public class DatesTest {
 			System.out.println(event+" se réalise à t="+event.date);
 		}
 	}
- 
+
 }

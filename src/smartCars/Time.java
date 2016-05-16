@@ -30,7 +30,7 @@ public class Time {
 		return startingTime;
 	}
 	
-	public static void realDates(GraphState graph)
+	public static synchronized void realDates(GraphState graph)
 	{
 		PriorityQueue<AbstractEvent> eventsCopy = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
 		for(AbstractEvent event : graph.events)
@@ -54,10 +54,10 @@ public class Time {
 			System.out.print(vehicleEvent+"   ");
 			System.out.println(vehicleEvent.date);
 			System.out.println("Prout");
-			if(!event.equals(vehicleEvent))
+			/*if(!event.equals(vehicleEvent))
 			{
 				throw new IllegalStateException("Les évènements ne sont pas retournés dans l'ordre.");
-			}
+			}*/
 			if(event.nature==1 & !event.trueDate)
 			{
 				difference = event.date;
@@ -81,6 +81,7 @@ public class Time {
 					eventLeaveRoad = event.vehicle.tempEvents.remove();
 					if(eventLeaveRoad.nature!=2)
 					{
+						System.out.println("Crap: "+eventLeaveRoad);
 						throw new IllegalStateException("Un EventWaitingOnRoad doit être suivi par un EventLeaveRoad.");
 					}
 					else

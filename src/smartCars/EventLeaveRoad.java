@@ -13,7 +13,11 @@ public class EventLeaveRoad extends AbstractEvent {
 	
 	public static synchronized void executeEvent(AbstractEvent event, AbstractEvent eventWOR)
 	{
-		event.road.eventsWaitingOnRoad.remove(eventWOR);
+		if(!event.road.eventsWaitingOnRoad.remove(eventWOR))
+		{
+			System.out.println(eventWOR);
+			throw new IllegalStateException("La liste des EventWaitingOnRoad est corrompue.");
+		}
 		event.road.waitingVehicles.remove(event.vehicle);
 		event.vehicle.location.waitingForIntersection = false;
 		event.road.vehiclesOnRoad.remove(event.vehicle);
@@ -21,7 +25,6 @@ public class EventLeaveRoad extends AbstractEvent {
 		event.vehicle.location.actualizeLocation(event.road, event.road.length, event.date);
 	}
 	
-	// date de l'objet
 	public static void nextEvent(AbstractEvent event, Stack<AbstractEvent> tempEvents)
 	{
 
