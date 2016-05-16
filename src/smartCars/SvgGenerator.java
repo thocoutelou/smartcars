@@ -3,6 +3,7 @@ package smartCars;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -11,8 +12,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.IllegalFormatException;
 
 /* Ce fichier permet de générer une image svg qui représente l'état d'un GraphState à l'instant t
     Il est inspiré de http://research.jacquet.xyz/teaching/java/xml-dom/ dont l'auteur est Christophe Jacquet
@@ -21,6 +24,8 @@ import java.io.IOException;
 public class SvgGenerator {
 
     static Document doc = null;
+    CartesianCoordinate viewBox1 = new CartesianCoordinate(0,0);
+    CartesianCoordinate viewBox2 = new CartesianCoordinate(0,0);
 
 
     public SvgGenerator(Graph graph, File outputFile){
@@ -38,6 +43,7 @@ public class SvgGenerator {
             addRoadToElement(element,road);
         }
 
+        setViewBox(graph,element);
         // Ecriture du document sur le disque dans un fichier
         ecrireDocument(doc, outputFile);
     }
@@ -93,6 +99,19 @@ public class SvgGenerator {
         }
 
         return doc;
+    }
+
+    private void setViewBox(Graph graph, Element element){
+        for (AbstractIntersection intersection : graph.intersections) {
+            viewBox1.x=Math.min(viewBox1.x, intersection.center.x - intersection.radius);
+            viewBox1.y=Math.min(viewBox1.y, intersection.center.y - intersection.radius);
+            viewBox2.x=Math.max(viewBox2.x, intersection.center.x + intersection.radius);
+            viewBox2.y=Math.max(viewBox2.y, intersection.center.y + intersection.radius);
+            String viewBox = viewBox1.x +" " +viewBox1.y+" "+viewBox2.x+" "+viewBox2.y;
+            System.out.println(viewBox);
+        }
+        String viewBox = viewBox1.x +" " +viewBox1.y+" "+viewBox2.x+" "+viewBox2.y;
+        element.setAttribute("viewBox", viewBox);
     }
 
     private static void ecrireDocument(Document doc, File outputFile) {

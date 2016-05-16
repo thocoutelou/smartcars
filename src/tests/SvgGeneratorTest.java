@@ -17,15 +17,6 @@ public class SvgGeneratorTest {
     @Test
     public void test() {
 
-        /*String fileName;
-        String outputName;
-
-        for(int i=1; i<=4;i++){
-            fileName=project_location + "/media/map/" + i + ".svg";
-            outputName= project_location + "/media/map/" + i + "_output.svg";
-            Graph graph = SvgParser.parseGraphState(fileName);
-            SvgGenerator sg = new SvgGenerator(graph, outputName);
-        }*/
         File folder = new File(exemple_location);
         File[] exempleList = folder.listFiles();
         Graph graph;
