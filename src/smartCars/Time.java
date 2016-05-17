@@ -32,6 +32,7 @@ public class Time {
 	
 	public static synchronized void realDates(GraphState graph)
 	{
+		// initialisation
 		PriorityQueue<AbstractEvent> eventsCopy = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
 		for(AbstractEvent event : graph.events)
 		{
@@ -43,21 +44,23 @@ public class Time {
 		}
 		AbstractEvent event;
 		AbstractEvent vehicleEvent;
-		AbstractEvent eventLeaveRoad;
 		double difference;
+		
 		while(!eventsCopy.isEmpty())
 		{
 			event = eventsCopy.remove();
 			vehicleEvent = event.vehicle.tempEvents.remove();
+			
 			System.out.print(event+"   ");
 			System.out.println(event.date);
 			System.out.print(vehicleEvent+"   ");
 			System.out.println(vehicleEvent.date);
 			System.out.println("Prout");
-			/*if(!event.equals(vehicleEvent))
+			if(!event.equals(vehicleEvent))
 			{
 				throw new IllegalStateException("Les évènements ne sont pas retournés dans l'ordre.");
-			}*/
+			}
+			
 			if(event.nature==1 & !event.trueDate)
 			{
 				difference = event.date;
@@ -67,47 +70,30 @@ public class Time {
 				System.out.println(event.date+"\n");
 				difference = event.date-difference;
 				increaseFollowingDates(event, difference);
-				eventsCopy.add(event);
 				event.vehicle.tempEvents.add(event);
+				eventsCopy.add(event);
 			}
-			else
+			else if(event.nature==1 & event.trueDate)
 			{
-				if(event.nature==0)
+				EventWaitingOnRoad.setLeavingDate(event);
+				// la ligne suivante doit être exécutée
+				// impérativement après le calcul de leavingDate
+				event.road.eventsWaitingOnRoad.add(event);
+			}
+			else if(event.nature==2 & !event.trueDate)
+			{
+				difference = event.eventWaitingOnRoad.leavingDate-event.date;
+				increaseFollowingDates(event, difference);
+				event.date=event.eventWaitingOnRoad.leavingDate;
+				event.trueDate = true;
+				event.vehicle.tempEvents.add(event);
+				eventsCopy.add(event);
+			}
+			else if(event.nature==2 & event.trueDate)
+			{
+				if(!event.road.eventsWaitingOnRoad.remove(event.eventWaitingOnRoad))
 				{
-					EventVehicleStart.executeEvent(event);
-				}
-				else if(event.nature==1 & event.trueDate)
-				{
-					eventLeaveRoad = event.vehicle.tempEvents.remove();
-					if(eventLeaveRoad.nature!=2)
-					{
-						System.out.println("Crap: "+eventLeaveRoad);
-						throw new IllegalStateException("Un EventWaitingOnRoad doit être suivi par un EventLeaveRoad.");
-					}
-					else
-					{
-						EventWaitingOnRoad.setLeavingDate(event);
-						difference = event.leavingDate-eventLeaveRoad.date;
-						System.out.println(event.date);
-						System.out.println(eventLeaveRoad.date);
-						System.out.println(event.leavingDate);
-						increaseFollowingDates(event, difference);
-						eventLeaveRoad.date=event.leavingDate;
-					}
-					event.vehicle.tempEvents.add(eventLeaveRoad);
-					EventWaitingOnRoad.executeEvent(event);
-				}
-				else if(event.nature==2)
-				{
-					EventLeaveRoad.executeEvent(event, event.eventWaitingOnRoad);
-				}
-				else if(event.nature==3)
-				{
-					EventEnterRoad.executeEvent(event);
-				}
-				else if(event.nature==4)
-				{
-					EventVehicleEnd.executeEvent(event);
+					throw new IllegalStateException("La liste des EventWaitingOnRoad est corrompue.");
 				}
 			}
 		}

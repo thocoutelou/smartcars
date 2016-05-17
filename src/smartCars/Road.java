@@ -128,11 +128,9 @@ public class Road {
 	{
 		AbstractEvent[] eWORArray = eventsWaitingOnRoadToArray();
 		double length = 0.;
-		AbstractEvent eventWaitingOnRoad;
 		for(int i=left; i<eWORArray.length; i++)
 		{
-			eventWaitingOnRoad = eWORArray[i];
-			length += eventWaitingOnRoad.vehicle.length+AbstractVehicle.minSpaceBetweenVehicles;
+			length += eWORArray[i].vehicle.length+AbstractVehicle.minSpaceBetweenVehicles;
 		}
 		return length;
 	}
