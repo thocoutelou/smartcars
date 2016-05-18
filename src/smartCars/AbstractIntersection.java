@@ -73,7 +73,7 @@ public class AbstractIntersection {
 	}
 
 	public boolean overlap(AbstractIntersection intersectionB){
-		return (this.center.distanceFrom(intersectionB.center) <= Math.min(this.radius,intersectionB.radius) );
+		return (this.center.distanceFrom(intersectionB.center) <= this.radius + intersectionB.radius );
 	}
 
 	public boolean overlapList(ArrayList<AbstractIntersection> intersections){
