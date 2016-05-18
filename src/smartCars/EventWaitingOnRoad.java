@@ -30,7 +30,7 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		else
 		{
 			AbstractEvent lastEventWaitingOnRoad = event.road.eventsWaitingOnRoad.peek();
-			System.out.println("OMG It was you !   "+lastEventWaitingOnRoad);
+			System.out.println("Consultation de la liste event.eventsWaitingOnRoad");
 			event.leavingDate = lastEventWaitingOnRoad.leavingDate+event.road.averageWaitingTime;
 		}
 	}

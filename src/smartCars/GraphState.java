@@ -1,7 +1,6 @@
 package smartCars;
 
 import java.util.ArrayList;
-import java.util.PriorityQueue;
 import java.util.Stack;
 
 /**
@@ -16,7 +15,7 @@ public class GraphState extends Graph {
 	public Stack<AbstractVehicle> vehicles;
 	
 	// file (FIFO en fonction des dates) des évènements à survenir dans le graphe
-	public PriorityQueue<AbstractEvent> events = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
+	public PriorityQueue events = new PriorityQueue();
 	
 	/**
 	 * Constructeur unique, ne doit être appelé que par le parser.
@@ -62,7 +61,7 @@ public class GraphState extends Graph {
 		for(AbstractVehicle vehicle : vehicles)
 		{
 			AbstractEvent.vehicleEvents(vehicle);
-			this.events.addAll(vehicle.events);
+			this.events.qaddAll(vehicle.events);
 		}
 		System.out.println("\nActualisation de l'état du graphe :\n"+this.events+"\n\n");
 		

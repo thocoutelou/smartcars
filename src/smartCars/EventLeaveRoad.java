@@ -15,8 +15,7 @@ public class EventLeaveRoad extends AbstractEvent {
 	{
 		if(!event.road.eventsWaitingOnRoad.remove(eventWOR))
 		{
-			System.out.println(eventWOR);
-			throw new IllegalStateException("La liste des EventWaitingOnRoad est corrompue.");
+			throw new IllegalStateException("La liste des eventsWaitingOnRoad est corrompue.");
 		}
 		event.road.waitingVehicles.remove(event.vehicle);
 		event.vehicle.location.waitingForIntersection = false;

@@ -1,7 +1,6 @@
 package smartCars;
 
 import java.util.ArrayList;
-import java.util.PriorityQueue;
 import java.util.Stack;
 
 /**
@@ -34,8 +33,8 @@ public class AbstractVehicle {
 	// sauvegarde les routes déjà empruntées en vue de les revoir
 	protected Stack<Road> itinary;
 	// évènements calculés à partir de Dijkstra
-	public PriorityQueue<AbstractEvent> events = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
-	public PriorityQueue<AbstractEvent> tempEvents = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
+	public PriorityQueue events = new PriorityQueue();
+	public PriorityQueue tempEvents = new PriorityQueue();
 	
 	/**
 	 * Constructeur à partir des information de localisation
@@ -74,14 +73,9 @@ public class AbstractVehicle {
 		this.tempPath = getPathCopy();
 	}
 	
-	public PriorityQueue<AbstractEvent> getEventsCopy()
+	public PriorityQueue getEventsCopy()
 	{
-		PriorityQueue<AbstractEvent> tempEvents = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
-		for(AbstractEvent e : this.events)
-		{
-			tempEvents.add(e);
-		}
-		return tempEvents;
+		return events.getCopy();
 	}
 	
 	public void setTempEvents()
@@ -118,7 +112,7 @@ public class AbstractVehicle {
 	{
 		while(!tempEvents.isEmpty())
 		{
-			events.add(tempEvents.pop());
+			events.qadd(tempEvents.pop());
 		}
 	}
 	

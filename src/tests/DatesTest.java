@@ -1,11 +1,10 @@
 package tests;
 
-import java.util.PriorityQueue;
-
 import org.junit.Test;
 
 import smartCars.AbstractEvent;
 import smartCars.GraphState;
+import smartCars.PriorityQueue;
 import smartCars.SvgParser;
 import smartCars.Time;
 
@@ -17,7 +16,7 @@ public class DatesTest {
 	public void test() {
 		
 		//Parse du graph4
-		String fileName=project_location + "/media/exemple/4.svg";
+		String fileName=project_location + "/media/exemple/3.svg";
 		GraphState graph3 = SvgParser.parseGraphState(fileName);
 		
 		graph3.calculatePaths();
@@ -25,23 +24,21 @@ public class DatesTest {
 
 		AbstractEvent event;
 		System.out.println("Vérification de la chronologie de ces évènements (dates factices) :");
-		PriorityQueue<AbstractEvent> events = graph3.vehicles.get(0).getEventsCopy();
-		while(!events.isEmpty())
+		PriorityQueue events = graph3.vehicles.get(0).getEventsCopy();
+		while(!events.qisEmpty())
 		{
-			event = events.remove();
+			event = events.qremove();
 			System.out.println(event+" se réaliserait à t="+event.date);
 		}
 		
 		Time.realDates(graph3);
 		
 		System.out.println("\nVérification de la chronologie de ces évènements (dates réelles) :");
-		for(AbstractEvent e : graph3.events)
+		events.qaddAll(graph3.events);
+		
+		while(!events.qisEmpty())
 		{
-			events.add(e);
-		}
-		while(!events.isEmpty())
-		{
-			event = events.remove();
+			event = events.qremove();
 			System.out.println(event+" se réalise à t="+event.date);
 		}
 	}

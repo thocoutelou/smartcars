@@ -1,11 +1,10 @@
 package tests;
 
-import java.util.PriorityQueue;
-
 import org.junit.Test;
 
 import smartCars.AbstractEvent;
 import smartCars.GraphState;
+import smartCars.PriorityQueue;
 import smartCars.SvgParser;
 
 public class ResolutionTest {
@@ -30,15 +29,12 @@ public class ResolutionTest {
 		graph4.gatherEvents();
 		
 		System.out.println("Vérification de la chronologie de ces évènements (dates factices) :");
-		PriorityQueue<AbstractEvent> events = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
-		for(AbstractEvent event : graph4.events)
-		{
-			events.add(event);
-		}
+		PriorityQueue events = new PriorityQueue();
+		events.qaddAll(graph4.events);
 		AbstractEvent event;
-		while(!events.isEmpty())
+		while(!events.qisEmpty())
 		{
-			event = events.remove();
+			event = events.qremove();
 			System.out.println(event+" se réaliserait à t="+event.date);
 		}
 	}

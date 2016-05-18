@@ -1,15 +1,8 @@
 package smartCars;
 
-import java.util.PriorityQueue;
-import java.util.concurrent.PriorityBlockingQueue;
-
 public class Time {
 	
 	public static double time;
-
-	// évènements à survenir dans l'ordre chronologique, une fois calculés
-	public static PriorityBlockingQueue<AbstractEvent> events = new PriorityBlockingQueue<AbstractEvent>();
-	
 
 	public static double duration(Road road, double distance)
 	{
@@ -33,11 +26,8 @@ public class Time {
 	public static synchronized void realDates(GraphState graph)
 	{
 		// initialisation
-		PriorityQueue<AbstractEvent> eventsCopy = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
-		for(AbstractEvent event : graph.events)
-		{
-			eventsCopy.add(event);
-		}
+		PriorityQueue eventsCopy = new PriorityQueue();
+		eventsCopy.qaddAll(graph.events);
 		for(AbstractVehicle vehicle : graph.vehicles)
 		{
 			vehicle.setTempEvents();
@@ -46,10 +36,10 @@ public class Time {
 		AbstractEvent vehicleEvent;
 		double difference;
 		
-		while(!eventsCopy.isEmpty())
+		while(!eventsCopy.qisEmpty())
 		{
-			event = eventsCopy.remove();
-			vehicleEvent = event.vehicle.tempEvents.remove();
+			event = eventsCopy.qremove();
+			vehicleEvent = event.vehicle.tempEvents.qremove();
 			
 			System.out.print(event+"   ");
 			System.out.println(event.date);
@@ -58,10 +48,25 @@ public class Time {
 			System.out.println("Prout");
 			if(!event.equals(vehicleEvent))
 			{
+				event = eventsCopy.qremove();
+				vehicleEvent = event.vehicle.tempEvents.qremove();
+				System.out.print(event+"   ");
+				System.out.println(event.date);
+				System.out.print(vehicleEvent+"   ");
+				System.out.println(vehicleEvent.date);
+				System.out.println("Pourquoi?");
+				
 				throw new IllegalStateException("Les évènements ne sont pas retournés dans l'ordre.");
 			}
-			
-			if(event.nature==1 & !event.trueDate)
+
+			if(event.nature==1 & event.trueDate)
+			{
+				EventWaitingOnRoad.setLeavingDate(event);
+				// la ligne suivante doit être exécutée
+				// impérativement après le calcul de leavingDate
+				event.road.eventsWaitingOnRoad.add(event);
+			}
+			else if(event.nature==1 & !event.trueDate)
 			{
 				difference = event.date;
 				event.date = EventWaitingOnRoad.relativeDate(event);
@@ -69,25 +74,9 @@ public class Time {
 				System.out.print("\nChangement de date : "+event+"   ");
 				System.out.println(event.date+"\n");
 				difference = event.date-difference;
-				increaseFollowingDates(event, difference);
-				event.vehicle.tempEvents.add(event);
-				eventsCopy.add(event);
-			}
-			else if(event.nature==1 & event.trueDate)
-			{
-				EventWaitingOnRoad.setLeavingDate(event);
-				// la ligne suivante doit être exécutée
-				// impérativement après le calcul de leavingDate
-				event.road.eventsWaitingOnRoad.add(event);
-			}
-			else if(event.nature==2 & !event.trueDate)
-			{
-				difference = event.eventWaitingOnRoad.leavingDate-event.date;
-				increaseFollowingDates(event, difference);
-				event.date=event.eventWaitingOnRoad.leavingDate;
-				event.trueDate = true;
-				event.vehicle.tempEvents.add(event);
-				eventsCopy.add(event);
+				event.vehicle.tempEvents.qdates(difference);
+				event.vehicle.tempEvents.qadd(event);
+				eventsCopy.qadd(event);
 			}
 			else if(event.nature==2 & event.trueDate)
 			{
@@ -96,21 +85,19 @@ public class Time {
 					throw new IllegalStateException("La liste des EventWaitingOnRoad est corrompue.");
 				}
 			}
+			else if(event.nature==2 & !event.trueDate)
+			{
+				difference = event.eventWaitingOnRoad.leavingDate-event.date;
+				event.vehicle.tempEvents.qdates(difference);
+				event.date=event.eventWaitingOnRoad.leavingDate;
+				event.trueDate = true;
+				event.vehicle.tempEvents.qadd(event);
+				eventsCopy.qadd(event);
+			}
+			
 		}
 	}
 	
-	public static void increaseFollowingDates(AbstractEvent event, double difference)
-	{
-		if(difference<0)
-		{
-			System.out.println("\n*** Be aware *** Debug time has come!  "+difference);
-			throw new IllegalArgumentException("L'incrément de temps doit être positif.");
-		}
-		for(AbstractEvent e : event.vehicle.tempEvents)
-		{
-			e.date+=difference;
-		}
-	}
 	
 	/* Bonus : système de gestion des heures de pointe.
 

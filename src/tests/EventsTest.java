@@ -26,9 +26,9 @@ public class EventsTest {
 		
 		AbstractEvent event;
 		System.out.println();
-		while(!vehicleTest.events.isEmpty())
+		while(!vehicleTest.events.qisEmpty())
 		{
-			event = vehicleTest.events.remove();
+			event = vehicleTest.events.qremove();
 			System.out.print(event+"   ");
 			System.out.println(event.date);
 		}
