@@ -189,7 +189,7 @@ public class SvgParser {
 			
 			// Détermination de speed
 			if (geometricFigure.getAttribute("speed").isEmpty()) { // On utilise la valeur par défaut
-				speed = 50000;
+				speed = 50; //en km/h
 			} else {
 				speed = Float.parseFloat(geometricFigure.getAttribute("speed"));
 			}
