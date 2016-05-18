@@ -25,6 +25,7 @@ public class Time {
 	
 	public static synchronized void realDates(GraphState graph)
 	{
+		System.out.println("<---   Calcul des dates réelles   --->");
 		// initialisation
 		PriorityQueue eventsCopy = new PriorityQueue();
 		eventsCopy.qaddAll(graph.events);
@@ -43,8 +44,6 @@ public class Time {
 			
 			System.out.print(event+"   ");
 			System.out.println(event.date);
-			System.out.print(vehicleEvent+"   ");
-			System.out.println(vehicleEvent.date+"\n");
 			if(!event.equals(vehicleEvent))
 			{
 				event = eventsCopy.qremove();
@@ -65,7 +64,7 @@ public class Time {
 				event.date = EventWaitingOnRoad.relativeDate(event);
 				event.trueDate = true;
 				System.out.print("Changement de date : "+event+"   ");
-				System.out.println(event.date+"\n\n");
+				System.out.println(event.date);
 				difference = event.date-difference;
 				event.vehicle.tempEvents.qdates(difference);
 				event.vehicle.tempEvents.qadd(event);
@@ -86,9 +85,9 @@ public class Time {
 				event.trueDate = true;
 				event.vehicle.tempEvents.qadd(event);
 				eventsCopy.qadd(event);
-			}
-			
+			}	
 		}
+		System.out.println();
 	}
 	
 	

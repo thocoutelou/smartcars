@@ -97,12 +97,5 @@ public class Dijkstra {
 
 		return path;
 	}
-	
-	
-	//TODO (ou pas)
-	public void changePath(ArrayList<AbstractEvent> events)
-	{
-		
-	}
 
 }

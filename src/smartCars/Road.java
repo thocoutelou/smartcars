@@ -49,8 +49,7 @@ public class Road {
 	public Queue<AbstractVehicle> vehiclesOnRoad = new LinkedList<AbstractVehicle>();
 	// dont véhicules en attente de sortie de la route
 	public Queue<AbstractVehicle> waitingVehicles = new LinkedList<AbstractVehicle>();
-	// évènements implémentant les attentes de traversée de la prochaine intersection :
-	// plus la date d'un évènement est proche, plus il sera situé en fin de liste
+	// évènements implémentant les attentes de traversée de la prochaine intersection
 	public PriorityQueue eventsWaitingOnRoad = new PriorityQueue();
 	
 	/**
@@ -214,7 +213,6 @@ public class Road {
 		// Test à effets de bord
 		if(!decreaseLength(vehicle.length+AbstractVehicle.minSpaceBetweenVehicles))
 		{
-			// Vive la programmation objet pour ses tirades de logique dure
 			vehicle.location.currentRoad.destination.obstruction = true;
 			throw new IllegalStateException("La saturation de la route "+identifier+" obstrue l'intersection "+vehicle.location.currentRoad.origin);
 		}
@@ -250,14 +248,6 @@ public class Road {
 		//TODO Modifier en détail la "location" du véhicule
 		leavingVehicle.location.currentRoad = nextRoad;
 		nextRoad.vehiclesOnRoad.add(leavingVehicle);
-		try
-		{
-			leavingVehicle.itinary.push(leavingVehicle.path.pop());
-		}
-		catch(EmptyStackException e)
-		{
-			throw new IllegalStateException("Mauvais appel de formerWaitingVehicle : le véhicule en attente est déjà arrivé à destination");
-		}
 	}
 	
 	// Associe à un point M le point le plus proche qui appartient au segment Road

@@ -37,7 +37,7 @@ public class GraphState extends Graph {
 	 * les véhicules d'itinéraires les plus longs sont prioritaires.
 	 * @param vehiclesInGraph
 	 */
-	public void stackVehicles(ArrayList<AbstractVehicle> vehiclesInGraph)
+	public synchronized void stackVehicles(Stack<AbstractVehicle> vehiclesInGraph)
 	{
 		Stack<AbstractVehicle> vehicles = new Stack<AbstractVehicle>();
 		while(!vehiclesInGraph.isEmpty())
@@ -47,10 +47,19 @@ public class GraphState extends Graph {
 		this.vehicles = vehicles;
 	}
 	
+	// Version 1, sans priorité pour les véhicules
 	public void calculatePaths()
 	{
-		for(AbstractVehicle vehicle : vehicles)
+		stackVehicles(vehicles);
+		Stack<AbstractVehicle> vehiclesCopy = new Stack<AbstractVehicle>();
+		AbstractVehicle vehicle;
+		for(AbstractVehicle v : vehicles)
 		{
+			vehiclesCopy.add(v);
+		}
+		while(!vehiclesCopy.isEmpty())
+		{
+			vehicle = vehiclesCopy.pop();
 			Dijkstra.calculatePath(this, vehicle);
 			vehicle.printPath();
 		}

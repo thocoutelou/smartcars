@@ -12,12 +12,8 @@ public class Graph {
 	
 	// intersections du graphe (suffit à définir le graphe))
 	public ArrayList<AbstractIntersection> intersections = new ArrayList<AbstractIntersection>();
-	// nombre d'intersections
-	public int numberOfIntersections;
 	// routes du graphe
 	public ArrayList<Road> roads = new ArrayList<Road>();
-	//nombre de routes
-	public int numberOfRoads;
 	// matrice de Floyd-Warshall en devenir du graphe, initialisée dans le constructeur
 	public Cost[][] costsMatrix;
 
@@ -30,9 +26,7 @@ public class Graph {
 	{
 		this.intersections = intersections;
 		this.roads = roads;
-		this.numberOfIntersections = intersections.size();
-		this.numberOfRoads = roads.size();
-		//this.costsMatrix = Cost.floydWarshall(this);
+		this.costsMatrix = Cost.floydWarshall(this);
 		listRoads();
 	}
 

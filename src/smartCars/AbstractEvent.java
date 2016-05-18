@@ -26,20 +26,11 @@ public class AbstractEvent {
 		this.date = date+Math.random();
 	}
 
-	public static class EventChronos implements Comparator<AbstractEvent>
+	public static class Chronologic implements Comparator<AbstractEvent>
 	{
 		public int compare(AbstractEvent eventA, AbstractEvent eventB)
 		{
 			if(eventA.date<eventB.date) return -1;
-			else return 1;
-		}
-	}
-	
-	public static class EventAntiChronos implements Comparator<AbstractEvent>
-	{
-		public int compare(AbstractEvent eventA, AbstractEvent eventB)
-		{
-			if(eventA.date>=eventB.date) return -1;
 			else return 1;
 		}
 	}

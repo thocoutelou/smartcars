@@ -109,24 +109,26 @@ public class Cost {
 	 */
 	public static Cost[][] floydWarshall(Graph graph)
 	{
-		System.out.println("Nombre d'intersections: "+graph.numberOfIntersections);
-		Cost costsMatrix[][] = new Cost[graph.numberOfIntersections][graph.numberOfIntersections];
-		for(int i=0; i<graph.numberOfIntersections; i++)
+		int start = AbstractIntersection.identificator-graph.intersections.size();
+		Road road;
+		Cost costsMatrix[][] = new Cost[AbstractIntersection.identificator][AbstractIntersection.identificator];
+		for(int i=start; i<AbstractIntersection.identificator; i++)
 		{
-			for(int j=0; j<graph.numberOfIntersections; j++)
+			for(int j=start; j<AbstractIntersection.identificator; j++)
 			{
 				costsMatrix[j][i] = new Cost();
 			}
 		}
-		for(int i = 0; i < graph.roads.size(); i ++)
+		for(int i=0; i<graph.roads.size(); i++)
 		{
-			costsMatrix[graph.roads.get(i).destination.identifier][graph.roads.get(i).origin.identifier] = graph.roads.get(i).cost;
+			road=graph.roads.get(i);
+			costsMatrix[road.destination.identifier][road.origin.identifier] = Cost.intersection(road);
 		}
-		for(int k=0; k<graph.numberOfIntersections; k++)
+		for(int k=start; k<AbstractIntersection.identificator; k++)
 		{
-			for(int i=0; i<graph.numberOfIntersections; i++)
+			for(int i=start; i<AbstractIntersection.identificator; i++)
 			{
-				for(int j=0; j<graph.numberOfIntersections; j++)
+				for(int j=start; j<AbstractIntersection.identificator; j++)
 				{
 					costsMatrix[j][i] = minimum(costsMatrix[j][i], sum(costsMatrix[k][i], costsMatrix[j][k]));
 				}

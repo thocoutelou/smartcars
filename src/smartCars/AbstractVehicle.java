@@ -30,8 +30,6 @@ public class AbstractVehicle {
 	public Stack<Road> tempPath;
 	// La trajectoire du véhicule est-elle calculée ?
 	protected boolean pathCalculated = false;
-	// sauvegarde les routes déjà empruntées en vue de les revoir
-	protected Stack<Road> itinary;
 	// évènements calculés à partir de Dijkstra
 	public PriorityQueue events = new PriorityQueue();
 	public PriorityQueue tempEvents = new PriorityQueue();
@@ -169,7 +167,7 @@ public class AbstractVehicle {
 	 * @param vehicles à traiter
 	 * @return véhicule dont la destination est la moins coûteuse
 	 */
-	public static AbstractVehicle lessPriorityVehicle(Graph graph, ArrayList<AbstractVehicle> vehicles)
+	public static AbstractVehicle lessPriorityVehicle(Graph graph, Stack<AbstractVehicle> vehicles)
 	{
 		AbstractVehicle lessPriorityVehicle = vehicles.get(0);
 		for(AbstractVehicle v : vehicles)
