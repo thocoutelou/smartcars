@@ -6,6 +6,11 @@ public class PriorityQueue {
 	
 	private LinkedList<AbstractEvent> queue = new LinkedList<AbstractEvent>();
 	
+	public int qsize()
+	{
+		return queue.size();
+	}
+	
 	public boolean qisEmpty()
 	{
 		return queue.isEmpty();
@@ -30,6 +35,25 @@ public class PriorityQueue {
 		return event;
 	}
 	
+	public AbstractEvent aqelement()
+	{
+		if(queue.isEmpty())
+		{
+			throw new IllegalStateException("La file est vide.");
+		}
+		AbstractEvent event = queue.peek();
+		double max = event.date;
+		for(AbstractEvent e : queue)
+		{
+			if(max<e.date)
+			{
+				max=e.date;
+				event=e;
+			}
+		}
+		return event;
+	}
+	
 	public AbstractEvent qremove()
 	{
 		if(queue.isEmpty())
@@ -43,6 +67,26 @@ public class PriorityQueue {
 			if(e.date<min)
 			{
 				min=e.date;
+				event=e;
+			}
+		}
+		queue.remove(event);
+		return event;
+	}
+	
+	public AbstractEvent aqremove()
+	{
+		if(queue.isEmpty())
+		{
+			throw new IllegalStateException("La file est vide.");
+		}
+		AbstractEvent event = queue.peek();
+		double max = event.date;
+		for(AbstractEvent e : queue)
+		{
+			if(max<e.date)
+			{
+				max=e.date;
 				event=e;
 			}
 		}
@@ -92,6 +136,20 @@ public class PriorityQueue {
 		{
 			e.date+=d;
 		}
+	}
+	
+	public String toString()
+	{
+		String newline = System.getProperty("line.separator");
+		String result = new String();
+		PriorityQueue pq = getCopy();
+		AbstractEvent e;
+		while(!pq.qisEmpty())
+		{
+			e=pq.qremove();
+			result+=e.toString()+" de date "+e.date+"s"+newline;
+		}
+		return result;
 	}
 	
 }

@@ -2,10 +2,10 @@ package tests;
 
 import org.junit.Test;
 
-import smartCars.AbstractEvent;
+import smartCars.AbstractVehicle;
 import smartCars.GraphState;
-import smartCars.PriorityQueue;
 import smartCars.SvgParser;
+import smartCars.Time;
 
 public class ResolutionTest {
 	
@@ -14,29 +14,21 @@ public class ResolutionTest {
 	@Test
 	public void test() {
 		
-		//Parse du graph3
-		String fileName=project_location + "/media/exemple/3.svg";
-		GraphState graph3 = SvgParser.parseGraphState(fileName);
-		
-		graph3.calculatePaths();
-		graph3.gatherEvents();
-		
 		//Parse du graph4
-		fileName=project_location + "/media/exemple/4.svg";
+		String fileName=project_location + "/media/exemple/4.svg";
 		GraphState graph4 = SvgParser.parseGraphState(fileName);
 		
 		graph4.calculatePaths();
 		graph4.gatherEvents();
+		Time.realDates(graph4);
 		
-		System.out.println("Vérification de la chronologie de ces évènements (dates factices) :");
-		PriorityQueue events = new PriorityQueue();
-		events.qaddAll(graph4.events);
-		AbstractEvent event;
-		while(!events.qisEmpty())
+		for(AbstractVehicle v : graph4.vehicles)
 		{
-			event = events.qremove();
-			System.out.println(event+" se réaliserait à t="+event.date);
+			System.out.println(v);
+			System.out.println(v.events);
 		}
+		System.out.println("Liste des évènements du graphe :");
+		System.out.println(graph4.events);
 	}
 
 }

@@ -16,20 +16,20 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		event.road.waitingVehicles.add(event.vehicle);
 		event.vehicle.location.waitingForIntersection = true;
 		event.road.length-=event.vehicle.length+AbstractVehicle.minSpaceBetweenVehicles;
-		event.road.eventsWaitingOnRoad.add(event);
+		event.road.eventsWaitingOnRoad.qadd(event);
 		event.vehicle.location.actualizeLocation(event.road, event.road.length, event.date);
 	}
 	
 	// doit absolument être appelée avant l'exécution de l'évènement (event.road.eventsWaitingOnRoad.get(0))
 	public static synchronized void setLeavingDate(AbstractEvent event)
 	{
-		if(event.road.eventsWaitingOnRoad.isEmpty())
+		if(event.road.eventsWaitingOnRoad.qisEmpty())
 		{
 			event.leavingDate = event.date+event.road.averageWaitingTime;
 		}
 		else
 		{
-			AbstractEvent lastEventWaitingOnRoad = event.road.eventsWaitingOnRoad.peek();
+			AbstractEvent lastEventWaitingOnRoad = event.road.eventsWaitingOnRoad.aqelement();
 			System.out.println("Consultation de la liste event.eventsWaitingOnRoad");
 			event.leavingDate = lastEventWaitingOnRoad.leavingDate+event.road.averageWaitingTime;
 		}
@@ -47,13 +47,13 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		Road road = event.road;
 		double initialDate = event.date;
 		double absoluteDate = absoluteDate(road, initialDate);
-		if(road.eventsWaitingOnRoad.isEmpty()) return absoluteDate;
+		if(road.eventsWaitingOnRoad.qisEmpty()) return absoluteDate;
 		else
 		{
 			AbstractEvent[] eWORArray = road.eventsWaitingOnRoadToArray();
 			int left = 0;
 			double arrivingDate, distance;
-			if(road.eventsWaitingOnRoad.peek().leavingDate<absoluteDate)
+			if(road.eventsWaitingOnRoad.aqelement().leavingDate<absoluteDate)
 				return absoluteDate;
 			else
 			{

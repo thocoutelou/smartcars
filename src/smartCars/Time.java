@@ -44,18 +44,11 @@ public class Time {
 			System.out.print(event+"   ");
 			System.out.println(event.date);
 			System.out.print(vehicleEvent+"   ");
-			System.out.println(vehicleEvent.date);
-			System.out.println("Prout");
+			System.out.println(vehicleEvent.date+"\n");
 			if(!event.equals(vehicleEvent))
 			{
 				event = eventsCopy.qremove();
 				vehicleEvent = event.vehicle.tempEvents.qremove();
-				System.out.print(event+"   ");
-				System.out.println(event.date);
-				System.out.print(vehicleEvent+"   ");
-				System.out.println(vehicleEvent.date);
-				System.out.println("Pourquoi?");
-				
 				throw new IllegalStateException("Les évènements ne sont pas retournés dans l'ordre.");
 			}
 
@@ -64,15 +57,15 @@ public class Time {
 				EventWaitingOnRoad.setLeavingDate(event);
 				// la ligne suivante doit être exécutée
 				// impérativement après le calcul de leavingDate
-				event.road.eventsWaitingOnRoad.add(event);
+				event.road.eventsWaitingOnRoad.qadd(event);
 			}
 			else if(event.nature==1 & !event.trueDate)
 			{
 				difference = event.date;
 				event.date = EventWaitingOnRoad.relativeDate(event);
 				event.trueDate = true;
-				System.out.print("\nChangement de date : "+event+"   ");
-				System.out.println(event.date+"\n");
+				System.out.print("Changement de date : "+event+"   ");
+				System.out.println(event.date+"\n\n");
 				difference = event.date-difference;
 				event.vehicle.tempEvents.qdates(difference);
 				event.vehicle.tempEvents.qadd(event);
@@ -80,7 +73,7 @@ public class Time {
 			}
 			else if(event.nature==2 & event.trueDate)
 			{
-				if(!event.road.eventsWaitingOnRoad.remove(event.eventWaitingOnRoad))
+				if(!event.road.eventsWaitingOnRoad.qremove().equals(event.eventWaitingOnRoad))
 				{
 					throw new IllegalStateException("La liste des EventWaitingOnRoad est corrompue.");
 				}

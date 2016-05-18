@@ -3,7 +3,6 @@ package smartCars;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 import java.util.Queue;
 
 /**
@@ -52,7 +51,7 @@ public class Road {
 	public Queue<AbstractVehicle> waitingVehicles = new LinkedList<AbstractVehicle>();
 	// évènements implémentant les attentes de traversée de la prochaine intersection :
 	// plus la date d'un évènement est proche, plus il sera situé en fin de liste
-	public PriorityQueue<AbstractEvent> eventsWaitingOnRoad = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventAntiChronos());
+	public PriorityQueue eventsWaitingOnRoad = new PriorityQueue();
 	
 	/**
 	 * constructeur unique, doit être utilisé seulement par le parser
@@ -135,47 +134,21 @@ public class Road {
 		return length;
 	}
 	
-	public PriorityQueue<AbstractEvent> eventsWaitingOnRoadCopy()
+	public PriorityQueue eventsWaitingOnRoadCopy()
 	{
-		PriorityQueue<AbstractEvent> eWORCopy = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventAntiChronos());
-		for(AbstractEvent e : eventsWaitingOnRoad)
-		{
-			eWORCopy.add(e);
-		}
-		return eWORCopy;
-	}
-	
-	public PriorityQueue<AbstractEvent> reverseEventsWaitingOnRoadCopy()
-	{
-		PriorityQueue<AbstractEvent> eWORCopy = new PriorityQueue<AbstractEvent>(new AbstractEvent.EventChronos());
-		for(AbstractEvent e : eventsWaitingOnRoad)
-		{
-			eWORCopy.add(e);
-		}
+		PriorityQueue eWORCopy = new PriorityQueue();
+		eWORCopy.qaddAll(eventsWaitingOnRoad);
 		return eWORCopy;
 	}
 	
 	public AbstractEvent[] eventsWaitingOnRoadToArray()
 	{
-		PriorityQueue<AbstractEvent> eWORCopy = eventsWaitingOnRoadCopy();
-		AbstractEvent[] eWORArray = new AbstractEvent[eWORCopy.size()];
+		PriorityQueue eWORCopy = eventsWaitingOnRoadCopy();
+		AbstractEvent[] eWORArray = new AbstractEvent[eWORCopy.qsize()];
 		int c = 0;
-		while(!eWORCopy.isEmpty())
+		while(!eWORCopy.qisEmpty())
 		{
-			eWORArray[c]=eWORCopy.remove();
-			c++;
-		}
-		return eWORArray;
-	}
-	
-	public AbstractEvent[] reverseEventsWaitingOnRoadToArray()
-	{
-		PriorityQueue<AbstractEvent> eWORCopy = reverseEventsWaitingOnRoadCopy();
-		AbstractEvent[] eWORArray = new AbstractEvent[eWORCopy.size()];
-		int c = 0;
-		while(!eWORCopy.isEmpty())
-		{
-			eWORArray[c]=eWORCopy.remove();
+			eWORArray[c]=eWORCopy.aqremove();
 			c++;
 		}
 		return eWORArray;

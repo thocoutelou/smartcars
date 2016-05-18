@@ -13,7 +13,7 @@ public class EventLeaveRoad extends AbstractEvent {
 	
 	public static synchronized void executeEvent(AbstractEvent event, AbstractEvent eventWOR)
 	{
-		if(!event.road.eventsWaitingOnRoad.remove(eventWOR))
+		if(!event.road.eventsWaitingOnRoad.qremove(eventWOR))
 		{
 			throw new IllegalStateException("La liste des eventsWaitingOnRoad est corrompue.");
 		}

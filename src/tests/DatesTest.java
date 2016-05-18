@@ -30,6 +30,7 @@ public class DatesTest {
 			event = events.qremove();
 			System.out.println(event+" se réaliserait à t="+event.date);
 		}
+		System.out.println("\n");
 		
 		Time.realDates(graph3);
 		
