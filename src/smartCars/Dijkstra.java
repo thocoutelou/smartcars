@@ -22,6 +22,7 @@ public class Dijkstra {
 	public static void calculatePath(Graph graph, AbstractVehicle vehicle) throws IllegalStateException
 	{
 		System.out.println("<---   Dijkstra pour le véhicule "+vehicle.identifier+"   --->");
+		System.out.println("Coût approximatif de l'itinéraire : "+graph.costsMatrix[vehicle.intersectionBeforeEnd().identifier][vehicle.intersectionAfterStart().identifier].getCost());
 		
 		AbstractIntersection origin = vehicle.intersectionAfterStart();
 		ArrayList<Road> nextRoads = new ArrayList<Road>(origin.getLeavingRoads());

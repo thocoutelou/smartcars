@@ -33,6 +33,15 @@ public class Cost {
 		this.finite = true;
 	}
 	
+	public double getCost()
+	{
+		if(!finite)
+		{
+			throw new IllegalStateException("Le coût de cet itinéraire est infini.");
+		}
+		else return absoluteCost;
+	}
+	
 	/**
 	 * Compare les coûts a et b,
 	 * avec priorité pour le coût a.
