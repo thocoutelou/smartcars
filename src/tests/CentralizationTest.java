@@ -29,8 +29,7 @@ public class CentralizationTest {
 		graph4.gatherEvents();
 		
 		System.out.println("Vérification de la chronologie de ces évènements (dates factices) :");
-		PriorityQueue events = new PriorityQueue();
-		events.qaddAll(graph4.events);
+		PriorityQueue events = graph4.getAllEventsCopy();
 		AbstractEvent event;
 		while(!events.qisEmpty())
 		{

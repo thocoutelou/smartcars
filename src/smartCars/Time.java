@@ -6,7 +6,7 @@ public class Time {
 
 	public static double duration(Road road, double distance)
 	{
-		return 3600.*distance/road.speed;
+		return 3.6*distance/road.speed;
 	}
 	
 	public static double startingTime(GraphState graphState) throws IllegalStateException
@@ -27,12 +27,8 @@ public class Time {
 	{
 		System.out.println("<---   Calcul des dates réelles   --->");
 		// initialisation
-		PriorityQueue eventsCopy = new PriorityQueue();
-		eventsCopy.qaddAll(graph.events);
-		for(AbstractVehicle vehicle : graph.vehicles)
-		{
-			vehicle.setTempEvents();
-		}
+		PriorityQueue eventsCopy = graph.getAllEventsCopy();
+		graph.setVehiclesTempEvents();
 		AbstractEvent event;
 		AbstractEvent vehicleEvent;
 		double difference;

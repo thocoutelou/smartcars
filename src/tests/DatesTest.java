@@ -35,7 +35,7 @@ public class DatesTest {
 		Time.realDates(graph3);
 		
 		System.out.println("\nVérification de la chronologie de ces évènements (dates réelles) :");
-		events.qaddAll(graph3.events);
+		events = graph3.getAllEventsCopy();
 		
 		while(!events.qisEmpty())
 		{

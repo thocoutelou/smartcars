@@ -11,17 +11,11 @@ public class EventLeaveRoad extends AbstractEvent {
 		nature = 2;
 	}
 	
-	public static synchronized void executeEvent(AbstractEvent event, AbstractEvent eventWOR)
+	public static synchronized void executeEvent(AbstractEvent event)
 	{
-		if(!event.road.eventsWaitingOnRoad.qremove(eventWOR))
-		{
-			throw new IllegalStateException("La liste des eventsWaitingOnRoad est corrompue.");
-		}
-		event.road.waitingVehicles.remove(event.vehicle);
-		event.vehicle.location.waitingForIntersection = false;
-		event.road.vehiclesOnRoad.remove(event.vehicle);
+		event.road.formerWaitingVehicle(event.vehicle);
 		event.road.destination.vehiclesOnIntersection.add(event.vehicle);
-		event.vehicle.location.actualizeLocation(event.road, event.road.length, event.date);
+		event.vehicle.location.actualizeLocation(event.road, event.road.length, event.date, event.nature);
 	}
 	
 	public static void nextEvent(AbstractEvent event, Stack<AbstractEvent> tempEvents)

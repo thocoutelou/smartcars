@@ -15,7 +15,7 @@ public class GraphState extends Graph {
 	public Stack<AbstractVehicle> vehicles;
 	
 	// file (FIFO en fonction des dates) des évènements à survenir dans le graphe
-	public PriorityQueue events = new PriorityQueue();
+	public PriorityQueue allEvents = new PriorityQueue();
 	
 	/**
 	 * Constructeur unique, ne doit être appelé que par le parser.
@@ -47,6 +47,21 @@ public class GraphState extends Graph {
 		this.vehicles = vehicles;
 	}
 	
+	public void setVehiclesTempEvents()
+	{
+		for(AbstractVehicle vehicle : vehicles)
+		{
+			vehicle.setTempEvents();
+		}
+	}
+	
+	public PriorityQueue getAllEventsCopy()
+	{
+		PriorityQueue eventsCopy = new PriorityQueue();
+		eventsCopy.qaddAll(allEvents);
+		return eventsCopy;
+	}
+	
 	// Version 1, sans priorité pour les véhicules
 	public void calculatePaths()
 	{
@@ -70,9 +85,9 @@ public class GraphState extends Graph {
 		for(AbstractVehicle vehicle : vehicles)
 		{
 			AbstractEvent.vehicleEvents(vehicle);
-			this.events.qaddAll(vehicle.events);
+			this.allEvents.qaddAll(vehicle.events);
 		}
-		System.out.println("\nActualisation de l'état du graphe :\n"+this.events+"\n\n");
+		System.out.println("\nActualisation de l'état du graphe :\n"+this.allEvents+"\n\n");
 	}
 	
 	public void resolve()
@@ -87,7 +102,51 @@ public class GraphState extends Graph {
 			System.out.println(v.events);
 		}
 		System.out.println("Liste des évènements du graphe :");
-		System.out.println(events);
+		System.out.println(allEvents);
+	}
+	
+	// part du principe que Time.time est modifié à la date souhaitée
+	public void setCurrentLocations()
+	{
+		setVehiclesTempEvents();
+		PriorityQueue eventsCopy = getAllEventsCopy();
+		AbstractEvent event = eventsCopy.qremove();;
+		AbstractEvent vehicleEvent = event.vehicle.tempEvents.qremove();
+		do
+		{
+			if(!event.equals(vehicleEvent))
+			{
+				throw new IllegalStateException("Les évènements ne sont pas retournés dans l'ordre.");
+			}
+			if(event.date<=Time.time)
+			{
+				if(event.nature==0)
+				{
+					EventVehicleStart.executeEvent(event);
+				}
+				if(event.nature==1)
+				{
+					EventWaitingOnRoad.executeEvent(event);
+				}
+				if(event.nature==2)
+				{
+					EventLeaveRoad.executeEvent(event);
+				}
+				if(event.nature==3)
+				{
+					EventEnterRoad.executeEvent(event);
+				}
+				if(event.nature==4)
+				{
+					EventVehicleEnd.executeEvent(event);
+				}
+			}
+			else
+			{
+				break;
+			}
+		}
+		while(!allEvents.qisEmpty());
 	}
 	
 	public String toString(){

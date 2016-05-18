@@ -13,7 +13,7 @@ public class EventVehicleStart extends AbstractEvent{
 	public static synchronized void executeEvent(AbstractEvent event)
 	{
 		event.road.vehiclesOnRoad.add(event.vehicle);
-		event.vehicle.location.actualizeLocation(event.road, event.vehicle.location.initialPosition, event.date);
+		event.vehicle.location.actualizeLocation(event.road, event.vehicle.location.initialPosition, event.date, event.nature);
 	}
 	
 	// passage en statique à cause de l'impossibilité de cast

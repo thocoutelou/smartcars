@@ -14,7 +14,7 @@ public class EventEnterRoad extends AbstractEvent {
 	{
 		event.road.origin.vehiclesOnIntersection.remove(event.vehicle);
 		event.road.vehiclesOnRoad.add(event.vehicle);
-		event.vehicle.location.actualizeLocation(event.road, 0., event.date);
+		event.vehicle.location.actualizeLocation(event.road, 0., event.date, event.nature);
 	}
 	
 	// date de l'objet

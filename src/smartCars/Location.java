@@ -26,6 +26,8 @@ public class Location {
 	public double currentPosition;
 	public double currentDate;
 	
+	public int lastEventNature = 4;
+	
 	/**
 	 * Constructeur unique, ne doit être utilisé que par le parser,
 	 * ou lors de l'insertion d'un nouveau véhicule.
@@ -83,11 +85,12 @@ public class Location {
 	 * Met à jour la localisation courante du véhicule.
 	 * Cette méthode sera appelée lors de l'exécution des évènements.
 	 */
-	public void actualizeLocation(Road road, double position, double date)
+	public void actualizeLocation(Road road, double position, double date, int lastEventNature)
 	{
 		currentRoad = road;
 		currentPosition = position;
 		currentDate = date;
+		this.lastEventNature = lastEventNature;
 	}
 	
 	/**

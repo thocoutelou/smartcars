@@ -16,15 +16,13 @@ public class EventVehicleEnd extends AbstractEvent{
 		{
 			throw new IllegalStateException("L'itinéraire est faux ou n'a pas été mis à jour.");
 		}
-		else
+		event.vehicle.location.finalDate = event.date;
+		event.road.vehiclesOnRoad.remove(event.vehicle);
+		event.vehicle.location.actualizeLocation(event.road, event.vehicle.location.finalPosition, event.date, event.nature);
+		if(!event.vehicle.location.checkFinalLocation())
 		{
-			event.road.vehiclesOnRoad.remove(event.vehicle);
-			event.vehicle.location.actualizeLocation(event.road, event.vehicle.location.finalPosition, event.date);
-			/*if(!event.vehicle.location.checkFinalLocation())
-			{
-				throw new IllegalStateException("Le véhicule n'est pas arrivé à bon port.");
-			}*/
+			throw new IllegalStateException("Le véhicule n'est pas arrivé à bon port.");
 		}
 	}
-	
+		
 }

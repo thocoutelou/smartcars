@@ -11,13 +11,11 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		leavingDate = date+1.;
 	}
 	
-	public static synchronized void executeEvent(AbstractEvent event)
+	public static synchronized void executeEvent(AbstractEvent event) throws IllegalStateException
 	{
-		event.road.waitingVehicles.add(event.vehicle);
-		event.vehicle.location.waitingForIntersection = true;
-		event.road.length-=event.vehicle.length+AbstractVehicle.minSpaceBetweenVehicles;
+		event.road.newWaitingVehicle(event.vehicle);
 		event.road.eventsWaitingOnRoad.qadd(event);
-		event.vehicle.location.actualizeLocation(event.road, event.road.length, event.date);
+		event.vehicle.location.actualizeLocation(event.road, event.road.length, event.date, event.nature);
 	}
 	
 	// doit absolument être appelée avant l'exécution de l'évènement (event.road.eventsWaitingOnRoad.get(0))
@@ -29,9 +27,8 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		}
 		else
 		{
-			AbstractEvent lastEventWaitingOnRoad = event.road.eventsWaitingOnRoad.aqelement();
-			System.out.println("Consultation de la liste event.eventsWaitingOnRoad");
-			event.leavingDate = lastEventWaitingOnRoad.leavingDate+event.road.averageWaitingTime;
+			System.out.println("Consultation de la liste road.eventsWaitingOnRoad");
+			event.leavingDate = event.road.eventsWaitingOnRoad.aqelement().leavingDate+event.road.averageWaitingTime;
 		}
 	}
 	

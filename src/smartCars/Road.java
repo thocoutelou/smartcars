@@ -168,7 +168,7 @@ public class Road {
 	 * @param distance
 	 * @return La longueur de la route a-t-elle pu être diminuée ?
 	 */
-	private boolean decreaseLength(double distance)
+	public boolean decreaseLength(double distance)
 	{
 		// Marge d'erreur de 1 dm
 		if(length+0.1<distance)
@@ -177,7 +177,8 @@ public class Road {
 		}
 		else
 		{
-			length-=distance;
+			if(length<distance) length=0.;
+			else length-=distance;
 			return true;
 		}
 	}
@@ -191,13 +192,14 @@ public class Road {
 	private boolean increaseLength(double distance)
 	{
 		// Marge d'erreur de 1 dm
-		if(length+distance+0.1<absoluteLength)
+		if(length+distance>absoluteLength+0.1)
 		{
 			return false;
 		}
 		else
 		{
-			length+=distance;
+			if(length+distance>absoluteLength) length=absoluteLength;
+			else length-=distance;
 			return true;
 		}
 	}
@@ -218,13 +220,8 @@ public class Road {
 		}
 		else
 		{
-			// Le premier véhicule à attendre
-			// ne doit pas comptabiliser l'espace entre deux véhicules à l'arrêt
-			if(waitingVehicles.isEmpty())
-			{
-				increaseLength(AbstractVehicle.minSpaceBetweenVehicles);
-			}
 			waitingVehicles.add(vehicle);
+			vehicle.location.waitingForIntersection = true;
 		}
 	}
 	
@@ -234,20 +231,19 @@ public class Road {
 	 * peut à présent traverser l'intersection suivante.
 	 * @throws IllegalStateException
 	 */
-	public void formerWaitingVehicle() throws IllegalStateException
+	public void formerWaitingVehicle(AbstractVehicle vehicle) throws IllegalStateException
 	{
 		AbstractVehicle leavingVehicle = waitingVehicles.remove();
-		increaseLength(leavingVehicle.length);
-		if(!vehiclesOnRoad.contains(leavingVehicle))
+		vehicle.location.waitingForIntersection = false;
+		if(!vehicle.equals(leavingVehicle))
+		{
+			throw new IllegalStateException("La liste des eventsWaitingOnRoad est corrompue.");
+		}
+		increaseLength(leavingVehicle.length+AbstractVehicle.minSpaceBetweenVehicles);
+		if(!vehiclesOnRoad.remove(leavingVehicle))
 		{
 			throw new IllegalStateException("Les files de voitures présentes et en attente ne correspondent pas");
 		}
-		vehiclesOnRoad.remove(leavingVehicle);
-		//destination.crossIntersection(leavingVehicle, leavingVehicle.route.element());
-		Road nextRoad = leavingVehicle.path.pop();
-		//TODO Modifier en détail la "location" du véhicule
-		leavingVehicle.location.currentRoad = nextRoad;
-		nextRoad.vehiclesOnRoad.add(leavingVehicle);
 	}
 	
 	// Associe à un point M le point le plus proche qui appartient au segment Road

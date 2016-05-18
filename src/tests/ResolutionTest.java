@@ -2,10 +2,8 @@ package tests;
 
 import org.junit.Test;
 
-import smartCars.AbstractVehicle;
 import smartCars.GraphState;
 import smartCars.SvgParser;
-import smartCars.Time;
 
 public class ResolutionTest {
 	

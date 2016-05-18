@@ -16,7 +16,6 @@ import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -90,7 +89,7 @@ public class SvgParser {
 				//Regex pour récupérer la liste de tout les noeuds rect
 				exp = xPath.compile("//rect");
 				nl = (NodeList)exp.evaluate(document, XPathConstants.NODESET);
-				//Parse de tous les vhéhicules
+				//Parse de tous les véhicules
 				for (int i=0; i<nl.getLength(); i++){
 					final Element rect = (Element) nl.item(i);
 					vehicles.add(parseVehicle(rect,intersections));
@@ -141,7 +140,7 @@ public class SvgParser {
 			CartesianCoordinate point2;
 			AbstractIntersection origin = null;
 			AbstractIntersection destination = null;
-			double speed = 50;
+			double speed;
 			Cost cost;
 			int lane = 1; // Attribut pas encore implémenté
 			double averageWaitingTime;
@@ -189,7 +188,7 @@ public class SvgParser {
 			
 			// Détermination de speed
 			if (geometricFigure.getAttribute("speed").isEmpty()) { // On utilise la valeur par défaut
-				speed = 50000;
+				speed = 50.;
 			} else {
 				speed = Float.parseFloat(geometricFigure.getAttribute("speed"));
 			}
