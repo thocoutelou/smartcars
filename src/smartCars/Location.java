@@ -27,6 +27,7 @@ public class Location {
 	public double currentDate;
 	
 	public int lastEventNature = 4;
+	public boolean onIntersection = false;
 	
 	/**
 	 * Constructeur unique, ne doit être utilisé que par le parser,

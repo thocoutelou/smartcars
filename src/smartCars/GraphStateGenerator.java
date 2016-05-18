@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by tc on 18/05/16.
  */
 public class GraphStateGenerator extends GraphState{
-
+	
     CartesianCoordinate point1 = new CartesianCoordinate(0,0);
     CartesianCoordinate point2 = new CartesianCoordinate(2000,1000);
 
@@ -27,6 +27,5 @@ public class GraphStateGenerator extends GraphState{
         }
         return intersections;
     }
-
 
 }

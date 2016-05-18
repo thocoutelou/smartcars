@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import smartCars.GraphState;
 import smartCars.SvgParser;
+import smartCars.Time;
 
 public class ResolutionTest {
 	
@@ -17,7 +18,10 @@ public class ResolutionTest {
 		GraphState graph4 = SvgParser.parseGraphState(fileName);
 		
 		graph4.resolve();
+		Time.time = 80.;
+		graph4.setCurrentLocations();
 		
+		System.out.println();
 	}
 
 }

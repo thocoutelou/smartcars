@@ -9,6 +9,11 @@ public class Time {
 		return 3.6*distance/road.speed;
 	}
 	
+	public static double distance(Road road, double duration)
+	{
+		return road.speed*duration/3.6;
+	}
+	
 	public static double startingTime(GraphState graphState) throws IllegalStateException
 	{
 		if(graphState.vehicles.isEmpty())

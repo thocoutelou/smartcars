@@ -12,10 +12,6 @@ public class EventVehicleEnd extends AbstractEvent{
 	
 	public static synchronized void executeEvent(AbstractEvent event) throws IllegalStateException
 	{
-		if(event.vehicle.pathCalculated & !event.vehicle.tempPath.isEmpty())
-		{
-			throw new IllegalStateException("L'itinéraire est faux ou n'a pas été mis à jour.");
-		}
 		event.vehicle.location.finalDate = event.date;
 		event.road.vehiclesOnRoad.remove(event.vehicle);
 		event.vehicle.location.actualizeLocation(event.road, event.vehicle.location.finalPosition, event.date, event.nature);

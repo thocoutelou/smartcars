@@ -130,10 +130,46 @@ public class AbstractVehicle {
 	}
 	
 	
-	//TODO mais encore beaucoup de travail avant cette méthode
-	public void calculateLocation(GraphState graph, double date)
+	public void setCurrentPosition()
 	{
+		double duration;
+		double distance;
+		AbstractVehicle[] waitingVehicles;
+		int c=0;
 		
+		// la voiture continue à avancer
+		if(location.lastEventNature==0 | location.lastEventNature==3)
+		{
+			duration = Time.time-location.currentDate;
+			distance = Time.distance(location.currentRoad, duration);
+			location.currentPosition += distance;
+		}
+		if(location.lastEventNature==1)
+		{
+			waitingVehicles = new AbstractVehicle[location.currentRoad.waitingVehicles.size()];
+			for(AbstractVehicle v : location.currentRoad.waitingVehicles)
+			{
+				waitingVehicles[c] = v;
+				c++;
+			}
+			c=waitingVehicles.length-1;
+			distance=0;
+			while(!waitingVehicles[c].equals(this))
+			{
+				if(c<0)
+				{
+					throw new IllegalStateException("La liste des véhicules vehiclesWaitingOnRoad est corrompue.");
+				}
+				distance += waitingVehicles[c].length+AbstractVehicle.minSpaceBetweenVehicles;
+				c--;
+			}
+			location.currentPosition-=distance;
+			
+		}
+		if(location.lastEventNature==2)
+		{
+			location.onIntersection = true;
+		}
 	}
 	
 	/**

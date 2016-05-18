@@ -12,6 +12,10 @@ public class EventVehicleStart extends AbstractEvent{
 	
 	public static synchronized void executeEvent(AbstractEvent event)
 	{
+		if(!event.vehicle.pathCalculated)
+		{
+			throw new IllegalStateException("L'itinéraire n'a pas été mis à jour.");
+		}
 		event.road.vehiclesOnRoad.add(event.vehicle);
 		event.vehicle.location.actualizeLocation(event.road, event.vehicle.location.initialPosition, event.date, event.nature);
 	}

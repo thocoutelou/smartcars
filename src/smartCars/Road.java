@@ -133,6 +133,17 @@ public class Road {
 		return length;
 	}
 	
+	public double lengthFirstWaiting(int first)
+	{
+		AbstractEvent[] eWORArray = eventsWaitingOnRoadToArray();
+		double length = 0.;
+		for(int i=0; i<first; i++)
+		{
+			length += eWORArray[i].vehicle.length+AbstractVehicle.minSpaceBetweenVehicles;
+		}
+		return length;
+	}
+	
 	public PriorityQueue eventsWaitingOnRoadCopy()
 	{
 		PriorityQueue eWORCopy = new PriorityQueue();

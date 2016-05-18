@@ -76,6 +76,7 @@ public class GraphState extends Graph {
 		{
 			vehicle = vehiclesCopy.pop();
 			Dijkstra.calculatePath(this, vehicle);
+			vehicle.pathCalculated = true;
 			vehicle.printPath();
 		}
 	}
@@ -106,14 +107,16 @@ public class GraphState extends Graph {
 	}
 	
 	// part du principe que Time.time est modifié à la date souhaitée
-	public void setCurrentLocations()
+	public synchronized void setCurrentLocations()
 	{
 		setVehiclesTempEvents();
 		PriorityQueue eventsCopy = getAllEventsCopy();
-		AbstractEvent event = eventsCopy.qremove();;
-		AbstractEvent vehicleEvent = event.vehicle.tempEvents.qremove();
-		do
+		AbstractEvent event;
+		AbstractEvent vehicleEvent;
+		while(!eventsCopy.qisEmpty())
 		{
+			event = eventsCopy.qremove();
+			vehicleEvent = event.vehicle.tempEvents.qremove();
 			if(!event.equals(vehicleEvent))
 			{
 				throw new IllegalStateException("Les évènements ne sont pas retournés dans l'ordre.");
@@ -141,12 +144,18 @@ public class GraphState extends Graph {
 					EventVehicleEnd.executeEvent(event);
 				}
 			}
-			else
-			{
-				break;
-			}
+			else break;
 		}
-		while(!allEvents.qisEmpty());
+		
+		setCurrentPositions();
+	}
+	
+	public void setCurrentPositions()
+	{
+		for(AbstractVehicle vehicle : vehicles)
+		{
+			vehicle.setCurrentPosition();
+		}
 	}
 	
 	public String toString(){
