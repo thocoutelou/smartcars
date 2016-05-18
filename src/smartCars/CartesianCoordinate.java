@@ -42,6 +42,12 @@ public class CartesianCoordinate {
 		
 		return closestRoad;
 	}
+
+	static public CartesianCoordinate CartesianCoordinateRandom(CartesianCoordinate point1, CartesianCoordinate point2){
+		double x = Math.random()*(point2.x-point1.x)+point1.x;
+		double y = Math.random()*(point2.y-point1.y)+point2.y;
+		return new CartesianCoordinate(x,y);
+	}
 	
 	public String toString(){
 		return "("+this.x + ", " + this.y + ")";

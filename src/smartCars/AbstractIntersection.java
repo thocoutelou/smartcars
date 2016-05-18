@@ -72,6 +72,19 @@ public class AbstractIntersection {
 		return "Intersection " + this.identifier;
 	}
 
+	public boolean overlap(AbstractIntersection intersectionB){
+		return (this.center.distanceFrom(intersectionB.center) <= Math.min(this.radius,intersectionB.radius) );
+	}
+
+	public boolean overlapList(ArrayList<AbstractIntersection> intersections){
+		for(AbstractIntersection intersection : intersections){
+			if(this.overlap(intersection)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Identification détaillée de l'intersection.
 	 */
