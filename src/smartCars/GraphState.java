@@ -73,7 +73,21 @@ public class GraphState extends Graph {
 			this.events.qaddAll(vehicle.events);
 		}
 		System.out.println("\nActualisation de l'état du graphe :\n"+this.events+"\n\n");
+	}
+	
+	public void resolve()
+	{
+		calculatePaths();
+		gatherEvents();
+		Time.realDates(this);
 		
+		for(AbstractVehicle v : vehicles)
+		{
+			System.out.println(v);
+			System.out.println(v.events);
+		}
+		System.out.println("Liste des évènements du graphe :");
+		System.out.println(events);
 	}
 	
 	public String toString(){
