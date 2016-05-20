@@ -44,19 +44,12 @@ public class AbstractIntersection {
 		this.center= center;
 		this.radius = radius;
 		this.averageTime = averageTime;
-		// l'initialisation de leavingRoads est nécessaire, mais difficile à faire dès l'instanciation de l'intersection
+		// l'initialisation de leavingRoads est nécessaire,
+		// mais impossible à réaliser dès l'instanciation de l'intersection
 		this.leavingRoads = new ArrayList<Road>();
 	}
 
 
-	/**
-	 * Getter des routes sortant de l'intersection.
-	 * @return Routes sortantes
-	 */
-	public ArrayList<Road> getLeavingRoads() {
-		return leavingRoads;
-	}
-	
 	/**
 	 * Calcule la somme du coût d'une route
 	 * et de son intersection d'arrivée.
@@ -71,15 +64,6 @@ public class AbstractIntersection {
 	}
 
 	/**
-	 * Setter des routes sortant de l'intersection.
-	 * Doit être utilisée par le parser en complément du constructeur.
-	 * @param leavingRoads
-	 */
-	public void setLeavingRoads(ArrayList<Road> leavingRoads) {
-		this.leavingRoads = leavingRoads;
-	}
-	
-	/**
 	 * Identification de l'intersection.
 	 */
 	@Override
@@ -87,10 +71,24 @@ public class AbstractIntersection {
 		return "Intersection " + this.identifier;
 	}
 
+	/**
+	 * Les intersections se chevauchent-elles ?
+	 * Méthode utilisée dans la génération aléatoire de graphes.
+	 * @param intersectionB
+	 * @return Les intersections se chevauchent-elles ?
+	 */
 	public boolean overlap(AbstractIntersection intersectionB){
 		return (this.center.distanceFrom(intersectionB.center) <= this.radius + intersectionB.radius );
 	}
 
+
+	/**
+	 * La liste des intersections contient-elle
+	 * une intersection qui chevauche l'instance courrante ?
+	 * Méthode utilisée dans la génération aléatoire de graphes.
+	 * @param intersections
+	 * @return Deux intersections se chevauchent-elles ?
+	 */
 	public boolean overlapList(ArrayList<AbstractIntersection> intersections){
 		for(AbstractIntersection intersection : intersections){
 			if(this.overlap(intersection)){
@@ -111,7 +109,23 @@ public class AbstractIntersection {
 		}
 		return result;
 	}
+	
+	
+	// *** Getters ***
 
+	public ArrayList<Road> getLeavingRoads() {
+		return leavingRoads;
+	}
+	
+	/**
+	 * Setter des routes sortant de l'intersection.
+	 * Doit être utilisée par le parser en complément du constructeur.
+	 * @param leavingRoads
+	 */
+	public void setLeavingRoads(ArrayList<Road> leavingRoads) {
+		this.leavingRoads = leavingRoads;
+	}
+	
 	public double getAverageTime() {
 		return averageTime;
 	}
@@ -120,7 +134,6 @@ public class AbstractIntersection {
 	public static int getIdentificator() {
 		return identificator;
 	}
-
 
 	public ArrayList<AbstractVehicle> getVehiclesOnIntersection() {
 		return vehiclesOnIntersection;

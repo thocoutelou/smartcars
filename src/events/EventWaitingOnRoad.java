@@ -6,6 +6,12 @@ import graph.Road;
 import resources.Time;
 import smartcars.AbstractVehicle;
 
+/**
+ * Evènement représentant l'entrée du véhicule
+ * dans la file d'attente pour entrer sur la prochaine intersection.
+ * @author cylla
+ *
+ */
 public class EventWaitingOnRoad extends AbstractEvent{
 	
 	public EventWaitingOnRoad(AbstractVehicle vehicle, Road road, double date)
@@ -15,6 +21,9 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		leavingDate = date+1.;
 	}
 	
+	/**
+	 * Exécution d'un évènement EventWaitingOnRoad.
+	 */
 	public static synchronized void executeEvent(AbstractEvent event) throws IllegalStateException
 	{
 		event.road.newWaitingVehicle(event.getVehicle());
@@ -22,7 +31,13 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		event.getVehicle().getLocation().actualizeLocation(event.road, event.road.getLength(), event.getDate(), event.nature);
 	}
 	
-	// doit absolument être appelée avant l'exécution de l'évènement (event.road.eventsWaitingOnRoad.get(0))
+	/**
+	 * Calcule la date réelle de l'évènement EventLeaveRoad qui suit.
+	 * Doit absolument être appelée avant sans
+	 * l'évènement courant dans event.road.eventsWaitingOnRoad
+	 * (à cause de event.road.eventsWaitingOnRoad.get(0)).
+	 * @param event
+	 */
 	public static synchronized void setLeavingDate(AbstractEvent event)
 	{
 		if(event.road.getEventsWaitingOnRoad().qisEmpty())
@@ -36,13 +51,24 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		}
 	}
 	
+	/**
+	 * Calcule la date de l'évènement si le véhicule était seul sur la route.
+	 * @param road
+	 * @param initialDate
+	 * @return date + durée de traversée de la route
+	 */
 	public static double absoluteDate(Road road, double initialDate)
 	{
 		return initialDate+Time.duration(road, road.getAbsoluteLength());
 	}
 	
-	// sera appelée en argument du constructeur,
-	// donc l'évènement ne sera pas encore dans road.eventsWaitingOnRoad
+	/**
+	 * Calcul de la vraie date de l'évènement EventWaitingOnRoad.
+	 * Doit être appelée seulement lors du déroulement
+	 * de la liste intégrale des évènements du graphe.
+	 * @param event
+	 * @return date réelle
+	 */
 	public static synchronized double relativeDate(AbstractEvent event)
 	{
 		Road road = event.road;
@@ -70,6 +96,13 @@ public class EventWaitingOnRoad extends AbstractEvent{
 		}
 	}
 	
+	/**
+	 * Crée dans tempEvents l'évènement EventLeaveRoad qui suit.
+	 * Passage en statique à cause de l'impossibilité de cast
+	 * un AbstractEvent en l'un de ses héritiers.
+	 * @param event
+	 * @param tempEvents
+	 */
 	public static void nextEvent(AbstractEvent event, Stack<AbstractEvent> tempEvents)
 	{
 

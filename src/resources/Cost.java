@@ -37,6 +37,10 @@ public class Cost {
 		this.finite = true;
 	}
 	
+	/**
+	 * Getter du coût lorsque celui-ci est fini.
+	 * @return
+	 */
 	public double getFiniteCost()
 	{
 		if(!finite)

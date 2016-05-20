@@ -33,15 +33,6 @@ import smartcars.AbstractVehicle;
  */
 public class SvgParser {
 
-	// ***** Commentaires de lecture et questions *****
-		// -> pourquoi utiliser float plutôt que double ?
-		// -> ajout d'une initialisation de fortune du coût d'une route
-		// -> il faudra utiliser les constructeurs complets des objets,
-		// quitte à modifier ces constructeurs, pour faciliter la lecture et cibler le debug :
-		// commencer par définir les caractéristiques de l'objet à créer avant d'instancier la classe
-		// -> je pense que l'exception NullPointerException est due à l'initialisation des routes de ce constructeur
-		
-		//TODO définir les normes de l'image (notamment les couleurs)
 		/**
 		 * Étapes du parsing de l'image:
 		 * 0 : Ouvrir le fichier .svg

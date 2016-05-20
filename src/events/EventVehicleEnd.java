@@ -5,6 +5,11 @@ import java.util.Stack;
 import graph.Road;
 import smartcars.AbstractVehicle;
 
+/**
+ * Evènement représentant l'arrêt du véhicule arrivé à destination.
+ * @author cylla
+ *
+ */
 public class EventVehicleEnd extends AbstractEvent{
 	
 	public EventVehicleEnd(AbstractVehicle vehicle, Road road, double date, Stack<Road> path)
@@ -13,6 +18,11 @@ public class EventVehicleEnd extends AbstractEvent{
 		nature = 4;
 	}
 	
+	/**
+	 * Exécution d'un évènement EventVehicleEnd.
+	 * @param event
+	 * @throws IllegalStateException
+	 */
 	public static synchronized void executeEvent(AbstractEvent event) throws IllegalStateException
 	{
 		event.getVehicle().getLocation().finalDate = event.getDate();

@@ -6,6 +6,11 @@ import graph.Road;
 import resources.Time;
 import smartcars.AbstractVehicle;
 
+/**
+ * Evènement représentant l'entrée du véhicule sur sa prochaine route.
+ * @author cylla
+ *
+ */
 public class EventEnterRoad extends AbstractEvent {
 	
 	public EventEnterRoad(AbstractVehicle vehicle, Road roadEntered, double date)
@@ -14,6 +19,10 @@ public class EventEnterRoad extends AbstractEvent {
 		nature = 3;
 	}
 	
+	/**
+	 * Exécution d'un évènement EventEnterRoad.
+	 * @param event
+	 */
 	public static synchronized void executeEvent(AbstractEvent event)
 	{
 		event.road.getOrigin().getVehiclesOnIntersection().remove(event.getVehicle());
@@ -21,7 +30,13 @@ public class EventEnterRoad extends AbstractEvent {
 		event.getVehicle().getLocation().actualizeLocation(event.road, 0., event.getDate(), event.nature);
 	}
 	
-	// date de l'objet
+	/**
+	 * Crée dans tempEvents l'évènement EventWaitingOnRoad ou EventVehicleEnd qui suit.
+	 * Passage en statique à cause de l'impossibilité de cast
+	 * un AbstractEvent en l'un de ses héritiers.
+	 * @param event
+	 * @param tempEvents
+	 */
 	public static void nextEvent(AbstractEvent event, Stack<AbstractEvent> tempEvents)
 	{
 		Road road = event.road;

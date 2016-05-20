@@ -4,6 +4,20 @@ import java.util.LinkedList;
 
 import events.AbstractEvent;
 
+/**
+ * File de priorité pour les évènements,
+ * considérant leur date comme critère de comparaison :
+ * un évènement de date faible sera renvoyé en priorité.
+ * Cette structure diffère de java.util.PriorityQueue
+ * combiné à l'utilisation de la classe AbstractEvent.Chronologic
+ * en celà qu'elle renvoie l'évènement de date le plus faible
+ * en le calculant lorsque la requête remove (qremove ici)
+ * est formulée, et non seulement lors de l'ajout d'un nouvel élément.
+ * L'utilisation de java.util.PriorityQueue a par sa perversité
+ * laissé de nombreuses séquelles dans mon esprit encore innocent de programmeur.
+ * @author cylla
+ *
+ */
 public class PriorityQueue {
 	
 	private LinkedList<AbstractEvent> queue = new LinkedList<AbstractEvent>();

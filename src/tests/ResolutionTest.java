@@ -13,10 +13,7 @@ public class ResolutionTest {
 	@Test
 	public void test() {
 		
-		//Parse du graph4
-		String fileName=project_location + "/media/exemple/4.svg";
-		GraphState graph4 = SvgParser.parseGraphState(fileName);
-		
+		GraphState graph4 = GraphState.parse(4);
 		graph4.resolve();
 		Time.time = 80.;
 		graph4.setCurrentLocations();

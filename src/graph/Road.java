@@ -138,7 +138,23 @@ public class Road {
 		}
 		return length;
 	}
+
+	/**
+	 * Calcule la longueur courante de la file des voitures
+	 * en attente de traversée de l'intersection suivante.
+	 * @return longueur totale de la file d'attente
+	 */
+	public double lengthWaiting()
+	{
+		return lengthWaiting(0);
+	}
 	
+	/**
+	 * Calcule la file des 'first' premières voitures
+	 * dans la file des voitures en attente de traversée de l'intersection suivante.
+	 * @param first
+	 * @return longueur de la file des first premières voitures
+	 */
 	public double lengthFirstWaiting(int first)
 	{
 		AbstractEvent[] eWORArray = eventsWaitingOnRoadToArray();
@@ -149,7 +165,13 @@ public class Road {
 		}
 		return length;
 	}
-	
+
+	/**
+	 * Crée une copie superficielle de la liste eventsWaitingOnRoad ;
+	 * les évènements à l'intérieur de cette liste ne sont pas copiés
+	 * mais sont les instances originales des évènements présents dans la liste de départ.
+	 * @return copie des eventsWaitingOnRoad
+	 */
 	public PriorityQueue eventsWaitingOnRoadCopy()
 	{
 		PriorityQueue eWORCopy = new PriorityQueue();
@@ -157,6 +179,10 @@ public class Road {
 		return eWORCopy;
 	}
 	
+	/**
+	 * Transforme la liste des eventsWaitingOnRoad en un tableau.
+	 * @return tableau des eventsWaitingOnRoad
+	 */
 	public AbstractEvent[] eventsWaitingOnRoadToArray()
 	{
 		PriorityQueue eWORCopy = eventsWaitingOnRoadCopy();
@@ -170,16 +196,6 @@ public class Road {
 		return eWORArray;
 	}
 	
-	/**
-	 * Calcule la longueur courante de la file des voitures
-	 * en attente de traversée de l'intersection suivante.
-	 * @return longueur de la file d'attente
-	 */
-	public double lengthWaiting()
-	{
-		return lengthWaiting(0);
-	}
-
 	/**
 	 * Diminue la longueur disponible de la route d'une certaine distance.
 	 * @param distance
@@ -262,7 +278,11 @@ public class Road {
 		}
 	}
 	
-	// Associe à un point M le point le plus proche qui appartient au segment Road
+	/**
+	 * Associe à un point M le point le plus proche qui appartient au segment Road.
+	 * @param pointM
+	 * @return point le plus proche appartenant à une route
+	 */
 	public CartesianCoordinate coordinateProjection(CartesianCoordinate pointM){
 		double pente = (getPoint2().y - getPoint1().y) / (getPoint2().x - getPoint1().x);
 		double k = (pente*(getPoint1().x-pointM.x) + pointM.y - getPoint1().y) / (1 + pente*pente);
@@ -290,6 +310,9 @@ public class Road {
 		return  "Road " + this.getIdentifier() + " origin=" + this.getOrigin() + " destination=" + this.getDestination();
 	}
 
+	
+	// *** Getters ***
+	
 	public int getIdentifier() {
 		return identifier;
 	}

@@ -28,7 +28,7 @@ public class GraphState extends Graph {
 	// véhicules présent sur la carte
 	private Stack<AbstractVehicle> vehicles;
 	
-	// file (FIFO en fonction des dates) des évènements à survenir dans le graphe
+	// file de priorité (en fonction des dates) des évènements à survenir dans le graphe
 	private PriorityQueue allEvents = new PriorityQueue();
 	
 	/**
@@ -38,8 +38,6 @@ public class GraphState extends Graph {
 	 * @param vehicles
 	 * @param events
 	 */
-	// this.events sera peut-être initialisé plus tard,
-	// sachant que cette pile est le résultat de tous les calculs.
 	public GraphState(ArrayList<AbstractIntersection> intersections, ArrayList<Road> roads,
 			Stack<AbstractVehicle> vehicles) {
 		super(intersections, roads);
@@ -61,6 +59,10 @@ public class GraphState extends Graph {
 		this.vehicles = vehicles;
 	}
 	
+	/**
+	 * Place dans l'attribut tempEvents de chaque véhicule
+	 * une copie de l'attribut events du même véhicule.
+	 */
 	public void setVehiclesTempEvents()
 	{
 		for(AbstractVehicle vehicle : getVehicles())
@@ -69,6 +71,10 @@ public class GraphState extends Graph {
 		}
 	}
 	
+	/**
+	 * Crée une copie superficielle de la liste des évènements du graphe.
+	 * @return copie des events
+	 */
 	public PriorityQueue getAllEventsCopy()
 	{
 		PriorityQueue eventsCopy = new PriorityQueue();
@@ -76,12 +82,22 @@ public class GraphState extends Graph {
 		return eventsCopy;
 	}
 	
-	// Version 1, sans priorité pour les véhicules
+	/**
+	 * Calcule les itinéraires de tous les véhicules,
+	 * avec priorité pour les véhicules à trajets longs.
+	 * Cette priorité est importante puisque les véhicules
+	 * dont l'itinéraire est calculé le plus tardivement
+	 * seront ceux qui seront les plus affectés
+	 * par les itinéraires des autres voitures
+	 * (ceux qui ont déjà été calculés).
+	 */
 	public void calculatePaths()
 	{
 		stackVehicles(getVehicles());
 		Stack<AbstractVehicle> vehiclesCopy = new Stack<AbstractVehicle>();
 		AbstractVehicle vehicle;
+		// copie la pile des véhicules déjà rangés dans l'ordre
+		// consistant à prioriser les véhicules d'itinéraires les plus longs
 		for(AbstractVehicle v : getVehicles())
 		{
 			vehiclesCopy.add(v);
@@ -95,6 +111,11 @@ public class GraphState extends Graph {
 		}
 	}
 	
+	/**
+	 * Réunie les évènements de tous les véhicules
+	 * en les insérant dans la liste de priorité
+	 * allEvents de l'objet GraphState.
+	 */
 	public void gatherEvents()
 	{
 		for(AbstractVehicle vehicle : getVehicles())
@@ -105,6 +126,22 @@ public class GraphState extends Graph {
 		System.out.println("\nActualisation de l'état du graphe :\n"+this.allEvents+"\n\n");
 	}
 	
+	/**
+	 * Parse l'image numéro 'map' du dossier 'media/exemple/'.
+	 * @param map
+	 * @return graphe parsé
+	 */
+	public static GraphState parse(int map)
+	{
+		String projectLocation = SvgParser.getProjectLocation();
+		String mapLocation = new String(projectLocation+"/media/exemple/"+map+".svg");
+		return SvgParser.parseGraphState(mapLocation);
+	}
+	
+	/**
+	 * Effectue tous les calculs menant à la résolution du problème,
+	 * en partant du principe que le graphe est correctement initialisée.
+	 */
 	public void resolve()
 	{
 		calculatePaths();
@@ -120,7 +157,10 @@ public class GraphState extends Graph {
 		System.out.println(allEvents);
 	}
 	
-	// part du principe que Time.time est modifié à la date souhaitée
+	/**
+	 * Actualise la localisation courante de toutes les voitures à la date Time.time.
+	 * Cette méthode part donc du principe que Time.time est déjà modifié à la date souhaitée.
+	 */
 	public synchronized void setCurrentLocations()
 	{
 		setVehiclesTempEvents();
@@ -165,6 +205,9 @@ public class GraphState extends Graph {
 		printCurrentPositions();
 	}
 	
+	/**
+	 * Calcule et met à jour les positions courantes de toutes les voitures à la date Time.time.
+	 */
 	public void setCurrentPositions()
 	{
 		for(AbstractVehicle vehicle : getVehicles())
@@ -173,6 +216,9 @@ public class GraphState extends Graph {
 		}
 	}
 	
+	/**
+	 * Affiche les positions courantes des véhicules.
+	 */
 	public void printCurrentPositions()
 	{
 		System.out.println("\nPositions des véhicules à la date "+Time.time+"s :");
@@ -199,6 +245,9 @@ public class GraphState extends Graph {
 		return result;
 	}
 
+	
+	// *** Getters ***
+	
 	public Stack<AbstractVehicle> getVehicles() {
 		return vehicles;
 	}

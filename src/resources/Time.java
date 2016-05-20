@@ -7,19 +7,40 @@ import problem.GraphState;
 
 public class Time {
 	
+	// date courante
 	public static double time;
 
+	/**
+	 * Calcule le temps requis pour se déplacer
+	 * d'une certaine distance sur une certaine route.
+	 * @param road
+	 * @param distance
+	 * @return durée d'un déplacement de distance sur road
+	 */
 	public static double duration(Road road, double distance)
 	{
 		return 3.6*distance/road.getSpeed();
 	}
 	
+	/**
+	 * Calcule la distance parcourue en une certaine durée sur une certaine route.
+	 * @param road
+	 * @param duration
+	 * @return distance parcourue en duration sur road
+	 */
 	public static double distance(Road road, double duration)
 	{
 		return road.getSpeed()*duration/3.6;
 	}
 	
-	
+	/**
+	 * Calcule des dates réelles des évènements.
+	 * Méthode clé de résolution du problème.
+	 * Requiert une liste de tous les évènements à survenir dans le graphe,
+	 * de dates fausses pourvu que les évènements
+	 * d'un même véhicule soient correctement ordonnés.
+	 * @param graph
+	 */
 	public static synchronized void realDates(GraphState graph)
 	{
 		System.out.println("<---   Calcul des dates réelles   --->");

@@ -24,13 +24,15 @@ public class Location {
 	public double finalDate;
 	
 	// données de la position courante significatives
-	// seulement si une requête de localisation du véhicule a été formulée
+	// seulement si une requête de localisation du véhicule a été formulée,
+	// et seront dans ce cas calculées à la date Time.time
 	public Road currentRoad;
 	public double currentPosition;
 	public double currentDate;
-	
-	public int lastEventNature = 4;
 	public boolean onIntersection = false;
+	
+	// nature du dernier évènement exécuté concernant le véhicule
+	public int lastEventNature = 4;
 	
 	/**
 	 * Constructeur unique, ne doit être utilisé que par le parser,

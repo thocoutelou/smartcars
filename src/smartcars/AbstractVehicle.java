@@ -64,6 +64,10 @@ public class AbstractVehicle {
 		this.setPath(path);
 	}
 	
+	/**
+	 * Crée une copie superficielle de l'itinéraire du véhicule.
+	 * @return copie de path
+	 */
 	private Stack<Road> getPathCopy()
 	{
 		Stack<Road> path = new Stack<Road>();
@@ -74,21 +78,35 @@ public class AbstractVehicle {
 		return path;
 	}
 	
+	/**
+	 * Initialise tempPath avec une copie superficielle de l'itinéraire path du véhicule.
+	 */
 	public void setTempPath()
 	{
 		this.tempPath = getPathCopy();
 	}
 	
+	/**
+	 * Crée une copie superficielle de la liste des évènements du véhicule.
+	 * @return copie de events
+	 */
 	public PriorityQueue getEventsCopy()
 	{
 		return getEvents().getCopy();
 	}
 	
+	/**
+	 * Initialise tempEvents avec une copie superficielle
+	 * de la liste des évènements du véhicule.
+	 */
 	public void setTempEvents()
 	{
 		tempEvents = getEventsCopy();
 	}
 	
+	/**
+	 * Affiche en détail l'itinéraire du véhicule.
+	 */
 	public void printPath()
 	{
 		Stack<Road> path = getPathCopy();
@@ -113,7 +131,12 @@ public class AbstractVehicle {
 		System.out.println("end\n");
 	}
 	
-	
+	/**
+	 * Setter propre des évènements du véhicule,
+	 * à partir d'une pile calculée au sein
+	 * de la méthode statique AbstractEvent.vehicleEvents.
+	 * @param tempEvents
+	 */
 	public void setEvents(Stack<AbstractEvent> tempEvents)
 	{
 		while(!tempEvents.isEmpty())
@@ -138,7 +161,9 @@ public class AbstractVehicle {
 		return Cost.inferior(aPath, bPath);
 	}
 	
-	
+	/**
+	 * Calcule et met à jour la position courante de la voiture à la date Time.time.
+	 */
 	public void setCurrentPosition()
 	{
 		double duration;
@@ -226,13 +251,6 @@ public class AbstractVehicle {
 		return lessPriorityVehicle;
 	}
 	
-	/**
-	 * Forme la file (events) des évènements du véhicule.
-	 */
-	public static void buildEvents()
-	{
-		
-	}
 	
 	public String toString(){
 		String result = "Véhicule " + this.getIdentifier() + " : ";
@@ -240,6 +258,9 @@ public class AbstractVehicle {
 		return result;
 	}
 
+	
+	// *** Getters ***
+	
 	public int getIdentifier() {
 		return identifier;
 	}
