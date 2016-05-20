@@ -69,6 +69,10 @@ public class Cost {
 		if(inferior(a, b)) return a;
 		else return b;
 	}
+
+	public static boolean isInfinite(Cost a){
+		return (! a.finite);
+	}
 	
 	/**
 	 * Renvoie le coût le plus important,

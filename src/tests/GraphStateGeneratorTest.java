@@ -1,5 +1,6 @@
 package tests;
 
+import smartCars.Cost;
 import smartCars.GraphState;
 import smartCars.GraphStateGenerator;
 import org.junit.Test;
@@ -15,7 +16,10 @@ public class GraphStateGeneratorTest {
         int a = 20;
         int b = 1;
         GraphState graphState = GraphStateGenerator.GraphStateGenerator(a,b);
+
+
         File output = new File("media/output/test.svg");
         new SvgGenerator(graphState, output);
+
     }
 }
