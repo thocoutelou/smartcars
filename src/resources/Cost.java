@@ -116,6 +116,7 @@ public class Cost {
 	 * @param graph
 	 * @return matrice de Floyd-Warshall du graphe
 	 */
+	/*
 	public static Cost[][] floydWarshall(Graph graph)
 	{
 		int start = AbstractIntersection.getIdentificator()-graph.getIntersections().size();
@@ -138,6 +139,33 @@ public class Cost {
 			for(int i=start; i<AbstractIntersection.getIdentificator(); i++)
 			{
 				for(int j=start; j<AbstractIntersection.getIdentificator(); j++)
+				{
+					costsMatrix[j][i] = minimum(costsMatrix[j][i], sum(costsMatrix[k][i], costsMatrix[j][k]));
+				}
+			}
+		}
+		return costsMatrix;
+	}
+	*/
+	public static Cost[][] floydWarshall(Graph graph)
+	{
+		Cost costsMatrix[][] = new Cost[AbstractIntersection.getIdentificator()][AbstractIntersection.getIdentificator()];
+		for(int i=0; i<AbstractIntersection.getIdentificator(); i++)
+		{
+			for(int j=0; j<AbstractIntersection.getIdentificator(); j++)
+			{
+				costsMatrix[j][i] = new Cost();
+			}
+		}
+		for(Road road : graph.getRoads())
+		{
+			costsMatrix[road.getDestination().identifier][road.getOrigin().identifier] = AbstractIntersection.intersectionCost(road);
+		}
+		for(int k=0; k<AbstractIntersection.getIdentificator(); k++)
+		{
+			for(int i=0; i<AbstractIntersection.getIdentificator(); i++)
+			{
+				for(int j=0; j<AbstractIntersection.getIdentificator(); j++)
 				{
 					costsMatrix[j][i] = minimum(costsMatrix[j][i], sum(costsMatrix[k][i], costsMatrix[j][k]));
 				}

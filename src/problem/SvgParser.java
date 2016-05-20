@@ -19,6 +19,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import events.AbstractEvent;
 import graph.AbstractIntersection;
 import graph.Road;
 import resources.CartesianCoordinate;
@@ -35,6 +36,7 @@ public class SvgParser {
 
 		/**
 		 * Étapes du parsing de l'image:
+		 *-1 : Réinitialiser les identificateurs des classes
 		 * 0 : Ouvrir le fichier .svg
 		 * 1 : sélectionner les informations dans le calque 1 (balise g)
 		 * 2 : créer toute les intersections représentées par des cercles <circle/> puis les Road représentées par des <path/> avec les méthodes
@@ -46,6 +48,12 @@ public class SvgParser {
 			/* La documentation du parser qu'on va utiliser est en ligne:
 			 * https://openclassrooms.com/courses/structurez-vos-donnees-avec-xml/dom-exemple-d-utilisation-en-java
 			 */
+			
+			// Réinitialisation des identificateurs
+			AbstractEvent.initializeIdentificator();
+			AbstractIntersection.initializeIdentificator();
+			AbstractVehicle.initializeIdentificator();
+			Road.initializeIdentificator();
 
 			// La classe DocumentBuilderFacorty est utilisée pour parser le xml de l'image svg.
 			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

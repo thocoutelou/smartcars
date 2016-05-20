@@ -371,5 +371,10 @@ public class Road {
 	public PriorityQueue getEventsWaitingOnRoad() {
 		return eventsWaitingOnRoad;
 	}
+
+	public static void initializeIdentificator()
+	{
+		identificator = 0;
+	}
 	
 }

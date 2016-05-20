@@ -304,6 +304,11 @@ public class AbstractVehicle {
 	public PriorityQueue getTempEvents() {
 		return tempEvents;
 	}
+
+	public static void initializeIdentificator()
+	{
+		identificator = 0;
+	}
 	
 }
 

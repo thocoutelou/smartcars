@@ -177,4 +177,9 @@ public class AbstractEvent {
 		return eventWaitingOnRoad;
 	}
 	
+	public static void initializeIdentificator()
+	{
+		identificator = 0;
+	}
+	
 }

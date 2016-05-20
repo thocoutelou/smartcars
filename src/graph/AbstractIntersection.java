@@ -138,5 +138,10 @@ public class AbstractIntersection {
 	public ArrayList<AbstractVehicle> getVehiclesOnIntersection() {
 		return vehiclesOnIntersection;
 	}
+	
+	public static void initializeIdentificator()
+	{
+		identificator = 0;
+	}
 
 }
