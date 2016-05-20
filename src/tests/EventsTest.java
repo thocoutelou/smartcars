@@ -2,11 +2,11 @@ package tests;
 
 import org.junit.Test;
 
-import smartCars.AbstractEvent;
-import smartCars.AbstractVehicle;
-import smartCars.Dijkstra;
-import smartCars.GraphState;
-import smartCars.SvgParser;
+import events.AbstractEvent;
+import graph.Dijkstra;
+import problem.GraphState;
+import problem.SvgParser;
+import smartcars.AbstractVehicle;
 
 public class EventsTest {
 	
@@ -20,18 +20,10 @@ public class EventsTest {
 		GraphState graph3 = SvgParser.parseGraphState(fileName);
 		System.out.println(graph3);
 		
-		AbstractVehicle vehicleTest = graph3.vehicles.get(0);
+		AbstractVehicle vehicleTest = graph3.getVehicles().get(0);
 		Dijkstra.calculatePath(graph3, vehicleTest);
 		AbstractEvent.vehicleEvents(vehicleTest);
 		
-		AbstractEvent event;
-		System.out.println();
-		while(!vehicleTest.events.qisEmpty())
-		{
-			event = vehicleTest.events.qremove();
-			System.out.print(event+"   ");
-			System.out.println(event.date);
-		}
 	}
-
+	
 }

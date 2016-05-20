@@ -1,21 +1,25 @@
-package smartCars;
+package events;
 
 import java.util.Comparator;
 import java.util.Stack;
 
+import graph.Road;
+import smartcars.AbstractVehicle;
+
 public class AbstractEvent {
 
-	protected static int identificator = 0;
-	protected int identifier;
+	private static int identificator = 0;
+	@SuppressWarnings("unused")
+	private int identifier;
 	protected int nature;
 	
-	protected AbstractVehicle vehicle;
+	private AbstractVehicle vehicle;
 	protected Road road;
-	public double date;
-	public boolean trueDate = false;
+	private double date;
+	private boolean trueDate = false;
 	
-	public double leavingDate;
-	public AbstractEvent eventWaitingOnRoad;
+	protected double leavingDate;
+	protected AbstractEvent eventWaitingOnRoad;
 	
 	protected AbstractEvent(AbstractVehicle vehicle, Road road, double date)
 	{
@@ -30,7 +34,7 @@ public class AbstractEvent {
 	{
 		public int compare(AbstractEvent eventA, AbstractEvent eventB)
 		{
-			if(eventA.date<eventB.date) return -1;
+			if(eventA.getDate()<eventB.getDate()) return -1;
 			else return 1;
 		}
 	}
@@ -41,7 +45,7 @@ public class AbstractEvent {
 		Stack<AbstractEvent> tempEvents = new Stack<AbstractEvent>();
 		vehicle.setTempPath();
 		
-		if(!vehicle.pathCalculated)
+		if(!vehicle.getPathCalculated())
 		{
 			throw new IllegalStateException("Dijkstra n'a pas été appliqué à ce véhicule.");
 		}
@@ -81,12 +85,12 @@ public class AbstractEvent {
 				// et sur la même route que le point de départ
 				if(lastEventNature==4)
 				{
-					System.out.println("\nLe véhicule "+vehicle.identifier+" a été acheminé avec succès à destination.\n");
+					System.out.println("\nLe véhicule "+vehicle.getIdentifier()+" a été acheminé avec succès à destination.\n");
 					
 					vehicle.setEvents(tempEvents);
 					
 					System.out.println("\nPile FIFO des évènements :");
-					System.out.println(vehicle.events);
+					System.out.println(vehicle.getEvents());
 					
 					break;
 				}
@@ -102,6 +106,42 @@ public class AbstractEvent {
 				}
 			}
 		}
+	}
+
+	public int getNature() {
+		return nature;
+	}
+
+	public AbstractVehicle getVehicle() {
+		return vehicle;
+	}
+
+	public Road getRoad() {
+		return road;
+	}
+
+	public double getDate() {
+		return date;
+	}
+
+	public void setDate(double date) {
+		this.date = date;
+	}
+
+	public boolean getTrueDate() {
+		return trueDate;
+	}
+
+	public void isTrueDate(boolean trueDate) {
+		this.trueDate = true;
+	}
+
+	public double getLeavingDate() {
+		return leavingDate;
+	}
+
+	public AbstractEvent getEventWaitingOnRoad() {
+		return eventWaitingOnRoad;
 	}
 	
 }

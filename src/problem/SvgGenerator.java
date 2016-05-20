@@ -1,10 +1,15 @@
-package smartCars;
+package problem;
 
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import graph.AbstractIntersection;
+import graph.Graph;
+import graph.Road;
+import resources.CartesianCoordinate;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,9 +28,9 @@ import java.util.IllegalFormatException;
 
 public class SvgGenerator {
 
-    static Document doc = null;
-    CartesianCoordinate viewBox1 = new CartesianCoordinate(0,0);
-    CartesianCoordinate viewBox2 = new CartesianCoordinate(0,0);
+    private static Document doc = null;
+    private CartesianCoordinate viewBox1 = new CartesianCoordinate(0,0);
+    private CartesianCoordinate viewBox2 = new CartesianCoordinate(0,0);
 
 
     public SvgGenerator(Graph graph, File outputFile){
@@ -34,12 +39,12 @@ public class SvgGenerator {
         Element element = doc.getDocumentElement();
 
         //Ajout des Intersections
-        for (AbstractIntersection intersection: graph.intersections){
+        for (AbstractIntersection intersection: graph.getIntersections()){
             addIntersectionToElement(element, intersection);
         }
 
         // Ajout des Road au document
-        for (Road road : graph.roads){
+        for (Road road : graph.getRoads()){
             addRoadToElement(element,road);
         }
 
@@ -74,7 +79,7 @@ public class SvgGenerator {
 
     private static Element addRoadToElement(Element element, Road road){
         Element path = doc.createElement("path");
-        String d = "M " + road.point1.x + "," + road.point1.y + " " + road.point2.x + "," + road.point2.y;
+        String d = "M " + road.getPoint1().x + "," + road.getPoint1().y + " " + road.getPoint2().x + "," + road.getPoint2().y;
         path.setAttribute("d", d);
         path.setAttribute("style", "fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1");
         element.appendChild(path);
@@ -102,7 +107,7 @@ public class SvgGenerator {
     }
 
     private void setViewBox(Graph graph, Element element){
-        for (AbstractIntersection intersection : graph.intersections) {
+        for (AbstractIntersection intersection : graph.getIntersections()) {
             viewBox1.x=Math.min(viewBox1.x, intersection.center.x - intersection.radius);
             viewBox1.y=Math.min(viewBox1.y, intersection.center.y - intersection.radius);
             viewBox2.x=Math.max(viewBox2.x, intersection.center.x + intersection.radius);

@@ -1,7 +1,21 @@
-package smartCars;
+package problem;
 
 import java.util.ArrayList;
 import java.util.Stack;
+
+import events.AbstractEvent;
+import events.EventEnterRoad;
+import events.EventLeaveRoad;
+import events.EventVehicleEnd;
+import events.EventVehicleStart;
+import events.EventWaitingOnRoad;
+import graph.AbstractIntersection;
+import graph.Dijkstra;
+import graph.Graph;
+import graph.Road;
+import resources.PriorityQueue;
+import resources.Time;
+import smartcars.AbstractVehicle;
 
 /**
  * Composée d'un graphe, de véhicules et des évènements en devenir,
@@ -12,10 +26,10 @@ import java.util.Stack;
 public class GraphState extends Graph {
 	
 	// véhicules présent sur la carte
-	public Stack<AbstractVehicle> vehicles;
+	private Stack<AbstractVehicle> vehicles;
 	
 	// file (FIFO en fonction des dates) des évènements à survenir dans le graphe
-	public PriorityQueue allEvents = new PriorityQueue();
+	private PriorityQueue allEvents = new PriorityQueue();
 	
 	/**
 	 * Constructeur unique, ne doit être appelé que par le parser.
@@ -49,7 +63,7 @@ public class GraphState extends Graph {
 	
 	public void setVehiclesTempEvents()
 	{
-		for(AbstractVehicle vehicle : vehicles)
+		for(AbstractVehicle vehicle : getVehicles())
 		{
 			vehicle.setTempEvents();
 		}
@@ -65,10 +79,10 @@ public class GraphState extends Graph {
 	// Version 1, sans priorité pour les véhicules
 	public void calculatePaths()
 	{
-		stackVehicles(vehicles);
+		stackVehicles(getVehicles());
 		Stack<AbstractVehicle> vehiclesCopy = new Stack<AbstractVehicle>();
 		AbstractVehicle vehicle;
-		for(AbstractVehicle v : vehicles)
+		for(AbstractVehicle v : getVehicles())
 		{
 			vehiclesCopy.add(v);
 		}
@@ -76,17 +90,17 @@ public class GraphState extends Graph {
 		{
 			vehicle = vehiclesCopy.pop();
 			Dijkstra.calculatePath(this, vehicle);
-			vehicle.pathCalculated = true;
+			vehicle.isPathCalculated();
 			vehicle.printPath();
 		}
 	}
 	
 	public void gatherEvents()
 	{
-		for(AbstractVehicle vehicle : vehicles)
+		for(AbstractVehicle vehicle : getVehicles())
 		{
 			AbstractEvent.vehicleEvents(vehicle);
-			this.allEvents.qaddAll(vehicle.events);
+			this.allEvents.qaddAll(vehicle.getEvents());
 		}
 		System.out.println("\nActualisation de l'état du graphe :\n"+this.allEvents+"\n\n");
 	}
@@ -97,10 +111,10 @@ public class GraphState extends Graph {
 		gatherEvents();
 		Time.realDates(this);
 		
-		for(AbstractVehicle v : vehicles)
+		for(AbstractVehicle v : getVehicles())
 		{
 			System.out.println(v);
-			System.out.println(v.events);
+			System.out.println(v.getEvents());
 		}
 		System.out.println("Liste des évènements du graphe :");
 		System.out.println(allEvents);
@@ -116,30 +130,30 @@ public class GraphState extends Graph {
 		while(!eventsCopy.qisEmpty())
 		{
 			event = eventsCopy.qremove();
-			vehicleEvent = event.vehicle.tempEvents.qremove();
+			vehicleEvent = event.getVehicle().getTempEvents().qremove();
 			if(!event.equals(vehicleEvent))
 			{
 				throw new IllegalStateException("Les évènements ne sont pas retournés dans l'ordre.");
 			}
-			if(event.date<=Time.time)
+			if(event.getDate()<=Time.time)
 			{
-				if(event.nature==0)
+				if(event.getNature()==0)
 				{
 					EventVehicleStart.executeEvent(event);
 				}
-				if(event.nature==1)
+				if(event.getNature()==1)
 				{
 					EventWaitingOnRoad.executeEvent(event);
 				}
-				if(event.nature==2)
+				if(event.getNature()==2)
 				{
 					EventLeaveRoad.executeEvent(event);
 				}
-				if(event.nature==3)
+				if(event.getNature()==3)
 				{
 					EventEnterRoad.executeEvent(event);
 				}
-				if(event.nature==4)
+				if(event.getNature()==4)
 				{
 					EventVehicleEnd.executeEvent(event);
 				}
@@ -148,22 +162,45 @@ public class GraphState extends Graph {
 		}
 		
 		setCurrentPositions();
+		printCurrentPositions();
 	}
 	
 	public void setCurrentPositions()
 	{
-		for(AbstractVehicle vehicle : vehicles)
+		for(AbstractVehicle vehicle : getVehicles())
 		{
 			vehicle.setCurrentPosition();
+		}
+	}
+	
+	public void printCurrentPositions()
+	{
+		System.out.println("\nPositions des véhicules à la date "+Time.time+"s :");
+		for(AbstractVehicle v : getVehicles())
+		{
+			System.out.print("Véhicule "+v.getIdentifier()+" : ");
+			if(v.getLocation().onIntersection)
+			{
+				System.out.println(v.getLocation().currentRoad.getDestination());
+			}
+			else
+			{
+				System.out.println(v.getLocation().currentRoad+"; "+"position "+v.getLocation().currentPosition+"m");
+			}
 		}
 	}
 	
 	public String toString(){
 		String newline = System.getProperty("line.separator");
 		String result = super.toString() + newline;
-		for(AbstractVehicle v: vehicles){
+		for(AbstractVehicle v: getVehicles()){
 			result += v.toString() + newline;
 		}
 		return result;
 	}
+
+	public Stack<AbstractVehicle> getVehicles() {
+		return vehicles;
+	}
+
 }

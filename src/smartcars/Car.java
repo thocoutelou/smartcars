@@ -1,5 +1,6 @@
-package smartCars;
+package smartcars;
 
+import resources.Location;
 
 public class Car extends AbstractVehicle {
 

@@ -2,9 +2,9 @@ package tests;
 
 import org.junit.Test;
 
-import smartCars.GraphState;
-import smartCars.SvgParser;
-import smartCars.Time;
+import problem.GraphState;
+import problem.SvgParser;
+import resources.Time;
 
 public class ResolutionTest {
 	
@@ -21,7 +21,6 @@ public class ResolutionTest {
 		Time.time = 80.;
 		graph4.setCurrentLocations();
 		
-		System.out.println();
 	}
 
 }

@@ -2,11 +2,11 @@ package tests;
 
 import org.junit.Test;
 
+import graph.Dijkstra;
 import junit.framework.TestCase;
-import smartCars.AbstractVehicle;
-import smartCars.GraphState;
-import smartCars.SvgParser;
-import smartCars.Dijkstra;
+import problem.GraphState;
+import problem.SvgParser;
+import smartcars.AbstractVehicle;
 
 public class DijkstraTest extends TestCase{
 	
@@ -20,7 +20,7 @@ public class DijkstraTest extends TestCase{
 		GraphState graph3 = SvgParser.parseGraphState(fileName);
 		System.out.println(graph3);
 		
-		AbstractVehicle vehicleTest = graph3.vehicles.get(0);
+		AbstractVehicle vehicleTest = graph3.getVehicles().get(0);
 		Dijkstra.calculatePath(graph3, vehicleTest);
 		vehicleTest.printPath();
 		
@@ -28,8 +28,8 @@ public class DijkstraTest extends TestCase{
 		fileName=project_location + "/media/exemple/4.svg";
 		GraphState graph4 = SvgParser.parseGraphState(fileName);
 		System.out.println(graph4);
-		for (int i=0; i<graph4.vehicles.size(); i++){
-			vehicleTest = graph4.vehicles.get(i);
+		for (int i=0; i<graph4.getVehicles().size(); i++){
+			vehicleTest = graph4.getVehicles().get(i);
 			Dijkstra.calculatePath(graph4, vehicleTest);
 			vehicleTest.printPath();
 		}

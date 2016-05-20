@@ -1,8 +1,14 @@
-package smartCars;
+package problem;
 
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Stack;
+
+import graph.AbstractIntersection;
+import graph.Road;
+import resources.CartesianCoordinate;
+import resources.Cost;
+import smartcars.AbstractVehicle;
 
 /**
  * Created by tc on 18/05/16.
@@ -10,8 +16,8 @@ import java.util.Stack;
 
 public class GraphStateGenerator{
 
-    static CartesianCoordinate point1 = new CartesianCoordinate(0,0);
-    static CartesianCoordinate point2 = new CartesianCoordinate(2000,1000);
+    private static CartesianCoordinate point1 = new CartesianCoordinate(0,0);
+    private static CartesianCoordinate point2 = new CartesianCoordinate(2000,1000);
 
     public static GraphState GraphStateGenerator(int intersectionNb, int vehicleNb){
         ArrayList<AbstractIntersection> intersections = intersectionsGenerator(intersectionNb);

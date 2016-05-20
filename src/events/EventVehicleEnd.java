@@ -1,6 +1,9 @@
-package smartCars;
+package events;
 
 import java.util.Stack;
+
+import graph.Road;
+import smartcars.AbstractVehicle;
 
 public class EventVehicleEnd extends AbstractEvent{
 	
@@ -12,10 +15,10 @@ public class EventVehicleEnd extends AbstractEvent{
 	
 	public static synchronized void executeEvent(AbstractEvent event) throws IllegalStateException
 	{
-		event.vehicle.location.finalDate = event.date;
-		event.road.vehiclesOnRoad.remove(event.vehicle);
-		event.vehicle.location.actualizeLocation(event.road, event.vehicle.location.finalPosition, event.date, event.nature);
-		if(!event.vehicle.location.checkFinalLocation())
+		event.getVehicle().getLocation().finalDate = event.getDate();
+		event.road.removeVehiclesOnRoad(event.getVehicle());
+		event.getVehicle().getLocation().actualizeLocation(event.road, event.getVehicle().getLocation().finalPosition, event.getDate(), event.nature);
+		if(!event.getVehicle().getLocation().checkFinalLocation())
 		{
 			throw new IllegalStateException("Le véhicule n'est pas arrivé à bon port.");
 		}

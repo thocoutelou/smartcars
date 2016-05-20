@@ -1,4 +1,8 @@
-package smartCars;
+package resources;
+
+import graph.AbstractIntersection;
+import graph.Graph;
+import graph.Road;
 
 /**
  * Représente un coût de traversée,
@@ -33,7 +37,7 @@ public class Cost {
 		this.finite = true;
 	}
 	
-	public double getCost()
+	public double getFiniteCost()
 	{
 		if(!finite)
 		{
@@ -95,19 +99,7 @@ public class Cost {
 		else return new Cost(a.absoluteCost+b.absoluteCost);
 	}
 	
-	/**
-	 * Calcule la somme du coût d'une route
-	 * et de son intersection d'arrivée.
-	 * Permet de prendre en compte les coûts de traversée des intersection
-	 * lors du calcul des itinéraires (Dijkstra).
-	 * @param road
-	 * @return somme du coût de la route et de son intersection d'arrivée
-	 */
-	public static Cost intersection(Road road)
-	{
-		return sum(road.cost, new Cost(road.destination.averageTime));
-	}
-	
+
 	/**
 	 * Calcule la matrice de Floyd-Warshall d'un graphe.
 	 * L'idée ici est ici de savoir quelle voiture traiter en priorité,
@@ -118,26 +110,26 @@ public class Cost {
 	 */
 	public static Cost[][] floydWarshall(Graph graph)
 	{
-		int start = AbstractIntersection.identificator-graph.intersections.size();
+		int start = AbstractIntersection.getIdentificator()-graph.getIntersections().size();
 		Road road;
-		Cost costsMatrix[][] = new Cost[AbstractIntersection.identificator][AbstractIntersection.identificator];
-		for(int i=start; i<AbstractIntersection.identificator; i++)
+		Cost costsMatrix[][] = new Cost[AbstractIntersection.getIdentificator()][AbstractIntersection.getIdentificator()];
+		for(int i=start; i<AbstractIntersection.getIdentificator(); i++)
 		{
-			for(int j=start; j<AbstractIntersection.identificator; j++)
+			for(int j=start; j<AbstractIntersection.getIdentificator(); j++)
 			{
 				costsMatrix[j][i] = new Cost();
 			}
 		}
-		for(int i=0; i<graph.roads.size(); i++)
+		for(int i=0; i<graph.getRoads().size(); i++)
 		{
-			road=graph.roads.get(i);
-			costsMatrix[road.destination.identifier][road.origin.identifier] = Cost.intersection(road);
+			road=graph.getRoads().get(i);
+			costsMatrix[road.getDestination().identifier][road.getOrigin().identifier] = AbstractIntersection.intersectionCost(road);
 		}
-		for(int k=start; k<AbstractIntersection.identificator; k++)
+		for(int k=start; k<AbstractIntersection.getIdentificator(); k++)
 		{
-			for(int i=start; i<AbstractIntersection.identificator; i++)
+			for(int i=start; i<AbstractIntersection.getIdentificator(); i++)
 			{
-				for(int j=start; j<AbstractIntersection.identificator; j++)
+				for(int j=start; j<AbstractIntersection.getIdentificator(); j++)
 				{
 					costsMatrix[j][i] = minimum(costsMatrix[j][i], sum(costsMatrix[k][i], costsMatrix[j][k]));
 				}

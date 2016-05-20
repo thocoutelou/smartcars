@@ -1,4 +1,9 @@
-package smartCars;
+package resources;
+
+import events.AbstractEvent;
+import events.EventWaitingOnRoad;
+import graph.Road;
+import problem.GraphState;
 
 public class Time {
 	
@@ -6,27 +11,14 @@ public class Time {
 
 	public static double duration(Road road, double distance)
 	{
-		return 3.6*distance/road.speed;
+		return 3.6*distance/road.getSpeed();
 	}
 	
 	public static double distance(Road road, double duration)
 	{
-		return road.speed*duration/3.6;
+		return road.getSpeed()*duration/3.6;
 	}
 	
-	public static double startingTime(GraphState graphState) throws IllegalStateException
-	{
-		if(graphState.vehicles.isEmpty())
-		{
-			throw new IllegalStateException("Le graphe est mal initialisé : aucun véhicule");
-		}
-		double startingTime = graphState.vehicles.get(0).location.initialDate;
-		for(AbstractVehicle v : graphState.vehicles)
-		{
-			startingTime = Math.min(startingTime, v.location.initialDate);
-		}
-		return startingTime;
-	}
 	
 	public static synchronized void realDates(GraphState graph)
 	{
@@ -41,50 +33,50 @@ public class Time {
 		while(!eventsCopy.qisEmpty())
 		{
 			event = eventsCopy.qremove();
-			vehicleEvent = event.vehicle.tempEvents.qremove();
+			vehicleEvent = event.getVehicle().getTempEvents().qremove();
 			
 			System.out.print(event+"   ");
-			System.out.println(event.date);
+			System.out.println(event.getDate());
 			if(!event.equals(vehicleEvent))
 			{
 				event = eventsCopy.qremove();
-				vehicleEvent = event.vehicle.tempEvents.qremove();
+				vehicleEvent = event.getVehicle().getTempEvents().qremove();
 				throw new IllegalStateException("Les évènements ne sont pas retournés dans l'ordre.");
 			}
 
-			if(event.nature==1 & event.trueDate)
+			if(event.getNature()==1 & event.getTrueDate())
 			{
 				EventWaitingOnRoad.setLeavingDate(event);
 				// la ligne suivante doit être exécutée
 				// impérativement après le calcul de leavingDate
-				event.road.eventsWaitingOnRoad.qadd(event);
+				event.getRoad().getEventsWaitingOnRoad().qadd(event);
 			}
-			else if(event.nature==1 & !event.trueDate)
+			else if(event.getNature()==1 & !event.getTrueDate())
 			{
-				difference = event.date;
-				event.date = EventWaitingOnRoad.relativeDate(event);
-				event.trueDate = true;
+				difference = event.getDate();
+				event.setDate(EventWaitingOnRoad.relativeDate(event));
+				event.isTrueDate(true);
 				System.out.print("Changement de date : "+event+"   ");
-				System.out.println(event.date);
-				difference = event.date-difference;
-				event.vehicle.tempEvents.qdates(difference);
-				event.vehicle.tempEvents.qadd(event);
+				System.out.println(event.getDate());
+				difference = event.getDate()-difference;
+				event.getVehicle().getTempEvents().qdates(difference);
+				event.getVehicle().getTempEvents().qadd(event);
 				eventsCopy.qadd(event);
 			}
-			else if(event.nature==2 & event.trueDate)
+			else if(event.getNature()==2 & event.getTrueDate())
 			{
-				if(!event.road.eventsWaitingOnRoad.qremove().equals(event.eventWaitingOnRoad))
+				if(!event.getRoad().getEventsWaitingOnRoad().qremove().equals(event.getEventWaitingOnRoad()))
 				{
 					throw new IllegalStateException("La liste des EventWaitingOnRoad est corrompue.");
 				}
 			}
-			else if(event.nature==2 & !event.trueDate)
+			else if(event.getNature()==2 & !event.getTrueDate())
 			{
-				difference = event.eventWaitingOnRoad.leavingDate-event.date;
-				event.vehicle.tempEvents.qdates(difference);
-				event.date=event.eventWaitingOnRoad.leavingDate;
-				event.trueDate = true;
-				event.vehicle.tempEvents.qadd(event);
+				difference = event.getEventWaitingOnRoad().getLeavingDate()-event.getDate();
+				event.getVehicle().getTempEvents().qdates(difference);
+				event.setDate(event.getEventWaitingOnRoad().getLeavingDate());
+				event.isTrueDate(true);
+				event.getVehicle().getTempEvents().qadd(event);
 				eventsCopy.qadd(event);
 			}	
 		}

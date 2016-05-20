@@ -1,6 +1,8 @@
-package smartCars;
+package resources;
 
 import java.util.LinkedList;
+
+import events.AbstractEvent;
 
 public class PriorityQueue {
 	
@@ -23,12 +25,12 @@ public class PriorityQueue {
 			throw new IllegalStateException("La file est vide.");
 		}
 		AbstractEvent event = queue.peek();
-		double min = event.date;
+		double min = event.getDate();
 		for(AbstractEvent e : queue)
 		{
-			if(e.date<min)
+			if(e.getDate()<min)
 			{
-				min=e.date;
+				min=e.getDate();
 				event=e;
 			}
 		}
@@ -42,12 +44,12 @@ public class PriorityQueue {
 			throw new IllegalStateException("La file est vide.");
 		}
 		AbstractEvent event = queue.peek();
-		double max = event.date;
+		double max = event.getDate();
 		for(AbstractEvent e : queue)
 		{
-			if(max<e.date)
+			if(max<e.getDate())
 			{
-				max=e.date;
+				max=e.getDate();
 				event=e;
 			}
 		}
@@ -61,12 +63,12 @@ public class PriorityQueue {
 			throw new IllegalStateException("La file est vide.");
 		}
 		AbstractEvent event = queue.peek();
-		double min = event.date;
+		double min = event.getDate();
 		for(AbstractEvent e : queue)
 		{
-			if(e.date<min)
+			if(e.getDate()<min)
 			{
-				min=e.date;
+				min=e.getDate();
 				event=e;
 			}
 		}
@@ -81,12 +83,12 @@ public class PriorityQueue {
 			throw new IllegalStateException("La file est vide.");
 		}
 		AbstractEvent event = queue.peek();
-		double max = event.date;
+		double max = event.getDate();
 		for(AbstractEvent e : queue)
 		{
-			if(max<e.date)
+			if(max<e.getDate())
 			{
-				max=e.date;
+				max=e.getDate();
 				event=e;
 			}
 		}
@@ -134,7 +136,7 @@ public class PriorityQueue {
 	{
 		for(AbstractEvent e : queue)
 		{
-			e.date+=d;
+			e.setDate(e.getDate() + d);
 		}
 	}
 	
@@ -147,7 +149,7 @@ public class PriorityQueue {
 		while(!pq.qisEmpty())
 		{
 			e=pq.qremove();
-			result+=e.toString()+" de date "+e.date+"s"+newline;
+			result+=e.toString()+" de date "+e.getDate()+"s"+newline;
 		}
 		return result;
 	}

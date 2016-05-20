@@ -1,6 +1,10 @@
-package smartCars;
+package events;
 
 import java.util.Stack;
+
+import graph.Road;
+import resources.Time;
+import smartcars.AbstractVehicle;
 
 public class EventWaitingOnRoad extends AbstractEvent{
 	
@@ -13,28 +17,28 @@ public class EventWaitingOnRoad extends AbstractEvent{
 	
 	public static synchronized void executeEvent(AbstractEvent event) throws IllegalStateException
 	{
-		event.road.newWaitingVehicle(event.vehicle);
-		event.road.eventsWaitingOnRoad.qadd(event);
-		event.vehicle.location.actualizeLocation(event.road, event.road.length, event.date, event.nature);
+		event.road.newWaitingVehicle(event.getVehicle());
+		event.road.getEventsWaitingOnRoad().qadd(event);
+		event.getVehicle().getLocation().actualizeLocation(event.road, event.road.getLength(), event.getDate(), event.nature);
 	}
 	
 	// doit absolument être appelée avant l'exécution de l'évènement (event.road.eventsWaitingOnRoad.get(0))
 	public static synchronized void setLeavingDate(AbstractEvent event)
 	{
-		if(event.road.eventsWaitingOnRoad.qisEmpty())
+		if(event.road.getEventsWaitingOnRoad().qisEmpty())
 		{
-			event.leavingDate = event.date+event.road.averageWaitingTime;
+			event.leavingDate = event.getDate()+event.road.getAverageWaitingTime();
 		}
 		else
 		{
 			System.out.println("Consultation de la liste road.eventsWaitingOnRoad");
-			event.leavingDate = event.road.eventsWaitingOnRoad.aqelement().leavingDate+event.road.averageWaitingTime;
+			event.leavingDate = event.road.getEventsWaitingOnRoad().aqelement().leavingDate+event.road.getAverageWaitingTime();
 		}
 	}
 	
 	public static double absoluteDate(Road road, double initialDate)
 	{
-		return initialDate+Time.duration(road, road.absoluteLength);
+		return initialDate+Time.duration(road, road.getAbsoluteLength());
 	}
 	
 	// sera appelée en argument du constructeur,
@@ -42,21 +46,21 @@ public class EventWaitingOnRoad extends AbstractEvent{
 	public static synchronized double relativeDate(AbstractEvent event)
 	{
 		Road road = event.road;
-		double initialDate = event.date;
+		double initialDate = event.getDate();
 		double absoluteDate = absoluteDate(road, initialDate);
-		if(road.eventsWaitingOnRoad.qisEmpty()) return absoluteDate;
+		if(road.getEventsWaitingOnRoad().qisEmpty()) return absoluteDate;
 		else
 		{
 			AbstractEvent[] eWORArray = road.eventsWaitingOnRoadToArray();
 			int left = 0;
 			double arrivingDate, distance;
-			if(road.eventsWaitingOnRoad.aqelement().leavingDate<absoluteDate)
+			if(road.getEventsWaitingOnRoad().aqelement().leavingDate<absoluteDate)
 				return absoluteDate;
 			else
 			{
 				do
 				{
-					distance = road.absoluteLength-road.lengthWaiting(left);
+					distance = road.getAbsoluteLength()-road.lengthWaiting(left);
 					arrivingDate = initialDate+Time.duration(road, distance);
 					left++;
 				}
@@ -70,7 +74,7 @@ public class EventWaitingOnRoad extends AbstractEvent{
 	{
 
 		Road road = event.road;
-		AbstractVehicle vehicle = event.vehicle;
+		AbstractVehicle vehicle = event.getVehicle();
 		
 		tempEvents.add(new EventLeaveRoad(vehicle, road, event.leavingDate, event));
 	}

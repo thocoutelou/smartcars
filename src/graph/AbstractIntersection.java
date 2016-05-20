@@ -1,7 +1,11 @@
-package smartCars;
+package graph;
 
 
 import java.util.ArrayList;
+
+import resources.CartesianCoordinate;
+import resources.Cost;
+import smartcars.AbstractVehicle;
 
 /**
  * Intersection du graphe.
@@ -12,19 +16,18 @@ import java.util.ArrayList;
 public class AbstractIntersection {
 	
 	// identificateur des instances, s'incrémente à chaque instanciation...
-	protected static int identificator = 0;
+	private static int identificator = 0;
 	// ... pour définir l'identifiant de l'intersection créée
 	public final int identifier;
 	// routes sortant de l'intersection
 	private ArrayList<Road> leavingRoads;
 	// véhicules sur l'intersection
-	public ArrayList<AbstractVehicle> vehiclesOnIntersection = new ArrayList<AbstractVehicle>();
+	private ArrayList<AbstractVehicle> vehiclesOnIntersection = new ArrayList<AbstractVehicle>();
 	
 	// durée moyenne de traversée de l'intersection
-	public double averageTime;
-	// L'intersection est-elle encombrée ?
-	public boolean obstruction;
+	private double averageTime;
 	
+	//TODO passer en private
 	// géométrie de l'intersection
 	public final CartesianCoordinate center;
 	public final float radius;
@@ -41,7 +44,6 @@ public class AbstractIntersection {
 		this.center= center;
 		this.radius = radius;
 		this.averageTime = averageTime;
-		obstruction = false;
 		// l'initialisation de leavingRoads est nécessaire, mais difficile à faire dès l'instanciation de l'intersection
 		this.leavingRoads = new ArrayList<Road>();
 	}
@@ -53,6 +55,19 @@ public class AbstractIntersection {
 	 */
 	public ArrayList<Road> getLeavingRoads() {
 		return leavingRoads;
+	}
+	
+	/**
+	 * Calcule la somme du coût d'une route
+	 * et de son intersection d'arrivée.
+	 * Permet de prendre en compte les coûts de traversée des intersection
+	 * lors du calcul des itinéraires (Dijkstra).
+	 * @param road
+	 * @return somme du coût de la route et de son intersection d'arrivée
+	 */
+	public static Cost intersectionCost(Road road)
+	{
+		return Cost.sum(road.getCost(), new Cost(road.getDestination().getAverageTime()));
 	}
 
 	/**
@@ -95,6 +110,20 @@ public class AbstractIntersection {
 			result += leavingRoads.get(i).toStringDetailed() + newline;
 		}
 		return result;
+	}
+
+	public double getAverageTime() {
+		return averageTime;
+	}
+
+
+	public static int getIdentificator() {
+		return identificator;
+	}
+
+
+	public ArrayList<AbstractVehicle> getVehiclesOnIntersection() {
+		return vehiclesOnIntersection;
 	}
 
 }

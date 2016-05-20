@@ -1,6 +1,15 @@
-package smartCars;
+package smartcars;
 
 import java.util.Stack;
+
+import events.AbstractEvent;
+import graph.AbstractIntersection;
+import graph.Graph;
+import graph.Road;
+import resources.Cost;
+import resources.Location;
+import resources.PriorityQueue;
+import resources.Time;
 
 /**
  * Définit un véhicule.
@@ -12,26 +21,26 @@ import java.util.Stack;
 public class AbstractVehicle {
 
 	// identificateur des instances, s'incrémente à chaque instanciation...
-	protected static int identificator = 0;
+	private static int identificator = 0;
 	// ... pour définir l'identifiant du véhicule créé
-	public int identifier;
+	private int identifier;
 	
 	// localise le point de départ de la voiture, sa destination,
 	// et sera mis à jour si une requête de visualisation de la carte est formulée
-	public Location location;
+	private Location location;
 	// longueur de la voiture
-	public double length;
+	protected double length;
 	// espace moyen entre deux véhicules à l'arrêt
-	public static double minSpaceBetweenVehicles = 0.7;
+	private static double minSpaceBetweenVehicles = 0.7;
 	
 	// trajectoire du véhicule une fois calculée
-	protected Stack<Road> path;
-	public Stack<Road> tempPath;
+	private Stack<Road> path;
+	private Stack<Road> tempPath;
 	// La trajectoire du véhicule est-elle calculée ?
-	protected boolean pathCalculated = false;
+	private boolean pathCalculated = false;
 	// évènements calculés à partir de Dijkstra
-	public PriorityQueue events = new PriorityQueue();
-	public PriorityQueue tempEvents = new PriorityQueue();
+	private PriorityQueue events = new PriorityQueue();
+	private PriorityQueue tempEvents = new PriorityQueue();
 	
 	/**
 	 * Constructeur à partir des information de localisation
@@ -40,7 +49,7 @@ public class AbstractVehicle {
 	 */
 	public AbstractVehicle(Location location)
 	{
-		identifier = identificator;
+		this.identifier = identificator;
 		identificator++;
 		this.location = location;
 	}
@@ -52,13 +61,13 @@ public class AbstractVehicle {
 	public void savePath(Stack<Road> path)
 	{
 		this.pathCalculated = true;
-		this.path = path;
+		this.setPath(path);
 	}
 	
 	private Stack<Road> getPathCopy()
 	{
 		Stack<Road> path = new Stack<Road>();
-		for(Road r : this.path)
+		for(Road r : this.getPath())
 		{
 			path.add(r);
 		}
@@ -72,7 +81,7 @@ public class AbstractVehicle {
 	
 	public PriorityQueue getEventsCopy()
 	{
-		return events.getCopy();
+		return getEvents().getCopy();
 	}
 	
 	public void setTempEvents()
@@ -87,18 +96,18 @@ public class AbstractVehicle {
 		{
 			Road road = path.pop();
 			
-			if(location.initialRoad.identifier==location.finalRoad.identifier
-					& location.initialPosition>location.finalPosition)
+			if(getLocation().initialRoad.getIdentifier()==getLocation().finalRoad.getIdentifier()
+					& getLocation().initialPosition>getLocation().finalPosition)
 			{
-				System.out.print("Road "+road.identifier+" -> "+"Intersection "+road.destination.identifier+"; ");
+				System.out.print("Road "+road.getIdentifier()+" -> "+"Intersection "+road.getDestination().identifier+"; ");
 			}
-			if(road.equals(location.finalRoad))
+			if(road.equals(getLocation().finalRoad))
 			{
-				System.out.print("Road "+road.identifier+" -> ");
+				System.out.print("Road "+road.getIdentifier()+" -> ");
 			}
 			else
 			{
-				System.out.print("Road "+road.identifier+" -> "+"Intersection "+road.destination.identifier+"; ");
+				System.out.print("Road "+road.getIdentifier()+" -> "+"Intersection "+road.getDestination().identifier+"; ");
 			}
 		}
 		System.out.println("end\n");
@@ -124,8 +133,8 @@ public class AbstractVehicle {
 	 */
 	public static boolean inferiorPath(Graph graph, AbstractVehicle a, AbstractVehicle b)
 	{
-		Cost aPath = graph.costsMatrix[a.intersectionBeforeEnd().identifier][a.intersectionAfterStart().identifier];
-		Cost bPath = graph.costsMatrix[b.intersectionBeforeEnd().identifier][b.intersectionAfterStart().identifier];
+		Cost aPath = graph.getCost(a.intersectionBeforeEnd().identifier, a.intersectionAfterStart().identifier);
+		Cost bPath = graph.getCost(b.intersectionBeforeEnd().identifier, b.intersectionAfterStart().identifier);
 		return Cost.inferior(aPath, bPath);
 	}
 	
@@ -138,16 +147,16 @@ public class AbstractVehicle {
 		int c=0;
 		
 		// la voiture continue à avancer
-		if(location.lastEventNature==0 | location.lastEventNature==3)
+		if(getLocation().lastEventNature==0 | getLocation().lastEventNature==3)
 		{
-			duration = Time.time-location.currentDate;
-			distance = Time.distance(location.currentRoad, duration);
-			location.currentPosition += distance;
+			duration = Time.time-getLocation().currentDate;
+			distance = Time.distance(getLocation().currentRoad, duration);
+			getLocation().currentPosition += distance;
 		}
-		if(location.lastEventNature==1)
+		if(getLocation().lastEventNature==1)
 		{
-			waitingVehicles = new AbstractVehicle[location.currentRoad.waitingVehicles.size()];
-			for(AbstractVehicle v : location.currentRoad.waitingVehicles)
+			waitingVehicles = new AbstractVehicle[getLocation().currentRoad.getWaitingVehicles().size()];
+			for(AbstractVehicle v : getLocation().currentRoad.getWaitingVehicles())
 			{
 				waitingVehicles[c] = v;
 				c++;
@@ -160,15 +169,15 @@ public class AbstractVehicle {
 				{
 					throw new IllegalStateException("La liste des véhicules vehiclesWaitingOnRoad est corrompue.");
 				}
-				distance += waitingVehicles[c].length+AbstractVehicle.minSpaceBetweenVehicles;
+				distance += waitingVehicles[c].getLength()+AbstractVehicle.getMinSpaceBetweenVehicles();
 				c--;
 			}
-			location.currentPosition-=distance;
+			getLocation().currentPosition-=distance;
 			
 		}
-		if(location.lastEventNature==2)
+		if(getLocation().lastEventNature==2)
 		{
-			location.onIntersection = true;
+			getLocation().onIntersection = true;
 		}
 	}
 	
@@ -180,7 +189,7 @@ public class AbstractVehicle {
 	 */
 	public AbstractIntersection intersectionAfterStart()
 	{
-		return location.nextIntersection();
+		return getLocation().nextIntersection();
 	}
 	
 	/**
@@ -191,7 +200,7 @@ public class AbstractVehicle {
 	 */
 	public AbstractIntersection intersectionBeforeEnd()
 	{
-		return location.finalIntersection();
+		return getLocation().finalIntersection();
 	}
 	
 	/**
@@ -226,10 +235,55 @@ public class AbstractVehicle {
 	}
 	
 	public String toString(){
-		String result = "Véhicule " + this.identifier + " : ";
-		result += this.location.toString();
+		String result = "Véhicule " + this.getIdentifier() + " : ";
+		result += this.getLocation().toString();
 		return result;
 	}
+
+	public int getIdentifier() {
+		return identifier;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public double getLength() {
+		return length;
+	}
+
+	public static double getMinSpaceBetweenVehicles() {
+		return minSpaceBetweenVehicles;
+	}
+
+	public Stack<Road> getPath() {
+		return path;
+	}
+
+	public void setPath(Stack<Road> path) {
+		this.path = path;
+	}
+
+	public Stack<Road> getTempPath() {
+		return tempPath;
+	}
+
+	public boolean getPathCalculated() {
+		return pathCalculated;
+	}
+	
+	public void isPathCalculated() {
+		pathCalculated = true;
+	}
+
+	public PriorityQueue getEvents() {
+		return events;
+	}
+
+	public PriorityQueue getTempEvents() {
+		return tempEvents;
+	}
+	
 }
 
 
