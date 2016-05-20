@@ -1,4 +1,7 @@
-package smartCars;
+package resources;
+
+import graph.AbstractIntersection;
+import graph.Road;
 
 /**
  * Données de localisation d'un véhicule.
@@ -21,18 +24,20 @@ public class Location {
 	public double finalDate;
 	
 	// données de la position courante significatives
-	// seulement si une requête de localisation du véhicule a été formulée
+	// seulement si une requête de localisation du véhicule a été formulée,
+	// et seront dans ce cas calculées à la date Time.time
 	public Road currentRoad;
 	public double currentPosition;
 	public double currentDate;
+	public boolean onIntersection = false;
 	
+	// nature du dernier évènement exécuté concernant le véhicule
 	public int lastEventNature = 4;
 	
 	/**
 	 * Constructeur unique, ne doit être utilisé que par le parser,
 	 * ou lors de l'insertion d'un nouveau véhicule.
 	 */
-	//TODO
 	public Location(Road initialRoad, double initialPosition, double initialDate, Road finalRoad, double finalPosition, double finalDate)
 	{
 		waitingForIntersection = false;
@@ -68,7 +73,7 @@ public class Location {
 	 */
 	public AbstractIntersection nextIntersection()
 	{
-		return initialRoad.destination;
+		return initialRoad.getDestination();
 	}
 
 	/**
@@ -78,7 +83,7 @@ public class Location {
 	 */
 	public AbstractIntersection finalIntersection()
 	{
-		return finalRoad.origin;
+		return finalRoad.getOrigin();
 	}
 	
 	/**

@@ -1,17 +1,25 @@
-package smartCars;
+package problem;
 
 import java.awt.*;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import graph.AbstractIntersection;
+import graph.Road;
+import resources.CartesianCoordinate;
+import resources.Cost;
+import smartcars.AbstractVehicle;
+import graph.Graph;
+
 /**
  * Created by tc on 18/05/16.
  */
+
 public class GraphStateGenerator{
 
-    static CartesianCoordinate point1 = new CartesianCoordinate(0,0);
-    static CartesianCoordinate point2 = new CartesianCoordinate(2000,1000);
+    private static CartesianCoordinate point1 = new CartesianCoordinate(0,0);
+    private static CartesianCoordinate point2 = new CartesianCoordinate(2000,1000);
 
     public static GraphState GraphStateGenerator(int intersectionNb, int vehicleNb){
         ArrayList<AbstractIntersection> intersections = intersectionsGenerator(intersectionNb);
@@ -34,6 +42,7 @@ public class GraphStateGenerator{
         return intersections;
     }
 
+    
     private static ArrayList<Road> roadsGenerator(ArrayList<AbstractIntersection> intersections){
         ArrayList<Road> roads = new ArrayList<Road>();
         Road road;
@@ -73,7 +82,7 @@ public class GraphStateGenerator{
         for(AbstractIntersection origin : intersections){
             for(AbstractIntersection destination : intersections){
                 if(origin != destination){
-                    if(Cost.isInfinite(graph.costsMatrix[destination.identifier][origin.identifier])){
+                    if(Cost.isInfinite(graph.getCostsMatrix()[destination.identifier][origin.identifier])){
                         Cost cost = new Cost(origin.center.distanceFrom(destination.center));
                         road = new Road(origin.center, destination.center, origin, destination, (double) 50, cost, 1, 10 );
                         roads.add(road);
@@ -88,6 +97,5 @@ public class GraphStateGenerator{
 
         return roads;
     }
-
 
 }

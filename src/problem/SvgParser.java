@@ -1,4 +1,4 @@
-package smartCars;
+package problem;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +19,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import graph.AbstractIntersection;
+import graph.Road;
+import resources.CartesianCoordinate;
+import resources.Cost;
+import resources.Location;
+import smartcars.AbstractVehicle;
+
 /**
  * Cette classe permet de créer un graphe à partir d'une image svg. 
  * Elle en extrait également les voitures.
@@ -26,15 +33,6 @@ import org.xml.sax.SAXException;
  */
 public class SvgParser {
 
-	// ***** Commentaires de lecture et questions *****
-		// -> pourquoi utiliser float plutôt que double ?
-		// -> ajout d'une initialisation de fortune du coût d'une route
-		// -> il faudra utiliser les constructeurs complets des objets,
-		// quitte à modifier ces constructeurs, pour faciliter la lecture et cibler le debug :
-		// commencer par définir les caractéristiques de l'objet à créer avant d'instancier la classe
-		// -> je pense que l'exception NullPointerException est due à l'initialisation des routes de ce constructeur
-		
-		//TODO définir les normes de l'image (notamment les couleurs)
 		/**
 		 * Étapes du parsing de l'image:
 		 * 0 : Ouvrir le fichier .svg
@@ -210,8 +208,8 @@ public class SvgParser {
 			// Renseignement de origin d'un nouveau leavingRoad
 			origin.getLeavingRoads().add(parseRoad);
 
-			System.out.println("Road " + parseRoad.identifier + " parsed: " +
-					parseRoad.point1 + "; " + parseRoad.point2);
+			System.out.println("Road " + parseRoad.getIdentifier() + " parsed: " +
+					parseRoad.getPoint1() + "; " + parseRoad.getPoint2());
 			//this.roads.add(parseRoad);
 			return parseRoad;
 		}
@@ -253,8 +251,8 @@ public class SvgParser {
 			CartesianCoordinate finalProjection = initialRoad.coordinateProjection(destination);
 			
 			// Calcul de initialPosition et de finalPosition
-			initialPosition = initialRoad.point1.distanceFrom(positionProjection);
-			finalPosition = finalRoad.point1.distanceFrom(finalProjection);
+			initialPosition = initialRoad.getPoint1().distanceFrom(positionProjection);
+			finalPosition = finalRoad.getPoint1().distanceFrom(finalProjection);
 			
 			// finalDate=0. n'est pas significative
 			Location vehiculeLocation = new Location(initialRoad, initialPosition, initialDate, finalRoad, finalPosition, 0.);

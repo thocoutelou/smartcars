@@ -1,9 +1,13 @@
-package smartCars;
+package resources;
 
 import java.util.ArrayList;
 
+import graph.AbstractIntersection;
+import graph.Road;
+
 public class CartesianCoordinate {
 	
+	//TODO passer en private
 	public double x;
 	public double y;
 	

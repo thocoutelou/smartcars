@@ -1,17 +1,17 @@
 package tests;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.junit.Test;
 
-import smartCars.Graph;
-import smartCars.SvgParser;
+import graph.Graph;
+import problem.SvgParser;
 
 public class SvgParserTest {
 
-		String project_location = SvgParser.getProjectLocation();
-		String exemple_location = project_location+"/media/exemple/";
+	String project_location = SvgParser.getProjectLocation();
+	String exemple_location = project_location+"/media/exemple/";
+	
 	@Test
 	public void test() {
 
@@ -24,8 +24,7 @@ public class SvgParserTest {
 			graph = SvgParser.parseGraphState(file);
 			System.out.println(graph);
 		}
-
-		return;
+		
 	}
 
 }

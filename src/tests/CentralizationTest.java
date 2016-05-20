@@ -2,10 +2,10 @@ package tests;
 
 import org.junit.Test;
 
-import smartCars.AbstractEvent;
-import smartCars.GraphState;
-import smartCars.PriorityQueue;
-import smartCars.SvgParser;
+import events.AbstractEvent;
+import problem.GraphState;
+import problem.SvgParser;
+import resources.PriorityQueue;
 
 public class CentralizationTest {
 	
@@ -34,7 +34,7 @@ public class CentralizationTest {
 		while(!events.qisEmpty())
 		{
 			event = events.qremove();
-			System.out.println(event+" se réaliserait à t="+event.date);
+			System.out.println(event+" se réaliserait à t="+event.getDate());
 		}
 	}
 

@@ -2,11 +2,11 @@ package tests;
 
 import org.junit.Test;
 
-import smartCars.AbstractEvent;
-import smartCars.GraphState;
-import smartCars.PriorityQueue;
-import smartCars.SvgParser;
-import smartCars.Time;
+import events.AbstractEvent;
+import problem.GraphState;
+import problem.SvgParser;
+import resources.PriorityQueue;
+import resources.Time;
 
 public class DatesTest {
 	
@@ -24,11 +24,11 @@ public class DatesTest {
 
 		AbstractEvent event;
 		System.out.println("Vérification de la chronologie de ces évènements (dates factices) :");
-		PriorityQueue events = graph3.vehicles.get(0).getEventsCopy();
+		PriorityQueue events = graph3.getVehicles().get(0).getEventsCopy();
 		while(!events.qisEmpty())
 		{
 			event = events.qremove();
-			System.out.println(event+" se réaliserait à t="+event.date);
+			System.out.println(event+" se réaliserait à t="+event.getDate());
 		}
 		System.out.println("\n");
 		
@@ -40,7 +40,7 @@ public class DatesTest {
 		while(!events.qisEmpty())
 		{
 			event = events.qremove();
-			System.out.println(event+" se réalise à t="+event.date);
+			System.out.println(event+" se réalise à t="+event.getDate());
 		}
 	}
 

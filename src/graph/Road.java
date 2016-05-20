@@ -1,9 +1,14 @@
-package smartCars;
+package graph;
 
 import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import events.AbstractEvent;
+import resources.CartesianCoordinate;
+import resources.Cost;
+import resources.PriorityQueue;
+import smartcars.AbstractVehicle;
 
 /**
  * Route du graphe.
@@ -16,41 +21,42 @@ public class Road {
 	// identificateur des instances, s'incrémente à chaque instanciation...
 	private static int identificator = 0;
 	// ... pour définir l'identifiant de la route créée
-	public final int identifier;
+	private final int identifier;
 	// coût de traversé de la route
 	// indépendant du coût de traversée des intersections
-	public Cost cost;
-	// nombre de voies
-	public int lane;
+	private Cost cost;
+	// nombre de voies, utile pour une éventuelle méthode 'doubler'
+	@SuppressWarnings("unused")
+	private int lane;
 	// longueur absolue de la route en mètres
-	public double absoluteLength;
+	private double absoluteLength;
 	
 	// la longueur disponible de la route sera variable,
 	// car doit prendre en compte les véhicules en attente
 	// de traversée de la prochaine intersection
-	public double length;
+	private double length;
 	// vitesse de circulation autorisée (km/h)
 	// et vitesse supposée des véhicules sur la route
-	public double speed;
+	private double speed;
 	// intersection d'origine de la route
-	public final AbstractIntersection origin;
+	private final AbstractIntersection origin;
 	// intersection d'arrivée de la route
-	public final AbstractIntersection destination;
+	private final AbstractIntersection destination;
 	// durée moyenne d'attente devant l'intersection d'arrivée
-	public double averageWaitingTime;
+	private double averageWaitingTime;
 	
 	// géométrie de la route:
 	// point de départ
-	public final CartesianCoordinate point1;
+	private final CartesianCoordinate point1;
 	// point d'arrivée
-	public final CartesianCoordinate point2;
+	private final CartesianCoordinate point2;
 	
 	// véhicules sur la route
-	public Queue<AbstractVehicle> vehiclesOnRoad = new LinkedList<AbstractVehicle>();
+	private Queue<AbstractVehicle> vehiclesOnRoad = new LinkedList<AbstractVehicle>();
 	// dont véhicules en attente de sortie de la route
-	public Queue<AbstractVehicle> waitingVehicles = new LinkedList<AbstractVehicle>();
+	private Queue<AbstractVehicle> waitingVehicles = new LinkedList<AbstractVehicle>();
 	// évènements implémentant les attentes de traversée de la prochaine intersection
-	public PriorityQueue eventsWaitingOnRoad = new PriorityQueue();
+	private PriorityQueue eventsWaitingOnRoad = new PriorityQueue();
 	
 	/**
 	 * constructeur unique, doit être utilisé seulement par le parser
@@ -73,8 +79,8 @@ public class Road {
 		this.cost = cost;
 		this.lane = lane;
 		this.averageWaitingTime = averageWaitingTime;
-		this.absoluteLength = this.point1.distanceFrom(point2);
-		this.length = this.absoluteLength;
+		this.absoluteLength = this.getPoint1().distanceFrom(point2);
+		this.length = this.getAbsoluteLength();
 	}
 	
 	/**
@@ -86,8 +92,8 @@ public class Road {
 	 */
 	public static Road minimum(Road a, Road b)
 	{
-		Cost minCost = Cost.minimum(a.cost, b.cost);
-		if(minCost.equals(a.cost)) return a;
+		Cost minCost = Cost.minimum(a.getCost(), b.getCost());
+		if(minCost.equals(a.getCost())) return a;
 		else return b;
 	}
 	
@@ -128,11 +134,44 @@ public class Road {
 		double length = 0.;
 		for(int i=left; i<eWORArray.length; i++)
 		{
-			length += eWORArray[i].vehicle.length+AbstractVehicle.minSpaceBetweenVehicles;
+			length += eWORArray[i].getVehicle().getLength()+AbstractVehicle.getMinSpaceBetweenVehicles();
 		}
 		return length;
 	}
+
+	/**
+	 * Calcule la longueur courante de la file des voitures
+	 * en attente de traversée de l'intersection suivante.
+	 * @return longueur totale de la file d'attente
+	 */
+	public double lengthWaiting()
+	{
+		return lengthWaiting(0);
+	}
 	
+	/**
+	 * Calcule la file des 'first' premières voitures
+	 * dans la file des voitures en attente de traversée de l'intersection suivante.
+	 * @param first
+	 * @return longueur de la file des first premières voitures
+	 */
+	public double lengthFirstWaiting(int first)
+	{
+		AbstractEvent[] eWORArray = eventsWaitingOnRoadToArray();
+		double length = 0.;
+		for(int i=0; i<first; i++)
+		{
+			length += eWORArray[i].getVehicle().getLength()+AbstractVehicle.getMinSpaceBetweenVehicles();
+		}
+		return length;
+	}
+
+	/**
+	 * Crée une copie superficielle de la liste eventsWaitingOnRoad ;
+	 * les évènements à l'intérieur de cette liste ne sont pas copiés
+	 * mais sont les instances originales des évènements présents dans la liste de départ.
+	 * @return copie des eventsWaitingOnRoad
+	 */
 	public PriorityQueue eventsWaitingOnRoadCopy()
 	{
 		PriorityQueue eWORCopy = new PriorityQueue();
@@ -140,6 +179,10 @@ public class Road {
 		return eWORCopy;
 	}
 	
+	/**
+	 * Transforme la liste des eventsWaitingOnRoad en un tableau.
+	 * @return tableau des eventsWaitingOnRoad
+	 */
 	public AbstractEvent[] eventsWaitingOnRoadToArray()
 	{
 		PriorityQueue eWORCopy = eventsWaitingOnRoadCopy();
@@ -154,16 +197,6 @@ public class Road {
 	}
 	
 	/**
-	 * Calcule la longueur courante de la file des voitures
-	 * en attente de traversée de l'intersection suivante.
-	 * @return longueur de la file d'attente
-	 */
-	public double lengthWaiting()
-	{
-		return lengthWaiting(0);
-	}
-
-	/**
 	 * Diminue la longueur disponible de la route d'une certaine distance.
 	 * @param distance
 	 * @return La longueur de la route a-t-elle pu être diminuée ?
@@ -171,14 +204,14 @@ public class Road {
 	public boolean decreaseLength(double distance)
 	{
 		// Marge d'erreur de 1 dm
-		if(length+0.1<distance)
+		if(getLength()+0.1<distance)
 		{
 			return false;
 		}
 		else
 		{
-			if(length<distance) length=0.;
-			else length-=distance;
+			if(getLength()<distance) length=0.;
+			else length -= distance;
 			return true;
 		}
 	}
@@ -192,14 +225,14 @@ public class Road {
 	private boolean increaseLength(double distance)
 	{
 		// Marge d'erreur de 1 dm
-		if(length+distance>absoluteLength+0.1)
+		if(getLength()+distance>getAbsoluteLength()+0.1)
 		{
 			return false;
 		}
 		else
 		{
-			if(length+distance>absoluteLength) length=absoluteLength;
-			else length-=distance;
+			if(getLength()+distance>getAbsoluteLength()) length=getAbsoluteLength();
+			else length+=distance;
 			return true;
 		}
 	}
@@ -213,15 +246,14 @@ public class Road {
 	public void newWaitingVehicle(AbstractVehicle vehicle) throws IllegalStateException
 	{
 		// Test à effets de bord
-		if(!decreaseLength(vehicle.length+AbstractVehicle.minSpaceBetweenVehicles))
+		if(!decreaseLength(vehicle.getLength()+AbstractVehicle.getMinSpaceBetweenVehicles()))
 		{
-			vehicle.location.currentRoad.destination.obstruction = true;
-			throw new IllegalStateException("La saturation de la route "+identifier+" obstrue l'intersection "+vehicle.location.currentRoad.origin);
+			throw new IllegalStateException("La saturation de la route "+getIdentifier()+" obstrue l'intersection "+vehicle.getLocation().currentRoad.getOrigin());
 		}
 		else
 		{
-			waitingVehicles.add(vehicle);
-			vehicle.location.waitingForIntersection = true;
+			getWaitingVehicles().add(vehicle);
+			vehicle.getLocation().waitingForIntersection = true;
 		}
 	}
 	
@@ -233,28 +265,32 @@ public class Road {
 	 */
 	public void formerWaitingVehicle(AbstractVehicle vehicle) throws IllegalStateException
 	{
-		AbstractVehicle leavingVehicle = waitingVehicles.remove();
-		vehicle.location.waitingForIntersection = false;
+		AbstractVehicle leavingVehicle = getWaitingVehicles().remove();
+		vehicle.getLocation().waitingForIntersection = false;
 		if(!vehicle.equals(leavingVehicle))
 		{
 			throw new IllegalStateException("La liste des eventsWaitingOnRoad est corrompue.");
 		}
-		increaseLength(leavingVehicle.length+AbstractVehicle.minSpaceBetweenVehicles);
+		increaseLength(leavingVehicle.getLength()+AbstractVehicle.getMinSpaceBetweenVehicles());
 		if(!vehiclesOnRoad.remove(leavingVehicle))
 		{
 			throw new IllegalStateException("Les files de voitures présentes et en attente ne correspondent pas");
 		}
 	}
 	
-	// Associe à un point M le point le plus proche qui appartient au segment Road
+	/**
+	 * Associe à un point M le point le plus proche qui appartient au segment Road.
+	 * @param pointM
+	 * @return point le plus proche appartenant à une route
+	 */
 	public CartesianCoordinate coordinateProjection(CartesianCoordinate pointM){
-		double pente = (point2.y - point1.y) / (point2.x - point1.x);
-		double k = (pente*(point1.x-pointM.x) + pointM.y - point1.y) / (1 + pente*pente);
+		double pente = (getPoint2().y - getPoint1().y) / (getPoint2().x - getPoint1().x);
+		double k = (pente*(getPoint1().x-pointM.x) + pointM.y - getPoint1().y) / (1 + pente*pente);
 		CartesianCoordinate pointH = new CartesianCoordinate(pointM.x + k*pente, pointM.y-k);
-		if(pointH.x>point2.x){
-			return point2;
-		} else if (pointH.x<point1.x){
-			return point1;
+		if(pointH.x>getPoint2().x){
+			return getPoint2();
+		} else if (pointH.x<getPoint1().x){
+			return getPoint1();
 		} else {
 			return pointM;
 		}
@@ -264,14 +300,76 @@ public class Road {
 	 * Identification de la route.
 	 */
 	public String toString(){
-		return "Road " + this.identifier;
+		return "Road " + this.getIdentifier();
 	}
 	
 	/**
 	 * Identification détaillée de la route.
 	 */
 	public String toStringDetailed(){
-		return  "Road " + this.identifier + " origin=" + this.origin + " destination=" + this.destination;
+		return  "Road " + this.getIdentifier() + " origin=" + this.getOrigin() + " destination=" + this.getDestination();
+	}
+
+	
+	// *** Getters ***
+	
+	public int getIdentifier() {
+		return identifier;
+	}
+
+	public Cost getCost() {
+		return cost;
+	}
+
+	public double getAbsoluteLength() {
+		return absoluteLength;
+	}
+
+	public double getLength() {
+		return length;
+	}
+	public double getSpeed() {
+		return speed;
+	}
+
+	public AbstractIntersection getOrigin() {
+		return origin;
+	}
+
+	public AbstractIntersection getDestination() {
+		return destination;
+	}
+
+	public double getAverageWaitingTime() {
+		return averageWaitingTime;
+	}
+
+	public CartesianCoordinate getPoint1() {
+		return point1;
+	}
+
+	public CartesianCoordinate getPoint2() {
+		return point2;
+	}
+	
+	public Queue<AbstractVehicle> getVehiclesOnRoad() {
+		return vehiclesOnRoad;
+	}
+	
+	public void removeVehiclesOnRoad(AbstractVehicle vehicle) {
+		// test à effet de bord
+		if(!vehiclesOnRoad.remove(vehicle))
+		{
+			throw new IllegalStateException("La liste vehiclesOnRoad est corrompue.");
+		}
+	}
+
+	public Queue<AbstractVehicle> getWaitingVehicles() {
+		return waitingVehicles;
+	}
+	
+	public PriorityQueue getEventsWaitingOnRoad() {
+		return eventsWaitingOnRoad;
 	}
 	
 }

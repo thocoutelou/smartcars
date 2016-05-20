@@ -1,6 +1,8 @@
-package smartCars;
+package graph;
 
 import java.util.ArrayList;
+
+import resources.Cost;
 
 /**
  * Le graphe est représenté par la liste de ses noeuds (intersections AbstractIntersection),
@@ -11,17 +13,14 @@ import java.util.ArrayList;
 public class Graph {
 	
 	// intersections du graphe (suffit à définir le graphe))
-	public ArrayList<AbstractIntersection> intersections = new ArrayList<AbstractIntersection>();
+	private ArrayList<AbstractIntersection> intersections = new ArrayList<AbstractIntersection>();
 	// routes du graphe
-	public ArrayList<Road> roads = new ArrayList<Road>();
-	// matrice de Floyd-Warshall en devenir du graphe, initialisée dans le constructeur
-	public Cost[][] costsMatrix;
+	private ArrayList<Road> roads = new ArrayList<Road>();
 
-	/**
-	 * constructeur temporaire, afin de visualiser les étapes de l'instanciation
-	 * @param intersections
-	 * @param roads
-	 */
+	// matrice de Floyd-Warshall en devenir du graphe, initialisée dans le constructeur
+	private Cost[][] costsMatrix;
+
+	
 	public Graph(ArrayList<AbstractIntersection> intersections, ArrayList<Road> roads)
 	{
 		this.intersections = intersections;
@@ -35,25 +34,10 @@ public class Graph {
 	 */
 	public void listRoads()
 	{
-		for(AbstractIntersection i : intersections)
+		for(AbstractIntersection i : getIntersections())
 		{
 			roads.addAll(i.getLeavingRoads());
 		}
-	}
-	
-	/**
-	 * Effectue tous les calculs menant à la résolution du problème,
-	 * en partant du principe que l'instance est correctement initialisée.
-	 */
-	// TODO Actualiser au fur et à mesure des tests.
-	public final void resolve(int map)
-	{
-		String projectLocation = SvgParser.getProjectLocation();
-		String mapLocation = new String(projectLocation+"/media/map/"+map+".svg");
-		GraphState graph = SvgParser.parseGraphState(mapLocation);
-		graph.calculatePaths();
-		graph.gatherEvents();
-		
 	}
 	
 	/**
@@ -62,10 +46,34 @@ public class Graph {
 	public String toString() {
 		String newline = System.getProperty("line.separator");
 		String result = "\n\n<---   Graph print   --->" + newline;
-		for (int i=0; i<intersections.size(); i++){
-			result += intersections.get(i).toStringDetailed()+ newline;
+		for (int i=0; i<getIntersections().size(); i++){
+			result += getIntersections().get(i).toStringDetailed()+ newline;
 		}
 		return result;
 	}
+	
+	
+	// *** Getters ***
+	
+	public Cost getCost(int j, int i)
+	{
+		return costsMatrix[j][i];
+	}
+	
+	public double getFiniteCost(int j, int i)
+	{
+		return costsMatrix[j][i].getFiniteCost();
+	}
+	
+	public ArrayList<AbstractIntersection> getIntersections() {
+		return intersections;
+	}
+	
+	public ArrayList<Road> getRoads()
+	{
+		return roads;
+	}
+
+	public Cost[][] getCostsMatrix() {return costsMatrix;}
 	
 }

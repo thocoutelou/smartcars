@@ -1,9 +1,10 @@
 package tests;
 
 import org.junit.Test;
-import smartCars.Graph;
-import smartCars.SvgGenerator;
-import smartCars.SvgParser;
+
+import graph.Graph;
+import problem.SvgGenerator;
+import problem.SvgParser;
 
 import java.io.File;
 import java.io.IOException;

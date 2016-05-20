@@ -1,7 +1,11 @@
-package smartCars;
+package graph;
 
 
 import java.util.ArrayList;
+
+import resources.CartesianCoordinate;
+import resources.Cost;
+import smartcars.AbstractVehicle;
 
 /**
  * Intersection du graphe.
@@ -12,19 +16,18 @@ import java.util.ArrayList;
 public class AbstractIntersection {
 	
 	// identificateur des instances, s'incrémente à chaque instanciation...
-	protected static int identificator = 0;
+	private static int identificator = 0;
 	// ... pour définir l'identifiant de l'intersection créée
 	public final int identifier;
 	// routes sortant de l'intersection
 	private ArrayList<Road> leavingRoads;
 	// véhicules sur l'intersection
-	public ArrayList<AbstractVehicle> vehiclesOnIntersection = new ArrayList<AbstractVehicle>();
+	private ArrayList<AbstractVehicle> vehiclesOnIntersection = new ArrayList<AbstractVehicle>();
 	
 	// durée moyenne de traversée de l'intersection
-	public double averageTime;
-	// L'intersection est-elle encombrée ?
-	public boolean obstruction;
+	private double averageTime;
 	
+	//TODO passer en private
 	// géométrie de l'intersection
 	public final CartesianCoordinate center;
 	public final float radius;
@@ -41,29 +44,25 @@ public class AbstractIntersection {
 		this.center= center;
 		this.radius = radius;
 		this.averageTime = averageTime;
-		obstruction = false;
-		// l'initialisation de leavingRoads est nécessaire, mais difficile à faire dès l'instanciation de l'intersection
+		// l'initialisation de leavingRoads est nécessaire,
+		// mais impossible à réaliser dès l'instanciation de l'intersection
 		this.leavingRoads = new ArrayList<Road>();
 	}
 
 
 	/**
-	 * Getter des routes sortant de l'intersection.
-	 * @return Routes sortantes
+	 * Calcule la somme du coût d'une route
+	 * et de son intersection d'arrivée.
+	 * Permet de prendre en compte les coûts de traversée des intersection
+	 * lors du calcul des itinéraires (Dijkstra).
+	 * @param road
+	 * @return somme du coût de la route et de son intersection d'arrivée
 	 */
-	public ArrayList<Road> getLeavingRoads() {
-		return leavingRoads;
+	public static Cost intersectionCost(Road road)
+	{
+		return Cost.sum(road.getCost(), new Cost(road.getDestination().getAverageTime()));
 	}
 
-	/**
-	 * Setter des routes sortant de l'intersection.
-	 * Doit être utilisée par le parser en complément du constructeur.
-	 * @param leavingRoads
-	 */
-	public void setLeavingRoads(ArrayList<Road> leavingRoads) {
-		this.leavingRoads = leavingRoads;
-	}
-	
 	/**
 	 * Identification de l'intersection.
 	 */
@@ -72,10 +71,24 @@ public class AbstractIntersection {
 		return "Intersection " + this.identifier;
 	}
 
+	/**
+	 * Les intersections se chevauchent-elles ?
+	 * Méthode utilisée dans la génération aléatoire de graphes.
+	 * @param intersectionB
+	 * @return Les intersections se chevauchent-elles ?
+	 */
 	public boolean overlap(AbstractIntersection intersectionB){
 		return (this.center.distanceFrom(intersectionB.center) <= this.radius + intersectionB.radius );
 	}
 
+
+	/**
+	 * La liste des intersections contient-elle
+	 * une intersection qui chevauche l'instance courrante ?
+	 * Méthode utilisée dans la génération aléatoire de graphes.
+	 * @param intersections
+	 * @return Deux intersections se chevauchent-elles ?
+	 */
 	public boolean overlapList(ArrayList<AbstractIntersection> intersections){
 		for(AbstractIntersection intersection : intersections){
 			if(this.overlap(intersection)){
@@ -95,6 +108,35 @@ public class AbstractIntersection {
 			result += leavingRoads.get(i).toStringDetailed() + newline;
 		}
 		return result;
+	}
+	
+	
+	// *** Getters ***
+
+	public ArrayList<Road> getLeavingRoads() {
+		return leavingRoads;
+	}
+	
+	/**
+	 * Setter des routes sortant de l'intersection.
+	 * Doit être utilisée par le parser en complément du constructeur.
+	 * @param leavingRoads
+	 */
+	public void setLeavingRoads(ArrayList<Road> leavingRoads) {
+		this.leavingRoads = leavingRoads;
+	}
+	
+	public double getAverageTime() {
+		return averageTime;
+	}
+
+
+	public static int getIdentificator() {
+		return identificator;
+	}
+
+	public ArrayList<AbstractVehicle> getVehiclesOnIntersection() {
+		return vehiclesOnIntersection;
 	}
 
 }

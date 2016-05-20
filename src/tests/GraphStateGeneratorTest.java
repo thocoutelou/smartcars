@@ -1,10 +1,11 @@
 package tests;
 
-import smartCars.Cost;
-import smartCars.GraphState;
-import smartCars.GraphStateGenerator;
 import org.junit.Test;
-import smartCars.SvgGenerator;
+
+import problem.GraphState;
+import problem.GraphStateGenerator;
+import problem.SvgGenerator;
+
 import java.io.File;
 
 /**
