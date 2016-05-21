@@ -67,14 +67,14 @@ public class SvgParser {
 			System.out.println("<---   Graph parse   --->");
 
 			try {
-				// On crée le parser et xPath pour utiliser les expressins régulières
+				// On crée le parser et xPath pour utiliser les expressions régulières
 				builder = factory.newDocumentBuilder();
 				final Document document= builder.parse(file);
 				XPath xPath = XPathFactory.newInstance().newXPath();
 				XPathExpression exp;
 				NodeList nl;
 
-				//Regex pour récupérer la liste de tout les noeuds cirlce
+				//Regex pour récupérer la liste de tout les noeuds circle
 				exp = xPath.compile("//circle");
 				nl = (NodeList)exp.evaluate(document, XPathConstants.NODESET);
 				//Parse de toutes les intersections

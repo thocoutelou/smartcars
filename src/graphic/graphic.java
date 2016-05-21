@@ -1,9 +1,14 @@
 package graphic;
 
-//ÒýÈëËùÐèÒªµÄ°ü£¬ºÜ¶àÊÇÎªÁË¶¨ÒåÀàÐÍ
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Ä°ï¿½Ü¶ï¿½ï¿½ï¿½Îªï¿½Ë¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 import javafx.application.Application;// (extends) identifier le type 'Application' 
 import javafx.stage.Stage;//identifier le type 'Stage'
 import problem.GraphState;
+import problem.SvgParser;
 import javafx.scene.control.Button;//identifier le type 'Button'
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -28,55 +33,56 @@ public class graphic extends Application {
 	//private int svg;
 	//private double date;
 	
-	 public void start(Stage primaryStage) { //start£¨£©ÊÇ³ÌÐòµÄÈë¿Ú
+	 public void start(Stage primaryStage) { //startï¿½ï¿½ï¿½ï¿½ï¿½Ç³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		 
-		//ÕâÀï²ÉÓÃÍø¸ñ²¼¾Ö
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñ²¼¾ï¿½
 	     GridPane grid = new GridPane();
-	     grid.setAlignment(Pos.CENTER);//Ä¬ÈÏÎª¾ÓÖÐÏÔÊ¾
-	     grid.setHgap(10);//gapÊôÐÔ¹ÜÀíÐÐÁÐÖ®¼äµÄ¼ä¾à,µ¥Î»ÏñËØ
+	     grid.setAlignment(Pos.CENTER);//Ä¬ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
+	     grid.setHgap(10);//gapï¿½ï¿½ï¿½Ô¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö®ï¿½ï¿½Ä¼ï¿½ï¿½,ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½
 	     grid.setVgap(10);
-	     grid.setPadding(new Insets(25,25,25,25));//padding¹ÜÀígridÃæ°å±ßÔµÖÜÎ§µÄ¼ä¾à£¬ÉÏÓÒÏÂ×ó
+	     grid.setPadding(new Insets(25,25,25,25));//paddingï¿½ï¿½ï¿½ï¿½gridï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½Î§ï¿½Ä¼ï¿½à£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		 
 	     
-	     //Ôö¼ÓÎÄ±¾TEXT±êÇ©LABELÎÄ±¾ÓòTEXT_FIELD£º´´½¨¿Ø¼þ
-	     //ÏÔÊ¾µÄÎÄ±¾TEXT
+	     //ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½TEXTï¿½ï¿½Ç©LABELï¿½Ä±ï¿½ï¿½ï¿½TEXT_FIELDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½
+	     //ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Ä±ï¿½TEXT
 	     Text scenetitle = new Text("Welcome to Smartcars!");
-	     scenetitle.setFont(Font.font("Tahoma",FontWeight.NORMAL,20));//ÉèÖÃ±äÁ¿µÄ×ÖÌå¡¢´ÖÏ¸ºÍ×ÖºÅ
-	     grid.add(scenetitle,0,0,2,1);//!!grid.add()º¯Êý½«scenetitle±äÁ¿Ìí¼Óµ½grid²¼¾ÖÖ®ÖÐ£¬µÚ0ÁÐµÚ0ÐÐÁÐ¿ç¶ÈÎª2ÐÐ¿ç¶ÈÎª1
-	     //´´½¨Label¶ÔÏó£¬·Åµ½µÚ0ÁÐ£¬µÚ1ÐÐ
+	     scenetitle.setFont(Font.font("Tahoma",FontWeight.NORMAL,20));//ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½å¡¢ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½Öºï¿½
+	     grid.add(scenetitle,0,0,2,1);//!!grid.add()ï¿½ï¿½ï¿½ï¿½scenetitleï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½gridï¿½ï¿½ï¿½ï¿½Ö®ï¿½Ð£ï¿½ï¿½ï¿½0ï¿½Ðµï¿½0ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½Îª2ï¿½Ð¿ï¿½ï¿½Îª1
+	     //ï¿½ï¿½ï¿½ï¿½Labelï¿½ï¿½ï¿½ó£¬·Åµï¿½ï¿½ï¿½0ï¿½Ð£ï¿½ï¿½ï¿½1ï¿½ï¿½
 	     Label number = new Label("SVG(A number from 0 to 4)");
 	     grid.add(number, 0, 1);
-	     //´´½¨ÎÄ±¾ÊäÈë¿ò£¬·Åµ½µÚ1ÁÐ£¬µÚ1ÐÐ
-	     TextField numberTextField = new TextField();
+	     //ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ò£¬·Åµï¿½ï¿½ï¿½1ï¿½Ð£ï¿½ï¿½ï¿½1ï¿½ï¿½
+	     final TextField numberTextField = new TextField();
 	     grid.add(numberTextField, 1, 1);
-	     //Í¬ÀíÉèÖÃÏÂÒ»À¸
+	     //Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 	     Label time = new Label("Date(A double number)");
 	     grid.add(time, 0, 2);
-	     TextField timeTextField = new TextField();
+	     final TextField timeTextField = new TextField();
 	     grid.add(timeTextField, 1, 2);
-	     //ÉèÖÃÊäÈëÊ±µÄ´íÎóÌáÊ¾ÐÅÏ¢£¨·´À¡£©
+	     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	     final Label label = new Label();
 	     GridPane.setConstraints(label, 0, 3);
 	     GridPane.setColumnSpan(label, 2);
 	     grid.getChildren().add(label);
 	     
-	     Scene scene = new Scene(grid,500,475);//³¡¾°sceneµÄ´óÐ¡ÉèÖÃ
+	     Scene scene = new Scene(grid,500,475);//ï¿½ï¿½ï¿½ï¿½sceneï¿½Ä´ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½
 	     
-	     //ÉèÖÃ°´Å¥µÄÐÅÏ¢
+	     //ï¿½ï¿½ï¿½Ã°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½Ï¢
 	     Button btn = new Button();
 	     btn.setText("Enter");
-	     HBox hbBtn = new HBox(10);//²¼¾ÖÃæ°å
-	     hbBtn.setAlignment(Pos.BOTTOM_RIGHT);//½«¶ÔÓ¦½ÚµãÉèÖÃÎª¿¿ÓÒÏÂ¶ÔÆë
-	     hbBtn.getChildren().add(btn);//½«°´Å¥¿Ø¼þ×÷Îª×Ó½Úµã
+	     HBox hbBtn = new HBox(10);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	     hbBtn.setAlignment(Pos.BOTTOM_RIGHT);//ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½ï¿½ï¿½
+	     hbBtn.getChildren().add(btn);//ï¿½ï¿½ï¿½ï¿½Å¥ï¿½Ø¼ï¿½ï¿½ï¿½Îªï¿½Ó½Úµï¿½
 	     grid.add(hbBtn,1,4);
 	     
 	     
-	     //µã»÷°´Å¥Ê±£¬»á½øÐÐ²Ù×÷
+	     //ï¿½ï¿½ï¿½ï¿½ï¿½Å¥Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½
 	     btn.setOnAction(new EventHandler<ActionEvent>(){
-	    	 public void handle(ActionEvent event){
+	    	 @SuppressWarnings("resource")
+			public void handle(ActionEvent event){
 	    		 int svg ;
 	    		 double date ;
-	    		 //¼ÓÈë³ÌÐò¶ÁÊý×ÖºÍÈÕÆÚ£¬¶Á³öÐÅÏ¢ºóÌæ»»Êý×ÖºÍÈÕÆÚ
+	    		 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öºï¿½ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½æ»»ï¿½ï¿½ï¿½Öºï¿½ï¿½ï¿½ï¿½ï¿½
 	    		 System.out.println(numberTextField.getText());
 	    		 System.out.println(timeTextField.getText());
 	    		 if ( (numberTextField.getText().equals("")) || (timeTextField.getText().equals(""))){
@@ -92,22 +98,25 @@ public class graphic extends Application {
 		    		     System.out.println("SVG Number : "+svg);
 		    		     date = Double.parseDouble(timeTextField.getText());
 		    		     System.out.println("Date : "+date);
-		    		     //¼ÓÈëÎÒÃÇµÄ³ÌÐò
+	    				 String file = new String(SvgParser.getProjectLocation()+"/media/exemple/"+svg+".svg");
+	    				 // lance une FileNotFoundException qui peut Ãªtre 'catch'
+	    				 new BufferedReader(new FileReader(file));
+		    		     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÇµÄ³ï¿½ï¿½ï¿½
 		    		     GraphState graph4 = GraphState.parse(svg);
 			    	     graph4.resolve();
 			    		 graph4.setCurrentLocations(date);
 	    			 }
-	    			 /*catch(FileNotFoundException fnfe)
+	    			 catch(FileNotFoundException e)
 	    			 {
-	    				 label.setText("This file number is not available.");
-	    			 }*/
+	    				 label.setText("File does not exist.");
+	    			 }
 	    			 catch(Exception e)
 	    			 {
 	    				 label.setText("You put wrong data.");
 	    			 }
 	    		 
 	    			
-	    		 System.out.println("\n\nSuccess!");//µã»÷°´Å¥ºó»áÔÚ¿ØÖÆÌ¨Êä³öÏÔÊ¾Success
+	    		 System.out.println("\n\nSuccess!");//ï¿½ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Success
 	    		 }
 	    	 }
 	     });
