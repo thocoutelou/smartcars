@@ -161,8 +161,9 @@ public class GraphState extends Graph {
 	 * Actualise la localisation courante de toutes les voitures à la date Time.time.
 	 * Cette méthode part donc du principe que Time.time est déjà modifié à la date souhaitée.
 	 */
-	public synchronized void setCurrentLocations()
+	public synchronized void setCurrentLocations(double time)
 	{
+		Time.time = time;
 		setVehiclesTempEvents();
 		PriorityQueue eventsCopy = getAllEventsCopy();
 		AbstractEvent event;
@@ -177,26 +178,7 @@ public class GraphState extends Graph {
 			}
 			if(event.getDate()<=Time.time)
 			{
-				if(event.getNature()==0)
-				{
-					EventVehicleStart.executeEvent(event);
-				}
-				if(event.getNature()==1)
-				{
-					EventWaitingOnRoad.executeEvent(event);
-				}
-				if(event.getNature()==2)
-				{
-					EventLeaveRoad.executeEvent(event);
-				}
-				if(event.getNature()==3)
-				{
-					EventEnterRoad.executeEvent(event);
-				}
-				if(event.getNature()==4)
-				{
-					EventVehicleEnd.executeEvent(event);
-				}
+				AbstractEvent.executeEvent(event);
 			}
 			else break;
 		}
@@ -233,6 +215,27 @@ public class GraphState extends Graph {
 			{
 				System.out.println(v.getLocation().currentRoad+"; "+"position "+v.getLocation().currentPosition+"m");
 			}
+		}
+	}
+	
+	/**
+	 * Calcule une vidéo des itinéraires des voitures
+	 * en vue de les afficher sur la carte.
+	 */
+	public void video(double increment)
+	{
+		double time = 0.;
+		double end = Time.endingTime(this);
+		PriorityQueue events = getAllEventsCopy();
+		while(time<=end)
+		{
+			while(events.qelement().getDate()<=time)
+			{
+				AbstractEvent.executeEvent(events.qremove());
+			}
+			Time.time = time;
+			setCurrentPositions();
+			time+=increment;
 		}
 	}
 	

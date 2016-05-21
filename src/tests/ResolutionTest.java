@@ -15,8 +15,7 @@ public class ResolutionTest {
 		
 		GraphState graph4 = GraphState.parse(4);
 		graph4.resolve();
-		Time.time = 80.;
-		graph4.setCurrentLocations();
+		graph4.setCurrentLocations(80.);
 		
 	}
 

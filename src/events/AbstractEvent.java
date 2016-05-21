@@ -138,6 +138,30 @@ public class AbstractEvent {
 		}
 	}
 	
+	public static void executeEvent(AbstractEvent event)
+	{
+		if(event.getNature()==0)
+		{
+			EventVehicleStart.executeEvent(event);
+		}
+		if(event.getNature()==1)
+		{
+			EventWaitingOnRoad.executeEvent(event);
+		}
+		if(event.getNature()==2)
+		{
+			EventLeaveRoad.executeEvent(event);
+		}
+		if(event.getNature()==3)
+		{
+			EventEnterRoad.executeEvent(event);
+		}
+		if(event.getNature()==4)
+		{
+			EventVehicleEnd.executeEvent(event);
+		}
+	}
+	
 	
 	// *** Getters ***
 

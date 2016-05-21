@@ -4,6 +4,7 @@ import events.AbstractEvent;
 import events.EventWaitingOnRoad;
 import graph.Road;
 import problem.GraphState;
+import smartcars.AbstractVehicle;
 
 public class Time {
 	
@@ -99,9 +100,25 @@ public class Time {
 				event.isTrueDate(true);
 				event.getVehicle().getTempEvents().qadd(event);
 				eventsCopy.qadd(event);
-			}	
+			}
+			else if(event.getNature()==4)
+			{
+				event.getVehicle().getLocation().finalDate=event.getDate();
+			}
 		}
 		System.out.println();
+	}
+
+	public static double endingTime(GraphState graph) {
+		double end = 0.;
+		for(AbstractVehicle v : graph.getVehicles())
+		{
+			if(v.getLocation().finalDate>end)
+			{
+				end = v.getLocation().finalDate;
+			}
+		}
+		return end;
 	}
 	
 	
