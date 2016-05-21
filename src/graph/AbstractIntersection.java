@@ -98,6 +98,21 @@ public class AbstractIntersection {
 		return false;
 	}
 
+	public static AbstractIntersection getClosestIntersection(CartesianCoordinate point1, ArrayList<AbstractIntersection> intersections){
+		if(intersections.size() == 0){
+			throw new IllegalArgumentException("Pas d'intersection");
+		}
+		AbstractIntersection closestIntersection = intersections.get(0);
+		double minimalDistance = point1.distanceFrom(closestIntersection.center);
+		for(AbstractIntersection intersection: intersections){
+			if(point1.distanceFrom(intersection.center) < minimalDistance){
+				closestIntersection = intersection;
+				minimalDistance = point1.distanceFrom(intersection.center);
+			}
+		}
+		return closestIntersection;
+	}
+
 	/**
 	 * Identification détaillée de l'intersection.
 	 */
