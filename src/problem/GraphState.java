@@ -1,5 +1,6 @@
 package problem;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -131,7 +132,7 @@ public class GraphState extends Graph {
 	 * @param map
 	 * @return graphe parsé
 	 */
-	public static GraphState parse(int map)
+	public static GraphState parse(int map) 
 	{
 		String projectLocation = SvgParser.getProjectLocation();
 		String mapLocation = new String(projectLocation+"/media/exemple/"+map+".svg");
