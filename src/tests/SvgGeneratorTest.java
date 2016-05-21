@@ -5,6 +5,7 @@ import org.junit.Test;
 import graph.Graph;
 import problem.SvgGenerator;
 import problem.SvgParser;
+import resources.Time;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,8 +27,13 @@ public class SvgGeneratorTest {
             System.out.println(file.getName());
             graph = SvgParser.parseGraphState(file);
             System.out.println(graph);
-            File outputFile= new File(output_location+file.getName());
-            SvgGenerator sg = new SvgGenerator(graph, outputFile);
+            File outputFile0= new File(output_location+file.getName());
+            SvgGenerator sg = new SvgGenerator(graph, outputFile0);
+
+            // Modification de la date pour voir l'évolution des véhicules
+            Time.time = 10;
+            File outputFile10= new File(output_location+file.getName()+"10.svg");
+            sg = new SvgGenerator(graph, outputFile10);
         }
 
 
