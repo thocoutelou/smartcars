@@ -6,10 +6,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import java.util.Stack;
+
 import graph.AbstractIntersection;
 import graph.Graph;
 import graph.Road;
 import resources.CartesianCoordinate;
+import smartcars.AbstractVehicle;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -46,6 +49,11 @@ public class SvgGenerator {
         // Ajout des Road au document
         for (Road road : graph.getRoads()){
             addRoadToElement(element,road);
+        }
+
+        System.out.println(graph.getClass());
+        if (graph.getClass() == problem.GraphState.class){
+            addVehicleToElement(element, ((GraphState) graph).getVehicles());
         }
 
         setViewBox(graph,element);
@@ -117,6 +125,32 @@ public class SvgGenerator {
         }
         String viewBox = viewBox1.x +" " +viewBox1.y+" "+viewBox2.x+" "+viewBox2.y;
         element.setAttribute("viewBox", viewBox);
+    }
+
+    private void addVehicleToElement(Element element, Stack<AbstractVehicle> vehicles){
+        for(AbstractVehicle vehicle : vehicles){
+            Element rect = doc.createElement("rect");
+            rect.setAttribute("style", "fill:#0000ff;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1");
+            rect.setAttribute("width", "10");
+            rect.setAttribute("height", "15");
+            CartesianCoordinate finalPosition = vehicle.getLocation().finalRoad.getPositionCartesianCoordinate(vehicle.getLocation().finalPosition);
+            rect.setAttribute("x_destination", String.valueOf(finalPosition.x));
+            rect.setAttribute("y_destination", String.valueOf(finalPosition.y));
+            CartesianCoordinate currentPosition = vehicle.getLocation().currentRoad.getPositionCartesianCoordinate(vehicle.getLocation().currentPosition);
+            rect.setAttribute("x", String.valueOf(currentPosition.x));
+            rect.setAttribute("y", String.valueOf(currentPosition.y));
+            element.appendChild(rect);
+        }
+        /*    <rect
+       style="fill:#0000ff;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="rect3372"
+       width="9.4592094"
+       height="16.55261"
+       x="165.85022"
+       y="242.63161"
+       x_destination="605"
+       y_destination="718"
+       /> */
     }
 
     private static void ecrireDocument(Document doc, File outputFile) {
