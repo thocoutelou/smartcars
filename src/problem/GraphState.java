@@ -27,7 +27,7 @@ public class GraphState extends Graph {
 	
 	// véhicules présent sur la carte
 	private Stack<AbstractVehicle> vehicles;
-	
+
 	// file de priorité (en fonction des dates) des évènements à survenir dans le graphe
 	private PriorityQueue allEvents = new PriorityQueue();
 	

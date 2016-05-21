@@ -14,7 +14,7 @@ import java.io.File;
 public class GraphStateGeneratorTest {
     @Test
     public void test() {
-        int a = 20;
+        int a = 10;
         int b = 1;
         GraphState graphState = GraphStateGenerator.GraphStateGenerator(a,b);
 

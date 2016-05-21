@@ -47,8 +47,9 @@ public class GraphStateGenerator{
         ArrayList<Road> roads = new ArrayList<Road>();
         Road road;
         int intersectionNb = intersections.size();
-        System.out.println(intersectionNb);
-        int roadNb = (int) Math.pow(2,intersectionNb);
+        //System.out.println(intersectionNb);
+        //int roadNb = (int) Math.pow(2,intersectionNb);
+        int roadNb = (int) intersectionNb;
         for(int i=0; i<intersectionNb; i++){
             boolean added = false;
             do{
@@ -65,21 +66,7 @@ public class GraphStateGenerator{
 
         // Test de la connexité du Graph
         Graph graph = new Graph(intersections, roads);
-        /*for (int i=0; i<graph.intersections.size(); i++){
-            for(int j=0; j<i; j++){
-                System.out.println(graph.costsMatrix[graph.intersections.get(i).identifier][graph.intersections.get(j).identifier]);
-                if(Cost.isInfinite(graph.costsMatrix[graph.intersections.get(i).identifier][graph.intersections.get(j).identifier])){
-                    AbstractIntersection origin = intersections.get(i);
-                    AbstractIntersection destination = intersections.get(j);
-                    Cost cost = new Cost(origin.center.distanceFrom(destination.center));
-                    road = new Road(origin.center, destination.center, origin, destination, (double) 50, cost, 1, 10 );
-                    roads.add(road);
-                    road = new Road(destination.center, origin.center, destination, origin, (double) 50, cost, 1, 10 );
-                    roads.add(road);
-                }
-            }
-        }*/
-        for(AbstractIntersection origin : intersections){
+        /*for(AbstractIntersection origin : intersections){
             for(AbstractIntersection destination : intersections){
                 if(origin != destination){
                     if(Cost.isInfinite(graph.getCostsMatrix()[destination.identifier][origin.identifier])){
@@ -89,7 +76,24 @@ public class GraphStateGenerator{
                         road = new Road(destination.center, origin.center, destination, origin, (double) 50, cost, 1, 10 );
                         roads.add(road);
                         System.out.println("Road added");
+                        graph = new Graph(intersections, roads);
                     }
+                }
+            }
+        }*/
+
+        for(AbstractIntersection intersection: intersections){
+            if(intersections.get(0) != intersection){
+                if(Cost.isInfinite(graph.getCostsMatrix()[intersections.get(0).identifier][intersection.identifier])){
+                    ArrayList<AbstractIntersection> neighbours = (ArrayList<AbstractIntersection>) intersections.clone();
+                    neighbours.remove(intersection);
+                    System.out.println(neighbours.size());
+                    AbstractIntersection link = intersection.center.closestRoad(neighbours).getDestination();
+                    Cost cost = new Cost(intersection.center.distanceFrom(link.center));
+                    road = new Road(intersection.center,link.center,intersection,link, (double) 50, cost, 1, 10 );
+                    roads.add(road);
+                    System.out.println("Road added");
+                    graph = new Graph(intersections, roads);
                 }
             }
         }

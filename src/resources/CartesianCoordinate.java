@@ -28,7 +28,7 @@ public class CartesianCoordinate {
 	
 	//Retourne la Road la plus proche du point parmis un ensemble d'intersections composés de leavingRoads
 	public Road closestRoad(ArrayList<AbstractIntersection> intersections){
-		Road closestRoad = intersections.get(0).getLeavingRoads().get(0);
+		/*Road closestRoad = intersections.get(0).getLeavingRoads().get(0);
 		Road testRoad = intersections.get(0).getLeavingRoads().get(0);
 		CartesianCoordinate pointH = closestRoad.coordinateProjection(this);
 		double minimumDistance = this.distanceFrom(pointH);
@@ -40,6 +40,27 @@ public class CartesianCoordinate {
 				if (this.distanceFrom(pointH) < minimumDistance){
 					closestRoad = testRoad;
 					minimumDistance = this.distanceFrom(pointH);
+				}
+			}
+		}*/
+		Road closestRoad = null;
+		double minimumDistance= 0;
+		for(AbstractIntersection testRoad : intersections) {
+			System.out.println(testRoad.getLeavingRoads());
+			if (!testRoad.getLeavingRoads().isEmpty()) {
+				closestRoad = testRoad.getLeavingRoads().get(0);
+			}
+		}
+		if (closestRoad == null){
+			throw new IllegalArgumentException("Il n'y a pas de Road dans le graph");
+		} else {
+			 minimumDistance = this.distanceFrom(closestRoad.getPoint1());
+		}
+		for(AbstractIntersection testRoad : intersections){
+			for(Road road: testRoad.getLeavingRoads()){
+				if(this.distanceFrom(road.coordinateProjection(this)) < minimumDistance){
+					closestRoad = road;
+					minimumDistance = this.distanceFrom(road.coordinateProjection(this));
 				}
 			}
 		}
