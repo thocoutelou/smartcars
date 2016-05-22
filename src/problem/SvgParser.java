@@ -36,12 +36,12 @@ public class SvgParser {
 
 		/**
 		 * Étapes du parsing de l'image:
-		 *-1 : Réinitialiser les identificateurs des classes
-		 * 0 : Ouvrir le fichier .svg
-		 * 1 : sélectionner les informations dans le calque 1 (balise g)
+		 * 0 : Réinitialiser les identificateurs des classes
+		 * 1 : Ouvrir le fichier .svg
 		 * 2 : créer toute les intersections représentées par des cercles <circle/> puis les Road représentées par des <path/> avec les méthodes
 		 * parseIntersection() et parseRoad()
 		 * 	   un path a une intersection de départ si son premier sommet se trouve dans la zone d'un cercle (intersection)
+		 * 3 : Parser les véhicules et leurs attributs
 		 */
 		public static GraphState parseGraphState(File file) {
 
@@ -114,7 +114,10 @@ public class SvgParser {
 			File file = new File(filename);
 			return parseGraphState(file);
 		}
-		
+
+	/*
+	Cette méthode permet d'extraire d'un élément geometricFigure d'un document org.w3c.dom.Document une intersection
+	 */
 		private static AbstractIntersection parseIntersection(Element geometricFigure) throws IllegalArgumentException{
 			if(geometricFigure.getNodeName() == "circle" ){
 				CartesianCoordinate center = new CartesianCoordinate(Float.parseFloat(geometricFigure.getAttribute("cx")),
@@ -220,7 +223,11 @@ public class SvgParser {
 			//this.roads.add(parseRoad);
 			return parseRoad;
 		}
-		
+
+	/*
+	Cette méthode permet d'extraire de geometricFigure un véhicule. Le véhicule va immédiatement être positionné sur une route Road,
+	C'est pour ça qu'il est nécessaire d'avoir accès à intersections et roads.
+	 */
 		private static AbstractVehicle parseVehicle(Element geometricFigure, ArrayList<AbstractIntersection> intersections) throws IllegalArgumentException{
 			if(geometricFigure.getNodeName() != "rect" ){
 				throw new IllegalArgumentException(geometricFigure.getAttribute("id") + " is not a Vehicule");

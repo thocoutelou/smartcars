@@ -3,6 +3,7 @@ package tests;
 import org.junit.Test;
 
 import graph.Graph;
+import problem.GraphState;
 import problem.SvgGenerator;
 import problem.SvgParser;
 import resources.Time;
@@ -29,13 +30,15 @@ public class SvgGeneratorTest {
             System.out.println(graph);
             File outputFile0= new File(output_location+file.getName());
             SvgGenerator sg = new SvgGenerator(graph, outputFile0);
-
-            // Modification de la date pour voir l'évolution des véhicules
-            Time.time = 10;
-            File outputFile10= new File(output_location+file.getName()+"10.svg");
-            sg = new SvgGenerator(graph, outputFile10);
         }
 
-
+        File file = new File(exemple_location+"4.svg");
+        graph = SvgParser.parseGraphState(file);
+        GraphState graphState = (GraphState) graph;
+        graphState.calculatePaths();
+        graphState.gatherEvents();
+        File outputFolder=new File(output_location+file.getName()+"_dir/");
+        outputFolder.mkdirs();
+        graphState.video(0.5, outputFolder, file.getName());
     }
 }

@@ -1,13 +1,15 @@
 package graphic;
 
+//importer les paquet 
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-
-//��������Ҫ�İ�ܶ���Ϊ�˶�������
 import javafx.application.Application;// (extends) identifier le type 'Application' 
 import javafx.stage.Stage;//identifier le type 'Stage'
 import problem.GraphState;
+import problem.SvgGenerator;
 import problem.SvgParser;
 import javafx.scene.control.Button;//identifier le type 'Button'
 import javafx.scene.control.Label;
@@ -23,66 +25,69 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.Scene;
 
+
 /**
- * 
- * @author shuwen
+ * Crée une fenêtre graphique qui demande à l'utilisateur
+ * quelle image traiter et à quelle date afficher les véhicules.
+ * Lance donc une résolution complète.
+ * @author Shuwen
  *
  */
 public class graphic extends Application {
 	
-	//private int svg;
-	//private double date;
+	//Private int svg;
+	//Private double date;
 	
-	 public void start(Stage primaryStage) { //start�����ǳ�������
+	 public void start(Stage primaryStage) {  //start est le début pour le programme 
 		 
-		//���������񲼾�
+		//La forme pour la fenêtre est la grille (grid en anglais)
 	     GridPane grid = new GridPane();
-	     grid.setAlignment(Pos.CENTER);//Ĭ��Ϊ������ʾ
-	     grid.setHgap(10);//gap���Թ�������֮��ļ��,��λ����
-	     grid.setVgap(10);
-	     grid.setPadding(new Insets(25,25,25,25));//padding����grid����Ե��Χ�ļ�࣬��������
+	     grid.setAlignment(Pos.CENTER);//On paramétre qu'on met les caractères au centre par défaut.
+	     grid.setHgap(10);//gap pour paramétrer l'intervalle entre les lignes 
+	     grid.setVgap(10);//gap pour paramétrer l'intervalle entre les colonne
+	     grid.setPadding(new Insets(25,25,25,25));//padding pour paramétrer l'intervalle de pourtour
 		 
 	     
-	     //�����ı�TEXT��ǩLABEL�ı���TEXT_FIELD�������ؼ�
-	     //��ʾ���ı�TEXT
+	     //Paramétrer le TEXT, LABEL, TEXT_FIELD.
+	     //Paramétrer le TEXT
 	     Text scenetitle = new Text("Welcome to Smartcars!");
-	     scenetitle.setFont(Font.font("Tahoma",FontWeight.NORMAL,20));//���ñ��������塢��ϸ���ֺ�
-	     grid.add(scenetitle,0,0,2,1);//!!grid.add()����scenetitle������ӵ�grid����֮�У���0�е�0���п��Ϊ2�п��Ϊ1
-	     //����Label���󣬷ŵ���0�У���1��
-	     Label number = new Label("SVG(A number from 0 to 4)");
+	     scenetitle.setFont(Font.font("Tahoma",FontWeight.NORMAL,20));//Paramétrer le type et la taille de texte. 
+	     grid.add(scenetitle,0,0,2,1);//Le méthode grid.add() ajoute scenetitle à la grille (ligne 0, colonne 0, occupé 2 lignes, occupé 1 colonne) 
+	     //Paramétrer le LABEL
+	     Label number = new Label("SVG (integer)");
 	     grid.add(number, 0, 1);
-	     //�����ı�����򣬷ŵ���1�У���1��
+	     //Paramétrer le TEXT_FIELD
 	     final TextField numberTextField = new TextField();
 	     grid.add(numberTextField, 1, 1);
-	     //ͬ��������һ��
-	     Label time = new Label("Date(A double number)");
+	     //Pareils qu'avant 
+	     Label time = new Label("Date (in seconds)");
 	     grid.add(time, 0, 2);
 	     final TextField timeTextField = new TextField();
 	     grid.add(timeTextField, 1, 2);
-	     //��������ʱ�Ĵ�����ʾ��Ϣ��������
+	     //Créer un label pour signaler, s'il y a une exception. 
 	     final Label label = new Label();
 	     GridPane.setConstraints(label, 0, 3);
 	     GridPane.setColumnSpan(label, 2);
 	     grid.getChildren().add(label);
 	     
-	     Scene scene = new Scene(grid,500,475);//����scene�Ĵ�С����
+	     Scene scene = new Scene(grid,500,475);//Créer la scène. 
 	     
-	     //���ð�ť����Ϣ
+	     //Paramétrer le bouton (button en anglais) 
 	     Button btn = new Button();
 	     btn.setText("Enter");
-	     HBox hbBtn = new HBox(10);//�������
-	     hbBtn.setAlignment(Pos.BOTTOM_RIGHT);//����Ӧ�ڵ�����Ϊ�����¶���
-	     hbBtn.getChildren().add(btn);//����ť�ؼ���Ϊ�ӽڵ�
+	     HBox hbBtn = new HBox(10);//Créer panneau HBox 
+	     hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+	     hbBtn.getChildren().add(btn);//Mettre hbBtncomme un noeuds enfants de la grille 
 	     grid.add(hbBtn,1,4);
 	     
 	     
-	     //�����ťʱ������в���
+	     //Les action après de cliquer l'Enter
 	     btn.setOnAction(new EventHandler<ActionEvent>(){
 	    	 @SuppressWarnings("resource")
 			public void handle(ActionEvent event){
 	    		 int svg ;
 	    		 double date ;
-	    		 //�����������ֺ����ڣ�������Ϣ���滻���ֺ�����
+	    		 //Capturer les datas que l'utilisateur remplit.
 	    		 System.out.println(numberTextField.getText());
 	    		 System.out.println(timeTextField.getText());
 	    		 if ( (numberTextField.getText().equals("")) || (timeTextField.getText().equals(""))){
@@ -98,13 +103,21 @@ public class graphic extends Application {
 		    		     System.out.println("SVG Number : "+svg);
 		    		     date = Double.parseDouble(timeTextField.getText());
 		    		     System.out.println("Date : "+date);
-	    				 String file = new String(SvgParser.getProjectLocation()+"/media/exemple/"+svg+".svg");
+		
 	    				 // lance une FileNotFoundException qui peut être 'catch'
+		    		     String file = new String(SvgParser.getProjectLocation()+"/media/exemple/"+svg+".svg");
 	    				 new BufferedReader(new FileReader(file));
-		    		     //�������ǵĳ���
-		    		     GraphState graph4 = GraphState.parse(svg);
-			    	     graph4.resolve();
-			    		 graph4.setCurrentLocations(date);
+	    				 
+		    		     //Appler les autres programmes
+		    		     GraphState graph = GraphState.parse(svg);
+			    	     graph.resolve();
+			    		 graph.setCurrentLocations(date);
+			    		 //Créer le file pour afficher l'image
+			    		 String outputS = new String(SvgParser.getProjectLocation()+"/media/output/"+svg+".svg");
+			    		 File outputF = new File(outputS);
+			    		 new SvgGenerator(graph, outputF);
+			    		 
+			    		 label.setText("Success!\nView file /media/output/"+svg+".svg");
 	    			 }
 	    			 catch(FileNotFoundException e)
 	    			 {
@@ -116,7 +129,7 @@ public class graphic extends Application {
 	    			 }
 	    		 
 	    			
-	    		 System.out.println("\n\nSuccess!");//�����ť����ڿ���̨�����ʾSuccess
+	    		 System.out.println("\n\nFin!");
 	    		 }
 	    	 }
 	     });

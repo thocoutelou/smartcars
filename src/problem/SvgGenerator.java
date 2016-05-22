@@ -35,7 +35,11 @@ public class SvgGenerator {
     private CartesianCoordinate viewBox1 = new CartesianCoordinate(0,0);
     private CartesianCoordinate viewBox2 = new CartesianCoordinate(0,0);
 
-
+    /*
+    COnstructeur de la classe. Il permet de générer un fichier SVG d'un Graph ou d'un GraphState à un instant donné.
+    Cette méthode appelle les autres méthodes de la classe, pour ajouter successivement au document les intersections, les routes et les véhicules.
+    Enfin, elle écrit le document avec la méthode writeDocument
+     */
     public SvgGenerator(Graph graph, File outputFile){
 
         doc = createSvgStructure();
@@ -58,8 +62,14 @@ public class SvgGenerator {
 
         setViewBox(graph,element);
         // Ecriture du document sur le disque dans un fichier
-        ecrireDocument(doc, outputFile);
+        writeDocuement(doc, outputFile);
     }
+
+    /*
+    Cette méthode permet d'ajouter une intersection à un document(org.w3c.dom.Document), ici doc. L'élément Element element permet
+    de connaître l'endroit où il faut insérer l'intersection.
+    Pour des questions pratique, un numéro d'intersection est également ajouté au document.
+     */
 
     private static Element addIntersectionToElement(Element element, AbstractIntersection intersection){
         // Ajout du cercle
@@ -85,6 +95,9 @@ public class SvgGenerator {
         return element;
     }
 
+    /*
+    Cette méthode permet comme la précédente d'ajouter un Road à doc, dans l'élément element.
+     */
     private static Element addRoadToElement(Element element, Road road){
         Element path = doc.createElement("path");
         String d = "M " + road.getPoint1().x + "," + road.getPoint1().y + " " + road.getPoint2().x + "," + road.getPoint2().y;
@@ -93,7 +106,10 @@ public class SvgGenerator {
         element.appendChild(path);
         return element;
     }
-
+    /*
+    Cette méthode permet de créer la structure de base d'un document destiné à devenir un fichier svg.
+    Elle utilise le modèle media/svg_template.svg
+     */
     private static Document createSvgStructure(){
 
         String template_location = "media/svg_template.svg";
@@ -113,7 +129,10 @@ public class SvgGenerator {
 
         return doc;
     }
-
+    /*
+    Cette méthode permet d'adapter la fenêtre graphique d'un document svg à l'ensemble des objets qu'il contient.
+    Cela permet de tous les voir, dans le cas de graph de grande dimension
+     */
     private void setViewBox(Graph graph, Element element){
         for (AbstractIntersection intersection : graph.getIntersections()) {
             viewBox1.x=Math.min(viewBox1.x, intersection.center.x - intersection.radius);
@@ -126,7 +145,9 @@ public class SvgGenerator {
         String viewBox = viewBox1.x +" " +viewBox1.y+" "+viewBox2.x+" "+viewBox2.y;
         element.setAttribute("viewBox", viewBox);
     }
-
+    /*
+    Cette méthode permet d'ajouter un AbstractVehicule dans doc, fils de element.
+     */
     private void addVehicleToElement(Element element, Stack<AbstractVehicle> vehicles){
         for(AbstractVehicle vehicle : vehicles){
             Element rect = doc.createElement("rect");
@@ -152,8 +173,10 @@ public class SvgGenerator {
        y_destination="718"
        /> */
     }
-
-    private static void ecrireDocument(Document doc, File outputFile) {
+    /*
+    Cette méthode permet de convertir un document org.w3c.dom.Document en un fichier svg : outputFile
+     */
+    private static void writeDocuement(Document doc, File outputFile) {
         // on considère le document "doc" comme étant la source d'une
         // transformation XML
         Source source = new DOMSource(doc);

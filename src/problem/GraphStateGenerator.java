@@ -13,11 +13,16 @@ import smartcars.AbstractVehicle;
 import graph.Graph;
 
 /**
- * Created by tc on 18/05/16.
+Cette classe permet de générer des graphe connexe pseudo-aléatoires. Elle est utilise pour faire des test sur de nombreux Graph.
+ C'est une approche graphique : on cherche à générer des graphe qui ont un sens, et qui ressemble à ceux qu'on pourrait avoir
+ naturellement dans une ville
  */
 
 public class GraphStateGenerator{
 
+    /*
+    les deux points suivants délimite la fenêtre du graph que l'on va générer.
+     */
     private static CartesianCoordinate point1 = new CartesianCoordinate(0,0);
     private static CartesianCoordinate point2 = new CartesianCoordinate(2000,1000);
 
@@ -28,7 +33,9 @@ public class GraphStateGenerator{
 
         return new GraphState(intersections,roads,vehicles);
     }
-
+    /*
+    Permet des intersections qui ne se chevauchent pas. On renseigne le nombre d'intersections voulues avec intersectionNb
+     */
     private static ArrayList<AbstractIntersection> intersectionsGenerator(int intersectionNb){
         ArrayList<AbstractIntersection> intersections = new ArrayList<AbstractIntersection>();
         AbstractIntersection intersection;
@@ -42,7 +49,13 @@ public class GraphStateGenerator{
         return intersections;
     }
 
-    
+    /*
+    Permet de générer des roads entre différents intersections contenues dans ArrayList<AbstractIntersection> intersection.
+    La génération des road est compliquée car il faut rendre le graphe connexe. VOici les étapes:
+    - création de Road aléatoire
+    - liaison d'intersections isolées à l'intersection la plus proche
+    - liaison des intersections restantes à la composante connexe la plus grande
+     */
     private static ArrayList<Road> roadsGenerator(ArrayList<AbstractIntersection> intersections){
         ArrayList<Road> roads = new ArrayList<Road>();
         Road road;
