@@ -107,7 +107,7 @@ public class Dijkstra {
 	}
 	
 	/**
-	 * Augmentent les coûts des routes empruntées.
+	 * Augmente les coûts des routes empruntées.
 	 * @param path
 	 */
 	private static void increaseCosts(Stack<Road> path)

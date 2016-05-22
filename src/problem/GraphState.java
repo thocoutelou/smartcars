@@ -22,7 +22,7 @@ import smartcars.AbstractVehicle;
 /**
  * Composée d'un graphe, de véhicules et des évènements en devenir,
  * constitue le problème à résoudre.
- * @author thomas
+ * @author thomas, cylla
  *
  */
 public class GraphState extends Graph {

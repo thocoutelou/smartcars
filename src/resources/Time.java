@@ -6,6 +6,12 @@ import graph.Road;
 import problem.GraphState;
 import smartcars.AbstractVehicle;
 
+/**
+ * Classe un peu fantaisiste qui implémente le temps virtuel.
+ * Contient des méthodes de calcul de dates et de durées.
+ * @author cylla
+ *
+ */
 public class Time {
 	
 	// date courante

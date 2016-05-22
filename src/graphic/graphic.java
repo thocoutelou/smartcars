@@ -42,7 +42,7 @@ public class graphic extends Application {
 		 
 		//La forme pour la fenêtre est la grille (grid en anglais)
 	     GridPane grid = new GridPane();
-	     grid.setAlignment(Pos.CENTER);//On paramétre qu'on met les caractères au centre par défaut.
+	     grid.setAlignment(Pos.CENTER);//On paramètre qu'on met les caractères au centre par défaut.
 	     grid.setHgap(10);//gap pour paramétrer l'intervalle entre les lignes 
 	     grid.setVgap(10);//gap pour paramétrer l'intervalle entre les colonne
 	     grid.setPadding(new Insets(25,25,25,25));//padding pour paramétrer l'intervalle de pourtour
@@ -52,14 +52,14 @@ public class graphic extends Application {
 	     //Paramétrer le TEXT
 	     Text scenetitle = new Text("Welcome to Smartcars!");
 	     scenetitle.setFont(Font.font("Tahoma",FontWeight.NORMAL,20));//Paramétrer le type et la taille de texte. 
-	     grid.add(scenetitle,0,0,2,1);//Le méthode grid.add() ajoute scenetitle à la grille (ligne 0, colonne 0, occupé 2 lignes, occupé 1 colonne) 
+	     grid.add(scenetitle,0,0,2,1);//La méthode grid.add() ajoute scenetitle à la grille (ligne 0, colonne 0, occupé 2 lignes, occupé 1 colonne) 
 	     //Paramétrer le LABEL
 	     Label number = new Label("SVG (integer)");
 	     grid.add(number, 0, 1);
 	     //Paramétrer le TEXT_FIELD
 	     final TextField numberTextField = new TextField();
 	     grid.add(numberTextField, 1, 1);
-	     //Pareils qu'avant 
+	     //Pareil qu'avant 
 	     Label time = new Label("Date (in seconds)");
 	     grid.add(time, 0, 2);
 	     final TextField timeTextField = new TextField();
@@ -77,11 +77,11 @@ public class graphic extends Application {
 	     btn.setText("Enter");
 	     HBox hbBtn = new HBox(10);//Créer panneau HBox 
 	     hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-	     hbBtn.getChildren().add(btn);//Mettre hbBtncomme un noeuds enfants de la grille 
+	     hbBtn.getChildren().add(btn);//Mettre hbBtn comme noeud enfant de la grille 
 	     grid.add(hbBtn,1,4);
 	     
 	     
-	     //Les action après de cliquer l'Enter
+	     //Les actions après avoir cliqué l'Enter
 	     btn.setOnAction(new EventHandler<ActionEvent>(){
 	    	 @SuppressWarnings("resource")
 			public void handle(ActionEvent event){
@@ -108,7 +108,7 @@ public class graphic extends Application {
 		    		     String file = new String(SvgParser.getProjectLocation()+"/media/exemple/"+svg+".svg");
 	    				 new BufferedReader(new FileReader(file));
 	    				 
-		    		     //Appler les autres programmes
+		    		     //Appeler les autres programmes
 		    		     GraphState graph = GraphState.parse(svg);
 			    	     graph.resolve();
 			    		 graph.setCurrentLocations(date);

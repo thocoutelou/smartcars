@@ -26,7 +26,8 @@ import java.io.IOException;
 import java.util.IllegalFormatException;
 
 /* Ce fichier permet de générer une image svg qui représente l'état d'un GraphState à l'instant t
-    Il est inspiré de http://research.jacquet.xyz/teaching/java/xml-dom/ dont l'auteur est Christophe Jacquet
+   Il est inspiré de http://research.jacquet.xyz/teaching/java/xml-dom/ dont l'auteur est Christophe Jacquet
+   @author thomas
  */
 
 public class SvgGenerator {

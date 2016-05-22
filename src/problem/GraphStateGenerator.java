@@ -13,9 +13,10 @@ import smartcars.AbstractVehicle;
 import graph.Graph;
 
 /**
-Cette classe permet de générer des graphe connexe pseudo-aléatoires. Elle est utilise pour faire des test sur de nombreux Graph.
+ Cette classe permet de générer des graphe connexe pseudo-aléatoires. Elle est utilise pour faire des test sur de nombreux Graph.
  C'est une approche graphique : on cherche à générer des graphe qui ont un sens, et qui ressemble à ceux qu'on pourrait avoir
- naturellement dans une ville
+ naturellement dans une ville.
+ @author thomas
  */
 
 public class GraphStateGenerator{

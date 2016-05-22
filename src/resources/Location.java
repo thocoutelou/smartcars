@@ -56,17 +56,6 @@ public class Location {
 	}
 	
 	/**
-	 * Affiche le véhicule sur l'image,
-	 * en partant du principe que sa localisation courante est à jour.
-	 * Cette mise à jour se fera pas à pas dans la classe Event.
-	 */
-	//TODO
-	public static void displayLocation()
-	{
-		
-	}
-	
-	/**
 	 * Renvoie la première intersection
 	 * rencontrée par le véhicule après son départ.
 	 * @return première intersection rencontrée

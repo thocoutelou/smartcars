@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import graph.AbstractIntersection;
 import graph.Road;
 
+/**
+ * Implémente des coordonnées géométriques dans une image SVG.
+ * @author thomas
+ *
+ */
 public class CartesianCoordinate {
 	
 	//TODO passer en private
@@ -17,7 +22,7 @@ public class CartesianCoordinate {
 	}
 
 	/*
-	Renvoi la distance du CartesianCoordinate courant à un autre CartesianCoordinate. On utilise la norme Euclidienne
+	Renvoie la distance du CartesianCoordinate courant à un autre CartesianCoordinate. On utilise la norme Euclidienne
 	 */
 	public double distanceFrom(CartesianCoordinate point2){
 		return Math.sqrt(Math.pow(point2.x-this.x, 2) + Math.pow(point2.y-this.y, 2)); 
