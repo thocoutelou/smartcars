@@ -1,5 +1,6 @@
 package problem;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -222,8 +223,11 @@ public class GraphState extends Graph {
 	 * Calcule une vidéo des itinéraires des voitures
 	 * en vue de les afficher sur la carte.
 	 */
-	public void video(double increment)
+	public void video(double increment, File folder, String filename)
 	{
+		if(!folder.isDirectory()){
+			throw new IllegalArgumentException("Le deuxième argument doit être un dossier");
+		}
 		double time = 0.;
 		double end = Time.endingTime(this);
 		PriorityQueue events = getAllEventsCopy();
@@ -235,6 +239,8 @@ public class GraphState extends Graph {
 			}
 			Time.time = time;
 			setCurrentPositions();
+			File output = new File(folder+"/"+filename+Time.time);
+			new SvgGenerator(this,output);
 			time+=increment;
 		}
 	}
