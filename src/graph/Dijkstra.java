@@ -9,7 +9,9 @@ import smartcars.AbstractVehicle;
 
 /**
  * Implémentation de l'algorithme de Dijkstra,
- * calculant le plus court chemin d'une intersection à une autre.
+ * calculant le plus court chemin d'une intersection à une autre,
+ * avec augmentation des coûts des routes déjà empruntées,
+ * symbolisant le temps d'attente supplémentaire introduit.
  * @author cylla
  *
  */
@@ -71,7 +73,9 @@ public class Dijkstra {
 			throw new IllegalStateException("Le graphe n'est pas connexe.");
 		}
 
-		vehicle.savePath(buildPath(vehicle, route));
+		Stack<Road> path = buildPath(vehicle, route);
+		increaseCosts(path);
+		vehicle.savePath(path);
 		System.out.println(vehicle.getPath());
 	}
 
@@ -100,6 +104,18 @@ public class Dijkstra {
 			}
 
 		return path;
+	}
+	
+	/**
+	 * Augmentent les coûts des routes empruntées.
+	 * @param path
+	 */
+	private static void increaseCosts(Stack<Road> path)
+	{
+		for(Road r : path)
+		{
+			r.increaseCost();
+		}
 	}
 
 }

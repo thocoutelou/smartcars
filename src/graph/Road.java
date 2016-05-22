@@ -237,6 +237,15 @@ public class Road {
 		}
 	}
 	
+	/**
+	 * Augmente le coût à cause du passage d'une voiture sur cette route.
+	 * Est appelée dans la classe Dijkstra après le calcul d'un itnéraire.
+	 */
+	public void increaseCost()
+	{
+		cost = Cost.sum(cost, new Cost(cost.getFiniteCost()/7));
+	}
+	
 	
 	/**
 	 * Un nouveau véhicule attend pour traverser l'intersection suivante.
@@ -384,5 +393,6 @@ public class Road {
 	{
 		identificator = 0;
 	}
+
 	
 }

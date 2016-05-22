@@ -6,6 +6,17 @@ import java.util.Stack;
 import graph.Road;
 import smartcars.AbstractVehicle;
 
+/**
+ * Schéma d'implémentation d'un évènement spécialisé.
+ * Cette classe n'est jamais instanciée,
+ * seuls sont instanciés ses évènements fils.
+ * Le cast d'un AbstractEvent vers un évènement spécialisé
+ * étant impossible, cette classe contient la nature de l'évènement
+ * qui constitue l'instance en cours de manipulation.
+ * 
+ * @author cylla
+ *
+ */
 public class AbstractEvent {
 
 	// identificateur des instances, s'incrémente à chaque instanciation...
