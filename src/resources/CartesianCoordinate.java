@@ -15,7 +15,10 @@ public class CartesianCoordinate {
 		this.x = x;
 		this.y = y;
 	}
-	
+
+	/*
+	Renvoi la distance du CartesianCoordinate courant à un autre CartesianCoordinate. On utilise la norme Euclidienne
+	 */
 	public double distanceFrom(CartesianCoordinate point2){
 		return Math.sqrt(Math.pow(point2.x-this.x, 2) + Math.pow(point2.y-this.y, 2)); 
 	}
@@ -26,23 +29,12 @@ public class CartesianCoordinate {
 	}
 	
 	
-	//Retourne la Road la plus proche du point parmis un ensemble d'intersections composés de leavingRoads
+	/*
+	Retourne la Road la plus proche du point parmis un ensemble d'intersections composés de leavingRoads
+	On regarde successivement la distance du CartesianCoordinate à sa projection sur les différentes Road
+	On sélectionne la Road qui minimise cette distance
+	 */
 	public Road closestRoad(ArrayList<AbstractIntersection> intersections){
-		/*Road closestRoad = intersections.get(0).getLeavingRoads().get(0);
-		Road testRoad = intersections.get(0).getLeavingRoads().get(0);
-		CartesianCoordinate pointH = closestRoad.coordinateProjection(this);
-		double minimumDistance = this.distanceFrom(pointH);
-		
-		for(int i=0; i<intersections.size(); i++){
-			for(int j=0; j<intersections.get(i).getLeavingRoads().size(); j++){
-				testRoad = intersections.get(i).getLeavingRoads().get(j);
-				pointH = testRoad.coordinateProjection(this);
-				if (this.distanceFrom(pointH) < minimumDistance){
-					closestRoad = testRoad;
-					minimumDistance = this.distanceFrom(pointH);
-				}
-			}
-		}*/
 		Road closestRoad = null;
 		double minimumDistance= 0;
 		for(AbstractIntersection testRoad : intersections) {
@@ -68,6 +60,9 @@ public class CartesianCoordinate {
 		return closestRoad;
 	}
 
+	/*
+	Permet de générer un représentant de CartesianCoordinate dans la zone graphique délimitée par point1 et point2
+	 */
 	static public CartesianCoordinate CartesianCoordinateRandom(CartesianCoordinate point1, CartesianCoordinate point2){
 		double x = Math.random()*(point2.x-point1.x)+point1.x;
 		double y = Math.random()*(point2.y-point1.y)+point2.y;
