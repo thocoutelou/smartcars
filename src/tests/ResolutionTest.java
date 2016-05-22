@@ -3,13 +3,9 @@ package tests;
 import org.junit.Test;
 
 import problem.GraphState;
-import problem.SvgParser;
-import resources.Time;
 
 public class ResolutionTest {
 	
-	String project_location = SvgParser.getProjectLocation();
-
 	@Test
 	public void test() {
 		

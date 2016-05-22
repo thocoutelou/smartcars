@@ -67,14 +67,14 @@ public class SvgParser {
 			System.out.println("<---   Graph parse   --->");
 
 			try {
-				// On crée le parser et xPath pour utiliser les expressins régulières
+				// On crée le parser et xPath pour utiliser les expressions régulières
 				builder = factory.newDocumentBuilder();
 				final Document document= builder.parse(file);
 				XPath xPath = XPathFactory.newInstance().newXPath();
 				XPathExpression exp;
 				NodeList nl;
 
-				//Regex pour récupérer la liste de tout les noeuds cirlce
+				//Regex pour récupérer la liste de tous les noeuds circle
 				exp = xPath.compile("//circle");
 				nl = (NodeList)exp.evaluate(document, XPathConstants.NODESET);
 				//Parse de toutes les intersections
@@ -83,7 +83,7 @@ public class SvgParser {
 					intersections.add(parseIntersection(circle));
 				}
 
-				//Regex pour récupérer la liste de tout les noeuds path
+				//Regex pour récupérer la liste de tous les noeuds path
 				exp = xPath.compile("//path");
 				nl = (NodeList)exp.evaluate(document, XPathConstants.NODESET);
 				//Parse de toutes les Road
@@ -92,7 +92,7 @@ public class SvgParser {
 					roads.add(parseRoad(path,intersections));
 				}
 
-				//Regex pour récupérer la liste de tout les noeuds rect
+				//Regex pour récupérer la liste de tous les noeuds rect
 				exp = xPath.compile("//rect");
 				nl = (NodeList)exp.evaluate(document, XPathConstants.NODESET);
 				//Parse de tous les véhicules
@@ -108,7 +108,6 @@ public class SvgParser {
 			GraphState graphState = new GraphState(intersections, roads, vehicles);
 			System.out.println(graphState);
 			return graphState;
-			//this.costsMatrix = Cost.floydWarshall(this);
 		}
 
 		public static GraphState parseGraphState(String filename){
