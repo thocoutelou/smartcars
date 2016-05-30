@@ -82,6 +82,10 @@ public class Location {
 	public void actualizeLocation(Road road, double position, double date, int lastEventNature)
 	{
 		currentRoad = road;
+		if(position>road.getAbsoluteLength()+0.1)
+		{
+			throw new IllegalArgumentException("La position du véhicule est fausse (en dehors de la route).");
+		}
 		currentPosition = position;
 		currentDate = date;
 		this.lastEventNature = lastEventNature;

@@ -32,13 +32,13 @@ public class SvgGeneratorTest {
             SvgGenerator sg = new SvgGenerator(graph, outputFile0);
         }
 
-        File file = new File(exemple_location+"4.svg");
+        File file = new File(exemple_location+"1.svg");
         graph = SvgParser.parseGraphState(file);
         GraphState graphState = (GraphState) graph;
         graphState.calculatePaths();
         graphState.gatherEvents();
         File outputFolder=new File(output_location+file.getName()+"_dir/");
         outputFolder.mkdirs();
-        graphState.video(0.5, outputFolder, file.getName());
+        graphState.video(1, outputFolder, file.getName());
     }
 }

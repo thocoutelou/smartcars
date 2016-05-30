@@ -306,8 +306,8 @@ public class Road {
 	}
 
 	public CartesianCoordinate getPositionCartesianCoordinate(double position){
-		double x_unit = (getPoint2().x-getPoint1().x)/getLength();
-		double y_unit = (getPoint2().y-getPoint1().y)/getLength();
+		double x_unit = (getPoint2().x-getPoint1().x)/getAbsoluteLength();
+		double y_unit = (getPoint2().y-getPoint1().y)/getAbsoluteLength();
 		double x = getPoint1().x + position*x_unit;
 		double y = getPoint1().y + position*y_unit;
 		return new CartesianCoordinate(x,y);

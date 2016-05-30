@@ -158,9 +158,14 @@ public class SvgGenerator {
             CartesianCoordinate finalPosition = vehicle.getLocation().finalRoad.getPositionCartesianCoordinate(vehicle.getLocation().finalPosition);
             rect.setAttribute("x_destination", String.valueOf(finalPosition.x));
             rect.setAttribute("y_destination", String.valueOf(finalPosition.y));
-            CartesianCoordinate currentPosition = vehicle.getLocation().currentRoad.getPositionCartesianCoordinate(vehicle.getLocation().currentPosition);
-            rect.setAttribute("x", String.valueOf(currentPosition.x));
-            rect.setAttribute("y", String.valueOf(currentPosition.y));
+            if(vehicle.getLocation().onIntersection){
+                rect.setAttribute("x", String.valueOf(vehicle.getLocation().currentRoad.getPoint1().x));
+                rect.setAttribute("y", String.valueOf(vehicle.getLocation().currentRoad.getPoint1().y));
+            }else{
+                CartesianCoordinate currentPosition = vehicle.getLocation().currentRoad.getPositionCartesianCoordinate(vehicle.getLocation().currentPosition);
+                rect.setAttribute("x", String.valueOf(currentPosition.x));
+                rect.setAttribute("y", String.valueOf(currentPosition.y));
+            }
             element.appendChild(rect);
         }
         /*    <rect
