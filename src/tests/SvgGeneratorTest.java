@@ -32,7 +32,7 @@ public class SvgGeneratorTest {
             SvgGenerator sg = new SvgGenerator(graph, outputFile0);
         }
 
-        File file = new File(exemple_location+"1.svg");
+        File file = new File(exemple_location+"3.svg");
         graph = SvgParser.parseGraphState(file);
         GraphState graphState = (GraphState) graph;
         graphState.calculatePaths();

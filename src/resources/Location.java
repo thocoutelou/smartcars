@@ -84,9 +84,11 @@ public class Location {
 		currentRoad = road;
 		if(position>road.getAbsoluteLength()+0.1)
 		{
-			throw new IllegalArgumentException("La position du véhicule est fausse (en dehors de la route).");
+			//throw new IllegalArgumentException("La position du véhicule est fausse (en dehors de la route).");
+			currentPosition = road.getAbsoluteLength();
+		} else {
+			currentPosition = position;
 		}
-		currentPosition = position;
 		currentDate = date;
 		this.lastEventNature = lastEventNature;
 	}
